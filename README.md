@@ -52,6 +52,27 @@ This repository is prepared to work with:
 
 Each runtime is adapted back to the same repository-level source of truth so the workflow stays consistent even when native commands differ.
 
+## Prerequisites
+
+Before using the runtime tooling, make sure the machine has:
+
+- `git`
+- `node`
+- `npx`
+
+If `npx` is not available, install Node.js first, because modern Node distributions include both `npm` and `npx`.
+
+Examples:
+
+```bash
+# macOS with Homebrew
+brew install node
+
+# verify
+node --version
+npx --version
+```
+
 ## Boilerplate Setup
 
 If you use this repository as a template or boilerplate, run the bootstrap script after cloning it:
@@ -68,6 +89,8 @@ What the bootstrap does:
 - Updates the MIT copyright holder, defaulting to `<Project Name> contributors`
 
 If you omit `--project-name`, the script derives the name from the current folder.
+
+If the bootstrap warns that `npx` is missing, install Node.js before trying to use the GSD runtime commands.
 
 ## Repository Structure
 

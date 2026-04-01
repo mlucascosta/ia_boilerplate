@@ -87,6 +87,19 @@ current_license_holder() {
   fi
 }
 
+warn_if_missing_runtime_prerequisites() {
+  if ! command -v node >/dev/null 2>&1; then
+    echo "Warning: 'node' was not found in PATH." >&2
+    echo "Install Node.js before using the bundled AI runtime tooling." >&2
+    return 0
+  fi
+
+  if ! command -v npx >/dev/null 2>&1; then
+    echo "Warning: 'npx' was not found in PATH." >&2
+    echo "Install a Node.js distribution that includes npm/npx before using the bundled AI runtime tooling." >&2
+  fi
+}
+
 current_codex_workflow_skill_name() {
   if [[ -f "$REPO_ROOT/AGENTS.md" ]]; then
     sed -n 's|.*\.codex/skills/\([^/]*\)/SKILL\.md.*|\1|p' "$REPO_ROOT/AGENTS.md" | sed -n '1p'
@@ -167,6 +180,8 @@ if [[ -z "$old_codex_workflow_skill_name" ]]; then
 fi
 
 new_codex_workflow_skill_name="$project_slug-workflow"
+
+warn_if_missing_runtime_prerequisites
 
 replace_literal_in_repo "$TEMPLATE_ROOT" "$REPO_ROOT"
 
