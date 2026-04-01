@@ -143,7 +143,7 @@ Deviations are normal — handle via rules below.
 2. **MCP tools:** If AGENTS.md or project instructions reference MCP tools (e.g. jCodeMunch for code navigation), prefer them over Grep/Glob when available. Fall back to Grep/Glob if MCP tools are not accessible.
 3. Per task:
    - **MANDATORY read_first gate:** If the task has a `<read_first>` field, you MUST read every listed file BEFORE making any edits. This is not optional. Do not skip files because you "already know" what's in them — read them. The read_first files establish ground truth for the task.
-   - `type="auto"`: if `tdd="true"` → TDD execution. Implement with deviation rules + auth gates. Verify done criteria. Commit (see task_commit). Track hash for Summary.
+  - `type="auto"`: implement with deviation rules + auth gates. Verify documentation, architecture, and done criteria. Commit (see task_commit). Track hash for Summary.
    - `type="checkpoint:*"`: STOP → checkpoint_protocol → wait for user → continue only after confirmation.
    - **MANDATORY acceptance_criteria check:** After completing each task, if it has `<acceptance_criteria>`, verify EVERY criterion before moving to the next task. Use grep, file reads, or CLI commands to confirm each criterion. If any criterion fails, fix the implementation before proceeding. Do not skip criteria or mark them as "will verify later".
 3. Run `<verification>` checks
@@ -219,20 +219,18 @@ End with: **Total deviations:** N auto-fixed (breakdown). **Impact:** assessment
 
 </deviation_documentation>
 
-<tdd_plan_execution>
-## TDD Execution
+<documentation_architecture_execution>
+## Documentation And Architecture Execution
 
-For `type: tdd` plans — RED-GREEN-REFACTOR:
+For code-producing tasks:
 
-1. **Infrastructure** (first TDD plan only): detect project, install framework, config, verify empty suite
-2. **RED:** Read `<behavior>` → failing test(s) → run (MUST fail) → commit: `test({phase}-{plan}): add failing test for [feature]`
-3. **GREEN:** Read `<implementation>` → minimal code → run (MUST pass) → commit: `feat({phase}-{plan}): implement [feature]`
-4. **REFACTOR:** Clean up → tests MUST pass → commit: `refactor({phase}-{plan}): clean up [feature]`
+1. Read any plan guidance that defines documentation expectations, code contracts, or architectural boundaries.
+2. Keep inline code documentation complete in the language-appropriate standard already used by the project.
+3. Preserve or improve responsibility boundaries, dependency direction, and separation of concerns while implementing.
+4. Verify documentation and architecture-related acceptance criteria before committing.
 
-Errors: RED doesn't fail → investigate test/existing feature. GREEN doesn't pass → debug, iterate. REFACTOR breaks → undo.
-
-See `/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/references/tdd.md` for structure.
-</tdd_plan_execution>
+If implementation reveals missing architectural guidance, stop and raise it as an architectural decision instead of improvising hidden structure.
+</documentation_architecture_execution>
 
 <precommit_failure_handling>
 ## Pre-commit Hook Failure Handling
@@ -272,8 +270,8 @@ git add src/types/user.ts
 |------|------|---------|
 | `feat` | New functionality | feat(08-02): create user registration endpoint |
 | `fix` | Bug fix | fix(08-02): correct email validation regex |
-| `test` | Test-only (TDD RED) | test(08-02): add failing test for password hashing |
-| `refactor` | No behavior change (TDD REFACTOR) | refactor(08-02): extract validation to helper |
+| `test` | Test-only changes | test(08-02): add regression coverage for password hashing |
+| `refactor` | No behavior change | refactor(08-02): extract validation to helper |
 | `perf` | Performance | perf(08-02): add database index |
 | `docs` | Documentation | docs(08-02): add API docs |
 | `style` | Formatting | style(08-02): format auth module |

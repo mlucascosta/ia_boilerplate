@@ -50,6 +50,8 @@ Keep cross-AI execution predictable by making repository artifacts and workflow 
 
 This document evolves when the repository workflow, artifact contract, or runtime integrations change.
 
+If this repository is reused as a boilerplate, run `./scripts/bootstrap-template.sh` first so local runtime paths and project-facing metadata are rewritten for the new project.
+
 After meaningful workflow updates:
 1. Reflect any newly validated repository capabilities in `Validated`.
 2. Move stale or rejected workflow ideas to `Out of Scope`.

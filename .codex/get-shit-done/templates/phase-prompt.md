@@ -133,7 +133,7 @@ After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 |-------|----------|---------|
 | `phase` | Yes | Phase identifier (e.g., `01-foundation`) |
 | `plan` | Yes | Plan number within phase (e.g., `01`, `02`) |
-| `type` | Yes | Always `execute` for standard plans, `tdd` for TDD plans |
+| `type` | Yes | Always `execute` for plan execution |
 | `wave` | Yes | Execution wave number (1, 2, 3...). Pre-computed at plan time. |
 | `depends_on` | Yes | Array of plan IDs this plan requires. |
 | `files_modified` | Yes | Files this plan touches. |
@@ -255,7 +255,7 @@ Wave 3 runs after Waves 1 and 2. Pauses at checkpoint, orchestrator presents to 
 - Different subsystems (auth vs API vs UI)
 - >3 tasks
 - Risk of context overflow
-- TDD candidates - separate plans
+- Documentation-heavy or architecture-sensitive work that deserves isolated review
 
 **Vertical slices preferred:**
 
@@ -270,15 +270,13 @@ AVOID:  Plan 01 = All models
 
 ---
 
-## TDD Plans
+## Documentation And Architecture-Sensitive Plans
 
-TDD features get dedicated plans with `type: tdd`.
+Create dedicated plans when the change needs concentrated attention on code documentation quality, public contracts, or architectural boundaries.
 
-**Heuristic:** Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-→ Yes: Create a TDD plan
-→ No: Standard task in standard plan
-
-See `/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/references/tdd.md` for TDD plan structure.
+**Heuristic:** Will the change alter responsibilities, interfaces, or non-obvious implementation rules that deserve isolated review?
+→ Yes: Create a dedicated focused plan
+→ No: Keep it as a standard task in a standard plan
 
 ---
 

@@ -76,8 +76,8 @@ Each task gets its own commit immediately after completion.
 **Commit types:**
 - `feat` - New feature/functionality
 - `fix` - Bug fix
-- `test` - Test-only (TDD RED phase)
-- `refactor` - Code cleanup (TDD REFACTOR phase)
+- `test` - Test-only changes when verification work is isolated
+- `refactor` - Code cleanup without changing behavior
 - `perf` - Performance improvement
 - `chore` - Dependencies, config, tooling
 
@@ -93,16 +93,16 @@ git commit -m "feat(08-02): create user registration endpoint
 - Returns JWT token on success
 "
 
-# TDD task - RED phase
+# Test-only task
 git add src/__tests__/jwt.test.ts
-git commit -m "test(07-02): add failing test for JWT generation
+git commit -m "test(07-02): add regression coverage for JWT generation
 
 - Tests token contains user ID claim
 - Tests token expires in 1 hour
 - Tests signature verification
 "
 
-# TDD task - GREEN phase
+# Feature implementation task
 git add src/utils/jwt.ts
 git commit -m "feat(07-02): implement JWT generation
 

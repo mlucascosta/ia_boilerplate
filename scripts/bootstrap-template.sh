@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+TEMPLATE_ROOT="/Users/mlucascosta/Documents/dev/reduto/collabPix"
+
+project_name=""
+project_slug=""
+copyright_holder=""
+
+usage() {
+  cat <<'EOF'
+Usage:
+  ./scripts/bootstrap-template.sh [--project-name "Your Project"] [--copyright-holder "Your Team"]
+
+Options:
+  --project-name       Project display name for README and planning docs.
+  --copyright-holder   MIT copyright holder. Defaults to "<Project Name> contributors".
+  --help               Show this message.
+EOF
+}
+
+title_case_from_path() {
+  printf '%s' "$1" | perl -pe 's/[-_]+/ /g; s/(^|\s)([[:alpha:]])/$1\U$2/g'
+}
+
+slugify() {
+  printf '%s' "$1" | perl -pe 's/[^[:alnum:]]+/-/g; s/^-+//; s/-+$//; $_=lc $_'
+}
+
+replace_literal_in_file() {
+  local file="$1"
+  local from="$2"
+  local to="$3"
+
+  if [[ ! -f "$file" ]]; then
+    return 0
+  fi
+
+  FROM="$from" TO="$to" perl -0pi -e 's/\Q$ENV{FROM}\E/$ENV{TO}/g' "$file"
+}
+
+find_repo_files_with_literal() {
+  local needle="$1"
+
+  if command -v rg >/dev/null 2>&1; then
+    rg -l --hidden --fixed-strings "$needle" "$REPO_ROOT" \
+      -g '!/.git' \
+      -g '!node_modules' \
+      -g '!dist' \
+      -g '!build' || true
+    return 0
+  fi
+
+  grep -RIl --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build -- "$needle" "$REPO_ROOT" || true
+}
+
+replace_literal_in_repo() {
+  local from="$1"
+  local to="$2"
+  local file
+
+  if [[ -z "$from" || "$from" == "$to" ]]; then
+    return 0
+  fi
+
+  while IFS= read -r file; do
+    if [[ -z "$file" ]]; then
+      continue
+    fi
+
+    replace_literal_in_file "$file" "$from" "$to"
+  done < <(find_repo_files_with_literal "$from")
+}
+
+current_readme_name() {
+  if [[ -f "$REPO_ROOT/README.md" ]]; then
+    sed -n '1s/^# //p' "$REPO_ROOT/README.md"
+  fi
+}
+
+current_license_holder() {
+  if [[ -f "$REPO_ROOT/LICENSE" ]]; then
+    sed -n '2s/^Copyright (c) [0-9]\{4\} //p' "$REPO_ROOT/LICENSE"
+  fi
+}
+
+current_codex_workflow_skill_name() {
+  if [[ -f "$REPO_ROOT/AGENTS.md" ]]; then
+    sed -n 's|.*\.codex/skills/\([^/]*\)/SKILL\.md.*|\1|p' "$REPO_ROOT/AGENTS.md" | sed -n '1p'
+  fi
+}
+
+rename_codex_workflow_skill() {
+  local old_name="$1"
+  local new_name="$2"
+  local skills_dir="$REPO_ROOT/.codex/skills"
+  local old_dir="$skills_dir/$old_name"
+  local new_dir="$skills_dir/$new_name"
+  local skill_file
+
+  if [[ -z "$old_name" || -z "$new_name" || "$old_name" == "$new_name" ]]; then
+    return 0
+  fi
+
+  replace_literal_in_repo "$old_name" "$new_name"
+
+  if [[ -d "$old_dir" && ! -e "$new_dir" ]]; then
+    mv "$old_dir" "$new_dir"
+  fi
+
+  skill_file="$new_dir/SKILL.md"
+  if [[ -f "$skill_file" ]]; then
+    replace_literal_in_file "$skill_file" "name: $old_name" "name: $new_name"
+    replace_literal_in_file "$skill_file" "# Reduto Workflow Skill" "# $project_name Workflow Skill"
+    replace_literal_in_file "$skill_file" "Reduto" "$project_name"
+  fi
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --project-name)
+      project_name="${2:-}"
+      shift 2
+      ;;
+    --copyright-holder)
+      copyright_holder="${2:-}"
+      shift 2
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "$project_name" ]]; then
+  project_name="$(title_case_from_path "$(basename "$REPO_ROOT")")"
+fi
+
+project_slug="$(slugify "$project_name")"
+
+if [[ -z "$copyright_holder" ]]; then
+  copyright_holder="$project_name contributors"
+fi
+
+old_project_name="$(current_readme_name)"
+if [[ -z "$old_project_name" ]]; then
+  old_project_name="CollabPix"
+fi
+
+old_copyright_holder="$(current_license_holder)"
+if [[ -z "$old_copyright_holder" ]]; then
+  old_copyright_holder="CollabPix contributors"
+fi
+
+old_codex_workflow_skill_name="$(current_codex_workflow_skill_name)"
+if [[ -z "$old_codex_workflow_skill_name" ]]; then
+  old_codex_workflow_skill_name="reduto-workflow"
+fi
+
+new_codex_workflow_skill_name="$project_slug-workflow"
+
+replace_literal_in_repo "$TEMPLATE_ROOT" "$REPO_ROOT"
+
+rename_codex_workflow_skill "$old_codex_workflow_skill_name" "$new_codex_workflow_skill_name"
+
+replace_literal_in_file "$REPO_ROOT/README.md" "$old_project_name" "$project_name"
+replace_literal_in_file "$REPO_ROOT/AGENTS.md" "$old_project_name" "$project_name"
+replace_literal_in_file "$REPO_ROOT/.planning/PROJECT.md" "$old_project_name" "$project_name"
+replace_literal_in_file "$REPO_ROOT/LICENSE" "$old_copyright_holder" "$copyright_holder"
+
+echo "Bootstrap complete."
+echo "Project name: $project_name"
+echo "Project slug: $project_slug"
+echo "Repository root: $REPO_ROOT"
+echo "Copyright holder: $copyright_holder"

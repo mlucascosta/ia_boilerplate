@@ -246,7 +246,6 @@ Execute each selected wave in sequence. Within a wave: parallel if `PARALLELIZAT
        @/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/workflows/execute-plan.md
        @/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/templates/summary.md
        @/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/references/checkpoints.md
-       @/Users/mlucascosta/Documents/dev/reduto/collabPix/.codex/get-shit-done/references/tdd.md
        </execution_context>
 
        <files_to_read>

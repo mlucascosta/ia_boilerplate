@@ -246,7 +246,6 @@ Execute each selected wave in sequence. Within a wave: parallel if `PARALLELIZAT
        @.github/get-shit-done/workflows/execute-plan.md
        @.github/get-shit-done/templates/summary.md
        @.github/get-shit-done/references/checkpoints.md
-       @.github/get-shit-done/references/tdd.md
        </execution_context>
 
        <files_to_read>

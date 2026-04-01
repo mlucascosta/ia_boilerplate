@@ -1,6 +1,6 @@
 ---
 name: reduto-workflow
-description: "Use when working in this repository with Codex, especially for phased features, documentation-first execution, planning artifacts, verification, and Reduto project constraints. Keywords: workflow, planning, docs, state, roadmap, verify, Reduto, Pest, SOLID."
+description: "Use when working in this repository with Codex, especially for phased features, documentation-first execution, planning artifacts, verification, and project constraints. Keywords: workflow, planning, docs, state, roadmap, verify, Reduto, TSDoc, PHPDoc, SOLID."
 ---
 
 # Reduto Workflow Skill
@@ -19,7 +19,8 @@ This skill adapts the repository workflow for Codex.
 2. For non-trivial work, read existing docs and planning artifacts before implementation.
 3. Keep `.planning/` current for phased or risky tasks.
 4. Update durable docs when implementation changes durable knowledge.
-5. Preserve project-specific constraints, including backend TDD with Pest and SOLID-oriented design.
+5. Preserve project-specific constraints, including mandatory complete in-code documentation and SOLID-oriented architecture for meaningful implementation work.
+6. Preserve the documented architectural direction and avoid introducing undeclared platform shifts.
 
 ## Crosswalk
 

@@ -14,6 +14,7 @@ The result is a model-agnostic workflow that can be followed by Copilot, Codex, 
 3. Documentation as memory: `docs/` and `.planning/` carry forward durable project knowledge.
 4. Dynamic rigor: small work can stay light; risky work must go deeper.
 5. Verifiable delivery: each meaningful task needs a concrete validation path.
+6. Explicit design delivery: implementation work is expected to preserve complete code-level documentation and a SOLID-oriented architecture.
 
 ## Standard Paths
 
@@ -110,11 +111,12 @@ Prefer atomic plans that fit in a fresh context window without hidden dependenci
 
 Verification must be explicit.
 
-1. Backend changes: tests first when required, then implementation, then validation.
-2. DB changes: idempotency, rollback awareness, and migration safety.
-3. UI changes: behavior validation on intended flows, not only static inspection.
-4. Docs changes: confirm docs match implementation rather than aspirational future state.
-5. Reviews: prioritize bugs, regressions, missing tests, and operational risk.
+1. Code changes must leave complete code documentation in a consistent standard such as TSDoc, PHPDoc, or an equivalent format appropriate to the language.
+2. Architectural changes must preserve SOLID-oriented design and make responsibilities, boundaries, and dependencies easy to reason about.
+3. DB changes require explicit validation of idempotency, rollback awareness, and migration safety.
+4. UI changes still require behavior validation on intended flows, not only static inspection.
+5. Docs changes must confirm docs match implementation rather than aspirational future state.
+6. Reviews must prioritize bugs, regressions, missing documentation, architectural drift, and operational risk.
 
 ## Documentation Standards
 
@@ -125,15 +127,16 @@ Use docs as operational memory.
 3. Solution capture is reserved for stable patterns, not temporary noise.
 4. Docs should be refreshed when implementation invalidates them.
 
-## Reduto-Specific Working Rules
+## Project-Specific Working Rules
 
-When this repository is used for Reduto-related work, keep these constraints active:
+When this repository is used as a project workflow base, keep these constraints active:
 
-1. Backend work uses TDD with Pest and SOLID-oriented design.
-2. Respect the PHP 8.3 plus HTMX plus AlpineJS plus MySQL direction.
-3. Preserve explicit multi-tenant boundaries, audit trails, and immutable financial ledgers.
-4. Prefer lightweight infrastructure choices aligned with the documented MVP constraints.
-5. Treat frontend tokens, typography, and component structure as deliberate system design, not incidental styling.
+1. Implementation work must maintain complete in-code documentation using TSDoc, PHPDoc, or an equivalent language-appropriate standard.
+2. Architectural work must preserve SOLID-oriented design and keep core business rules explicit in application code.
+3. Preserve explicit isolation boundaries, audit trails, and immutable history where the domain requires them.
+4. Prefer the simplest architecture and infrastructure that satisfies the documented constraints.
+5. Treat frontend structure, tokens, typography, and interaction rules as deliberate system design, not incidental styling.
+6. Do not introduce major framework or infrastructure shifts without first documenting and approving the direction.
 
 ## What Agents Must Avoid
 

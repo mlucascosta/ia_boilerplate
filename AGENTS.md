@@ -1,4 +1,4 @@
-# CollabPix AI Operating Manual
+# Project AI Operating Manual
 
 This repository uses a cross-AI workflow that must remain consistent across Copilot, Codex, Claude, and any other coding agent.
 
@@ -12,6 +12,7 @@ The canonical artifact contract is documented in `docs/ai/ARTIFACTS.md`.
 3. Prefer explicit plans, small batches, and verifiable execution over broad speculative edits.
 4. Keep project docs current when a change affects architecture, flows, infrastructure, operations, or reusable patterns.
 5. Treat `docs/` and `.planning/` as operational memory, not optional documentation.
+6. Treat complete in-code documentation and SOLID-oriented architecture as mandatory for meaningful implementation work.
 
 ## Default Workflow
 
@@ -40,22 +41,23 @@ For brownfield work on an existing codebase, use this order unless the user requ
 3. Capture stable patterns and non-obvious decisions.
 4. Avoid documenting churn; document durable knowledge.
 
-## Reduto Project Constraints
+## Project Constraints
 
-These constraints apply whenever work targets the Reduto stack described by project memory and roadmap material:
+These constraints apply whenever work targets the project described by repository docs, planning artifacts, and operational memory:
 
-1. Backend work must use TDD with Pest and SOLID-oriented design.
-2. Prefer PHP 8.3 with explicit business rules in application code.
-3. Keep database access explicit and safe.
-4. Preserve multi-tenant isolation, auditability, and immutable financial history.
-5. Avoid introducing forbidden platform choices such as Laravel, Symfony, CodeIgniter abstractions for new architecture, Redis, RabbitMQ, Kafka, Docker, and Kubernetes unless the user explicitly changes the platform direction.
-6. Frontend work should respect the existing HTMX plus AlpineJS direction and the documented design-token approach.
+1. Meaningful implementation work must keep complete in-code documentation using TSDoc, PHPDoc, or an equivalent language-appropriate standard.
+2. Meaningful implementation work must preserve SOLID-oriented architecture.
+3. Prefer explicit business rules in application code rather than hiding core logic behind framework magic.
+4. Keep data access explicit, testable, and safe.
+5. Preserve isolation boundaries, auditability, and immutable historical records where the domain depends on them.
+6. Do not introduce major frameworks, infrastructure platforms, or architectural dependencies without an explicit decision recorded in project docs.
+7. Frontend work should follow the documented UI conventions, component rules, and design-token or design-system guidance already established in the project.
 
 ## Execution Quality Bar
 
 1. Fix root causes instead of cosmetic patches when practical.
 2. Keep diffs focused and consistent with existing conventions.
-3. Validate with tests, checks, or explicit reasoning tied to acceptance criteria.
+3. Validate with checks, manual validation, tests when appropriate, or explicit reasoning tied to acceptance criteria, while keeping code documentation and architecture aligned with the documented standard.
 4. Call out blockers, assumptions, and residual risks clearly.
 
 ## Runtime Adapters

@@ -1,0 +1,49 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor and swap files
+*.swp
+*.swo
+*~
+
+# Logs and runtime noise
+*.log
+*.out
+*.err
+*.pid
+*.pid.lock
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Dependency directories and build outputs
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.tmp/
+tmp/
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local AI runtime state that should not be versioned
+.claude/tasks/
+.claude/notes/
+.claude/settings.local.json
+.codex/cache/
+.codex/tmp/
+
+# Local IDE settings
+.vscode/

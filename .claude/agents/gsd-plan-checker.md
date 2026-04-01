@@ -122,7 +122,6 @@ issue:
 |------|-------|--------|--------|------|
 | `auto` | Required | Required | Required | Required |
 | `checkpoint:*` | N/A | N/A | N/A | N/A |
-| `tdd` | Required | Behavior + Implementation | Test commands | Expected outcomes |
 
 **Red flags:**
 - Missing `<verify>` — can't confirm completion
@@ -540,7 +539,7 @@ The `tasks` array in the result shows each task's completeness:
 - `hasVerify` — verify element present
 - `hasDone` — done element present
 
-**Check:** valid task type (auto, checkpoint:*, tdd), auto tasks have files/action/verify/done, action is specific, verify is runnable, done is measurable.
+**Check:** valid task type (auto, checkpoint:*), auto tasks have files/action/verify/done, action is specific, verify is runnable, done is measurable.
 
 **For manual validation of specificity** (gsd-tools checks structure, not content quality):
 ```bash

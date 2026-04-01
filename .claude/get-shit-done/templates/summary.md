@@ -72,7 +72,7 @@ Each task was committed atomically:
 
 **Plan metadata:** `lmn012o` (docs: complete plan)
 
-_Note: TDD tasks may have multiple commits (test → feat → refactor)_
+_Note: Documentation-heavy or architecture-sensitive plans may produce extra commits when the work is intentionally split for clarity._
 
 ## Files Created/Modified
 - `path/to/file.ts` - What it does

@@ -73,8 +73,9 @@ Each plan should include:
 2. Scope.
 3. Expected files.
 4. Constraints.
-5. Verification steps.
-6. Done criteria.
+5. Documentation strategy, explicitly covering the in-code documentation standard to be preserved or introduced.
+6. Verification steps.
+7. Done criteria.
 
 ### `.planning/summaries/`
 
@@ -82,7 +83,7 @@ Use for execution summaries that help future sessions understand what changed.
 
 ### `.planning/verification/`
 
-Use for validation notes, UAT outcomes, test evidence, or unresolved gaps for non-trivial work.
+Use for validation notes, UAT outcomes, documentation conformance evidence, architecture conformance evidence, or unresolved gaps for non-trivial work.
 
 ## Documentation Contract
 
@@ -151,6 +152,8 @@ Reusable learnings and patterns from non-trivial implementation or debugging wor
 
 ## Constraints
 
+## Documentation Strategy
+
 ## Verification
 
 ## Done Criteria
@@ -174,6 +177,10 @@ Reusable learnings and patterns from non-trivial implementation or debugging wor
 # Verification: <name>
 
 ## Scope
+
+## Documentation Evidence
+
+## Architecture Evidence
 
 ## Checks Run
 

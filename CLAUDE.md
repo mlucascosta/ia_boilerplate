@@ -10,7 +10,8 @@ The canonical artifact contract lives in `docs/ai/ARTIFACTS.md`.
 2. Read relevant docs before implementation.
 3. Maintain `.planning/` for active workflow state when work is phased or risky.
 4. Keep documentation aligned with implementation.
-5. Preserve project constraints, especially backend TDD with Pest and SOLID-oriented design.
+5. Preserve project constraints, especially mandatory complete in-code documentation and SOLID-oriented architecture for meaningful implementation work.
+6. Preserve the documented architectural direction and avoid introducing undeclared platform shifts.
 
 ## Notes
 

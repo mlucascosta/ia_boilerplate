@@ -231,37 +231,37 @@ This prevents the "scavenger hunt" anti-pattern where executors explore the code
 
 **Test:** Could a different Claude instance execute without asking clarifying questions? If not, add specificity.
 
-## TDD Detection
+## Documentation And Architecture Detection
 
-**Heuristic:** Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-- Yes → Create a dedicated TDD plan (type: tdd)
+**Heuristic:** Will this change introduce or modify non-trivial interfaces, responsibilities, domain rules, or reusable internal contracts?
+- Yes → Create a dedicated focused plan with explicit documentation and architecture checks
 - No → Standard task in standard plan
 
-**TDD candidates (dedicated TDD plans):** Business logic with defined I/O, API endpoints with request/response contracts, data transformations, validation rules, algorithms, state machines.
+**Documentation-and-architecture-sensitive candidates:** Business logic, API endpoints, shared modules, validation rules, domain transformations, public interfaces, stateful workflows, and anything that changes dependency direction or responsibility boundaries.
 
-**Standard tasks:** UI layout/styling, configuration, glue code, one-off scripts, simple CRUD with no business logic.
+**Standard tasks:** UI layout/styling, configuration, glue code, one-off scripts, copy changes, and narrowly scoped edits with no structural impact.
 
-**Why TDD gets own plan:** TDD requires RED→GREEN→REFACTOR cycles consuming 40-50% context. Embedding in multi-task plans degrades quality.
+**Why these plans get their own focus:** Documentation-heavy and architecture-sensitive work benefits from isolated reasoning, explicit contract writing, and targeted acceptance criteria. Embedding too much of that work into broad multi-task plans degrades clarity.
 
-**Task-level TDD** (for code-producing tasks in standard plans): When a task creates or modifies production code, add `tdd="true"` and a `<behavior>` block to make test expectations explicit before implementation:
+**Task-level documentation requirements** (for code-producing tasks in standard plans): when a task creates or modifies production code, add explicit documentation and architecture expectations to the task itself:
 
 ```xml
-<task type="auto" tdd="true">
+<task type="auto">
   <name>Task: [name]</name>
-  <files>src/feature.ts, src/feature.test.ts</files>
-  <behavior>
-    - Test 1: [expected behavior]
-    - Test 2: [edge case]
-  </behavior>
-  <action>[Implementation after tests pass]</action>
+  <files>src/feature.ts</files>
+  <action>[Implementation details with explicit behavior and structure]</action>
+  <acceptance_criteria>
+    - Source file includes complete in-code documentation in the project standard
+    - Responsibilities and dependencies remain aligned with existing architectural boundaries
+  </acceptance_criteria>
   <verify>
-    <automated>npm test -- --filter=feature</automated>
+    <manual>Review code documentation and dependency boundaries in the touched files</manual>
   </verify>
   <done>[Criteria]</done>
 </task>
 ```
 
-Exceptions where `tdd="true"` is not needed: `type="checkpoint:*"` tasks, configuration-only files, documentation, migration scripts, glue code wiring existing tested components, styling-only changes.
+Exceptions where dedicated focus is not needed: `type="checkpoint:*"` tasks, documentation-only files, migration scripts with no reusable logic, styling-only changes, and simple configuration updates.
 
 ## User Setup Detection
 
@@ -764,51 +764,51 @@ Why bad: Verification fatigue. Combine into one checkpoint at end.
 
 </checkpoints>
 
-<tdd_integration>
+<documentation_architecture_integration>
 
-## TDD Plan Structure
+## Documentation And Architecture-Focused Plan Structure
 
-TDD candidates identified in task_breakdown get dedicated plans (type: tdd). One feature per TDD plan.
+Candidates identified in task_breakdown can get dedicated focused plans when the main risk is preserving code documentation quality or architectural integrity.
 
 ```markdown
 ---
 phase: XX-name
 plan: NN
-type: tdd
+type: execute
 ---
 
 <objective>
 [What feature and why]
-Purpose: [Design benefit of TDD for this feature]
-Output: [Working, tested feature]
+Purpose: [Documentation or architectural clarity benefit for isolating this work]
+Output: [Working feature with complete code documentation and preserved design boundaries]
 </objective>
 
-<feature>
-  <name>[Feature name]</name>
-  <files>[source file, test file]</files>
-  <behavior>
-    [Expected behavior in testable terms]
-    Cases: input -> expected output
-  </behavior>
-  <implementation>[How to implement once tests pass]</implementation>
-</feature>
+<focus>
+  <name>[Focused change name]</name>
+  <files>[source files]</files>
+  <documentation>[What in-code documentation must be added or preserved]</documentation>
+  <architecture>[What boundaries, responsibilities, or dependency rules must hold]</architecture>
+  <implementation>[How to implement while preserving those constraints]</implementation>
+</focus>
 ```
 
-## Red-Green-Refactor Cycle
+## Implementation Cycle
 
-**RED:** Create test file → write test describing expected behavior → run test (MUST fail) → commit: `test({phase}-{plan}): add failing test for [feature]`
+**IMPLEMENT:** Write the smallest coherent change that satisfies the focused objective.
 
-**GREEN:** Write minimal code to pass → run test (MUST pass) → commit: `feat({phase}-{plan}): implement [feature]`
+**DOCUMENT:** Add or refresh complete in-code documentation in the language-appropriate standard.
 
-**REFACTOR (if needed):** Clean up → run tests (MUST pass) → commit: `refactor({phase}-{plan}): clean up [feature]`
+**ALIGN:** Review responsibilities, abstractions, and dependency flow so the result remains SOLID-oriented.
 
-Each TDD plan produces 2-3 atomic commits.
+**VERIFY:** Confirm acceptance criteria, documentation completeness, and architecture expectations.
 
-## Context Budget for TDD
+These plans may still produce multiple atomic commits when clarity benefits from separating implementation, documentation refinement, and structural cleanup.
 
-TDD plans target ~40% context (lower than standard 50%). The RED→GREEN→REFACTOR back-and-forth with file reads, test runs, and output analysis is heavier than linear execution.
+## Context Budget For Focused Plans
 
-</tdd_integration>
+Documentation-heavy and architecture-sensitive plans target a lower context footprint than broad execution plans so reasoning stays explicit and reviewable.
+
+</documentation_architecture_integration>
 
 <gap_closure_mode>
 
@@ -1140,7 +1140,7 @@ For each task:
 2. What does it CREATE? (files, types, APIs others might need)
 3. Can it run independently? (no dependencies = Wave 1 candidate)
 
-Apply TDD detection heuristic. Apply user setup detection.
+Apply documentation-and-architecture detection heuristic. Apply user setup detection.
 </step>
 
 <step name="build_dependency_graph">

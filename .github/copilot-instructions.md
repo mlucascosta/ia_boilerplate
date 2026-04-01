@@ -12,9 +12,10 @@ Apply the repository workflow defined in `AGENTS.md`, `docs/ai/WORKFLOW.md`, and
 
 ## Project-Specific Priorities
 
-1. Backend work must use TDD with Pest and SOLID-oriented design.
-2. Respect the documented Reduto constraints when working on that stack.
-3. Prefer predictable delivery over speculative autonomy.
+1. Meaningful implementation work must keep complete in-code documentation using TSDoc, PHPDoc, or an equivalent language-appropriate standard.
+2. Meaningful implementation work must preserve SOLID-oriented architecture.
+3. Respect the documented project constraints and existing architectural direction.
+4. Prefer predictable delivery over speculative autonomy.
 
 <!-- GSD Configuration — managed by get-shit-done installer -->
 # Instructions for GSD
