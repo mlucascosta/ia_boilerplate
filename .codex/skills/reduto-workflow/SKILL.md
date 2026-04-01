@@ -21,6 +21,7 @@ This skill adapts the repository workflow for Codex.
 4. Update durable docs when implementation changes durable knowledge.
 5. Preserve project-specific constraints, including mandatory complete in-code documentation and SOLID-oriented architecture for meaningful implementation work.
 6. Preserve the documented architectural direction and avoid introducing undeclared platform shifts.
+7. Use Git Flow-compatible feature, release, and hotfix branches for meaningful implementation work instead of committing directly to the protected primary branch.
 
 ## Crosswalk
 

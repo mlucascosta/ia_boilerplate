@@ -9,10 +9,10 @@ Configuration options for `.planning/` directory behavior.
   "search_gitignored": false
 },
 "git": {
-  "branching_strategy": "none",
-  "phase_branch_template": "gsd/phase-{phase}-{slug}",
-  "milestone_branch_template": "gsd/{milestone}-{slug}",
-  "quick_branch_template": null
+  "branching_strategy": "phase",
+  "phase_branch_template": "feature/{phase}-{slug}",
+  "milestone_branch_template": "release/{milestone}-{slug}",
+  "quick_branch_template": "hotfix/{slug}"
 }
 ```
 
@@ -20,10 +20,10 @@ Configuration options for `.planning/` directory behavior.
 |--------|---------|-------------|
 | `commit_docs` | `true` | Whether to commit planning artifacts to git |
 | `search_gitignored` | `false` | Add `--no-ignore` to broad rg searches |
-| `git.branching_strategy` | `"none"` | Git branching approach: `"none"`, `"phase"`, or `"milestone"` |
-| `git.phase_branch_template` | `"gsd/phase-{phase}-{slug}"` | Branch template for phase strategy |
-| `git.milestone_branch_template` | `"gsd/{milestone}-{slug}"` | Branch template for milestone strategy |
-| `git.quick_branch_template` | `null` | Optional branch template for quick-task runs |
+| `git.branching_strategy` | `"phase"` | Git branching approach: `"none"`, `"phase"`, or `"milestone"` |
+| `git.phase_branch_template` | `"feature/{phase}-{slug}"` | Branch template for Git Flow feature branches |
+| `git.milestone_branch_template` | `"release/{milestone}-{slug}"` | Branch template for Git Flow release branches |
+| `git.quick_branch_template` | `"hotfix/{slug}"` | Optional branch template for Git Flow hotfix runs |
 </config_schema>
 
 <commit_docs_behavior>
@@ -119,20 +119,20 @@ To use uncommitted mode:
 | `phase` | At `execute-phase` start | Single phase | User merges after phase |
 | `milestone` | At first `execute-phase` of milestone | Entire milestone | At `complete-milestone` |
 
-**When `git.branching_strategy: "none"` (default):**
+**When `git.branching_strategy: "none"`:**
 - All work commits to current branch
 - Standard GSD behavior
 
-**When `git.branching_strategy: "phase"`:**
+**When `git.branching_strategy: "phase"` (default, Git Flow-compatible):**
 - `execute-phase` creates/switches to a branch before execution
-- Branch name from `phase_branch_template` (e.g., `gsd/phase-03-authentication`)
+- Branch name from `phase_branch_template` (e.g., `feature/03-authentication`)
 - All plan commits go to that branch
 - User merges branches manually after phase completion
 - `complete-milestone` offers to merge all phase branches
 
 **When `git.branching_strategy: "milestone"`:**
 - First `execute-phase` of milestone creates the milestone branch
-- Branch name from `milestone_branch_template` (e.g., `gsd/v1.0-mvp`)
+- Branch name from `milestone_branch_template` (e.g., `release/v1.0-mvp`)
 - All phases in milestone commit to same branch
 - `complete-milestone` offers to merge milestone branch to main
 
@@ -193,9 +193,9 @@ Squash merge is recommended — keeps main branch history clean while preserving
 
 | Strategy | Best for |
 |----------|----------|
-| `none` | Solo development, simple projects |
-| `phase` | Code review per phase, granular rollback, team collaboration |
-| `milestone` | Release branches, staging environments, PR per version |
+| `none` | Exceptional cases only where Git Flow is intentionally disabled by repository policy |
+| `phase` | Default Git Flow-compatible feature delivery |
+| `milestone` | Git Flow-compatible release stabilization branches |
 
 </branching_strategy_behavior>
 

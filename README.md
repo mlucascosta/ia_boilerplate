@@ -1,6 +1,6 @@
-# CollabPix
+# IA Boilerplate
 
-CollabPix is a repository-level, cross-AI workflow bootstrap for software delivery.
+IA Boilerplate is a repository-level, cross-AI workflow bootstrap for software delivery.
 
 It provides a shared operating model for GitHub Copilot, Codex, Claude, and other coding agents so they can work against the same planning artifacts, documentation rules, and execution constraints.
 
@@ -63,7 +63,7 @@ If you use this repository as a template or boilerplate, run the bootstrap scrip
 What the bootstrap does:
 
 - Rewrites local absolute runtime paths to the directory where the boilerplate was cloned
-- Renames project-facing boilerplate docs from `CollabPix` to your project name
+- Renames project-facing boilerplate docs from `IA Boilerplate` to your project name
 - Renames the internal Codex workflow skill from `reduto-workflow` to a project-derived identifier such as `your-project-workflow`
 - Updates the MIT copyright holder, defaulting to `<Project Name> contributors`
 

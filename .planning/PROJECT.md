@@ -1,4 +1,4 @@
-# CollabPix Workflow Bootstrap
+# IA Boilerplate Workflow Bootstrap
 
 ## What This Is
 

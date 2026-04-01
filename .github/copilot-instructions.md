@@ -14,8 +14,9 @@ Apply the repository workflow defined in `AGENTS.md`, `docs/ai/WORKFLOW.md`, and
 
 1. Meaningful implementation work must keep complete in-code documentation using TSDoc, PHPDoc, or an equivalent language-appropriate standard.
 2. Meaningful implementation work must preserve SOLID-oriented architecture.
-3. Respect the documented project constraints and existing architectural direction.
-4. Prefer predictable delivery over speculative autonomy.
+3. Meaningful implementation work must use Git Flow-compatible branching and avoid direct work on the protected primary branch.
+4. Respect the documented project constraints and existing architectural direction.
+5. Prefer predictable delivery over speculative autonomy.
 
 <!-- GSD Configuration — managed by get-shit-done installer -->
 # Instructions for GSD

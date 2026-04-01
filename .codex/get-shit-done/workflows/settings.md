@@ -33,7 +33,7 @@ Parse current values (default to `true` if not present):
 - `workflow.ui_phase` — generate UI-SPEC.md design contracts for frontend phases (default: true if absent)
 - `workflow.ui_safety_gate` — prompt to run $gsd-ui-phase before planning frontend phases (default: true if absent)
 - `model_profile` — which model each agent uses (default: `balanced`)
-- `git.branching_strategy` — branching approach (default: `"none"`)
+- `git.branching_strategy` — branching approach (default: `"phase"`, Git Flow-compatible)
 </step>
 
 <step name="present_settings">
@@ -122,9 +122,9 @@ AskUserQuestion([
     header: "Branching",
     multiSelect: false,
     options: [
-      { label: "None (Recommended)", description: "Commit directly to current branch" },
-      { label: "Per Phase", description: "Create branch for each phase (gsd/phase-{N}-{name})" },
-      { label: "Per Milestone", description: "Create branch for entire milestone (gsd/{version}-{name})" }
+      { label: "None", description: "Commit directly to current branch. Only use when repository policy explicitly disables Git Flow." },
+      { label: "Per Phase (Recommended)", description: "Create Git Flow feature branches for each phase (feature/{N}-{name})" },
+      { label: "Per Milestone", description: "Create Git Flow release branches for an entire milestone (release/{version}-{name})" }
     ]
   },
   {

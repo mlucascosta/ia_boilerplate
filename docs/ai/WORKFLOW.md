@@ -15,6 +15,7 @@ The result is a model-agnostic workflow that can be followed by Copilot, Codex, 
 4. Dynamic rigor: small work can stay light; risky work must go deeper.
 5. Verifiable delivery: each meaningful task needs a concrete validation path.
 6. Explicit design delivery: implementation work is expected to preserve complete code-level documentation and a SOLID-oriented architecture.
+7. Mandatory Git Flow discipline: meaningful work must happen on Git Flow-compatible branches, not directly on the protected primary branch.
 
 ## Standard Paths
 
@@ -117,6 +118,17 @@ Verification must be explicit.
 4. UI changes still require behavior validation on intended flows, not only static inspection.
 5. Docs changes must confirm docs match implementation rather than aspirational future state.
 6. Reviews must prioritize bugs, regressions, missing documentation, architectural drift, and operational risk.
+
+## Git Workflow Standard
+
+Git Flow is mandatory for meaningful implementation work.
+
+1. Agents must not execute meaningful implementation work directly on `main`, `master`, or any protected primary branch.
+2. Feature work must happen on `feature/*` branches.
+3. Release stabilization work must happen on `release/*` branches.
+4. Urgent production fixes must happen on `hotfix/*` branches.
+5. If the repository documents a different protected-branch naming policy, preserve that policy while keeping Git Flow branch families for delivery work.
+6. Planning, execution, and merge recommendations must assume branch-based delivery rather than direct commits to the primary branch.
 
 ## Documentation Standards
 

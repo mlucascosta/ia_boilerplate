@@ -153,12 +153,12 @@ fi
 
 old_project_name="$(current_readme_name)"
 if [[ -z "$old_project_name" ]]; then
-  old_project_name="CollabPix"
+  old_project_name="IA Boilerplate"
 fi
 
 old_copyright_holder="$(current_license_holder)"
 if [[ -z "$old_copyright_holder" ]]; then
-  old_copyright_holder="CollabPix contributors"
+  old_copyright_holder="IA Boilerplate contributors"
 fi
 
 old_codex_workflow_skill_name="$(current_codex_workflow_skill_name)"

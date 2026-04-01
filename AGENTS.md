@@ -13,6 +13,7 @@ The canonical artifact contract is documented in `docs/ai/ARTIFACTS.md`.
 4. Keep project docs current when a change affects architecture, flows, infrastructure, operations, or reusable patterns.
 5. Treat `docs/` and `.planning/` as operational memory, not optional documentation.
 6. Treat complete in-code documentation and SOLID-oriented architecture as mandatory for meaningful implementation work.
+7. Treat Git Flow-compatible branching as mandatory for meaningful implementation work.
 
 ## Default Workflow
 
@@ -59,6 +60,7 @@ These constraints apply whenever work targets the project described by repositor
 2. Keep diffs focused and consistent with existing conventions.
 3. Validate with checks, manual validation, tests when appropriate, or explicit reasoning tied to acceptance criteria, while keeping code documentation and architecture aligned with the documented standard.
 4. Call out blockers, assumptions, and residual risks clearly.
+5. Do not deliver meaningful implementation work directly on the protected primary branch; use Git Flow-compatible feature, release, or hotfix branches.
 
 ## Runtime Adapters
 

@@ -12,6 +12,7 @@ The canonical artifact contract lives in `docs/ai/ARTIFACTS.md`.
 4. Keep documentation aligned with implementation.
 5. Preserve project constraints, especially mandatory complete in-code documentation and SOLID-oriented architecture for meaningful implementation work.
 6. Preserve the documented architectural direction and avoid introducing undeclared platform shifts.
+7. Use Git Flow-compatible branching for meaningful implementation work and do not work directly on the protected primary branch.
 
 ## Notes
 
