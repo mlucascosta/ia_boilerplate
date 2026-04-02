@@ -1,63 +1,76 @@
 # Context Map
 
-Selective loading index. Agents must use this to determine which files to read per area instead of discovering scope each session.
+Use this file to minimize unnecessary context loading.
 
-## How to use
+## Always read first
+- `.planning/STATE.md`
+- the active plan in `.planning/plans/`
+- the specific files requested by the task
 
-1. Find the area matching your task.
-2. Load only the files listed under **Read first**.
-3. Load files under **If needed** only when the task requires them.
-4. Never load files outside these lists unless the user explicitly requests it.
+## Read only when needed
+- `docs/ai/WORKFLOW.md`
+- `docs/ai/ARTIFACTS.md`
+- `docs/ai/PROJECT_METHOD.md`
+- `docs/ai/DECISION_RULES.md`
+- `docs/architecture/*`
+- `docs/modules/*`
 
-## Template per area
+## Avoid by default
+- unrelated modules
+- old summaries unless the task explicitly depends on them
+- full repository scans
+- entire generated files when diffs or small excerpts are enough
 
-```md
-## <Area Name>
-Read first:
-- .planning/STATE.md
-- <primary doc for this area>
+## Task-oriented loading
 
-If needed:
-- <secondary docs>
+### Local bugfix
+Read:
+- `.planning/STATE.md`
+- active plan if present
+- failing module files
+- relevant test file
 
-Never load unless relevant:
-- <unrelated docs that agents tend to pull in>
-```
+Avoid:
+- roadmap
+- broad architecture docs
+- unrelated summaries
 
-## Areas
+### Local feature
+Read:
+- `.planning/STATE.md`
+- active plan
+- target module docs
+- affected implementation files
 
-> Populate the sections below as the project grows. Each area should list 2–5 files max under "Read first".
+Read later only if needed:
+- architecture docs
+- ADRs
+- roadmap
 
-## Architecture
-Read first:
-- .planning/STATE.md
-- docs/architecture/
+### Structural change
+Read:
+- `.planning/STATE.md`
+- `docs/ai/WORKFLOW.md`
+- `docs/ai/PROJECT_METHOD.md`
+- relevant architecture docs
+- related ADRs
+- affected module docs
 
-If needed:
-- docs/integrations/
-- docs/infrastructure/
+### Documentation change
+Read:
+- `.planning/STATE.md`
+- target documentation file
+- one closest canonical reference
 
-## Features
-Read first:
-- .planning/STATE.md
-- docs/features/<relevant-feature>.md
+Avoid:
+- implementation files unless the doc depends on them
 
-If needed:
-- docs/modules/<relevant-module>.md
+### Handoff or resume
+Read:
+- `.planning/STATE.md`
+- latest relevant summary
+- active plan
+- only the files in current scope
 
-## Infrastructure
-Read first:
-- .planning/STATE.md
-- docs/infrastructure/
-
-If needed:
-- docs/environments/
-- docs/runbooks/
-
-## Integrations
-Read first:
-- .planning/STATE.md
-- docs/integrations/<relevant-integration>.md
-
-If needed:
-- docs/architecture/
+## Loading rule
+Never ask the model to analyze the entire repository unless the task is explicitly repository-wide and planning artifacts were updated first.

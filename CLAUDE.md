@@ -12,6 +12,8 @@ Follow `AGENTS.md` (which points to WORKFLOW.md + ARTIFACTS.md).
 - Never paste entire files – only minimal excerpts when needed.
 - Session reset: >12 turns, >3 scope changes, or >2 failed attempts → SUMMARY → compress STATE → restart.
 - Use `docs/ai/RECIPES.md` for common task patterns.
+- Respect governance/execution artifact separation (see `docs/ai/PROJECT_METHOD.md`).
+- Consult `docs/ai/DECISION_RULES.md` to know when to update which artifact.
 
 ## Flags in plans (compact)
 `DOC=full|min`, `ARCH=solid|none`, `VERIFY=V0|V1|V2`, `SCOPE=<files>`

@@ -12,6 +12,14 @@ Mandatory first read. Consult `WORKFLOW.md` only when ambiguity requires it.
 
 Pick the **lightest** path that preserves correctness. Escalate if missing context.
 
+## Delivery model
+
+Hybrid: governance (stable direction) + adaptive execution (daily delivery).
+- Governance artifacts: VISION, ROADMAP, architecture docs, ADRs, RISK_REGISTER.
+- Execution artifacts: STATE, plans, summaries, verification, handoffs.
+- Humans own judgment and approval. AI accelerates execution.
+- See `PROJECT_METHOD.md` for full rationale. `DECISION_RULES.md` for when to update what.
+
 ## Verification
 
 | Level | Scope |
@@ -51,3 +59,7 @@ VERIFY=V0|V1|V2  FILES=<paths>  OUT=<exclusions>
 - Re-reading everything when scope can be explicit.
 - Combining unrelated tasks in one prompt.
 - Skipping handoff summaries at session boundaries.
+
+## Definition of Done
+
+A slice is done only when: scoped change implemented + validation done + summarized + STATE updated + no hidden structural decisions.

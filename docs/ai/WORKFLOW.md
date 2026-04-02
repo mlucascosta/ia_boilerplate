@@ -17,6 +17,39 @@ The result is a model-agnostic workflow that can be followed by Copilot, Codex, 
 6. Explicit design delivery: implementation work is expected to preserve complete code-level documentation and a SOLID-oriented architecture.
 7. Mandatory Git Flow discipline: meaningful work must happen on Git Flow-compatible branches, not directly on the protected primary branch.
 
+## Delivery Model
+
+This repository uses a hybrid delivery model. See `docs/ai/PROJECT_METHOD.md` for full rationale.
+
+### Governance layer
+Use governance artifacts for:
+- project direction
+- scope boundaries
+- architectural decisions
+- risks
+- quality rules
+- canonical documentation
+
+### Execution layer
+Use execution artifacts for:
+- backlog-driven implementation
+- small slices
+- AI-assisted pair programming
+- short validation loops
+- summaries and handoffs
+
+### Core rule
+Stable decisions must be recorded before repeated execution begins.
+Exploratory work must be broken into small, testable slices.
+
+## Human and AI Roles
+
+Humans own: judgment, prioritization, architecture, security, validation, approval.
+
+AI accelerates: drafting, local analysis, implementation support, tests, refactors, summaries.
+
+AI does not own final approval. No critical delivery is accepted without human validation proportional to risk.
+
 ## Standard Paths
 
 ### Path A: Full Feature Flow
@@ -120,11 +153,16 @@ Store workflow state in `.planning/` and durable project knowledge in `docs/`.
 Minimum artifact expectations:
 
 1. `docs/ai/ARTIFACTS.md` defines the artifact contract.
-2. `.planning/STATE.md` tracks current phase, decisions, blockers, and next steps for non-trivial work.
-3. `.planning/ROADMAP.md` exists when work is phased.
-4. `.planning/epics/` groups related plans for macro-phases when needed.
-5. `.planning/plans/` contains atomic plans when the task is large enough to need them.
-6. `docs/` holds stable docs, runbooks, architecture notes, and reusable learnings.
+2. `docs/ai/PROJECT_METHOD.md` defines the hybrid delivery model.
+3. `docs/ai/DECISION_RULES.md` defines when to update each artifact.
+4. `.planning/STATE.md` tracks current phase, decisions, blockers, and next steps for non-trivial work.
+5. `.planning/ROADMAP.md` exists when work is phased.
+6. `.planning/VISION.md` captures durable product direction when the project scope justifies it.
+7. `.planning/RISK_REGISTER.md` tracks known risks with mitigations.
+8. `.planning/epics/` groups related plans for macro-phases when needed.
+9. `.planning/adrs/` stores structural technical decisions with durable reasoning.
+10. `.planning/plans/` contains atomic plans when the task is large enough to need them.
+11. `docs/` holds stable docs, runbooks, architecture notes, and reusable learnings.
 
 ## Planning Standards
 
@@ -247,3 +285,12 @@ This lets agents parse task constraints in ~10 lines instead of re-reading prose
 7. Combining unrelated tasks in a single prompt.
 8. Continuing drifted chats instead of compacting into artifacts and restarting (see Token Economy rule 8).
 9. Skipping handoff summaries at session boundaries, because missing context causes expensive rework.
+
+## Definition of Done
+
+A slice is done only when:
+- the scoped change is implemented
+- validation appropriate to risk was completed
+- the result is summarized
+- `STATE.md` is updated
+- no unresolved structural decision is hidden inside execution notes

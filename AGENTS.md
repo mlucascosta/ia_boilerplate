@@ -27,6 +27,15 @@ You MUST follow:
 
 Prohibited: pasting **entire** files. Small excerpts are allowed when necessary for clarity.
 
+## Hybrid delivery model
+This project uses hybrid delivery:
+- governance artifacts for stable direction
+- execution artifacts for daily AI-assisted delivery
+
+Read the canonical workflow first.
+Do not mix roadmap-level decisions with slice execution notes.
+Do not treat chat history as the source of truth.
+
 ## Runtime Adapters
 
 Use the runtime-specific files only as adapters to this manual:

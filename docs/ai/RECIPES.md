@@ -1,73 +1,83 @@
 # Recipes
 
-Ultra-short task templates for common operations. Use these to reduce prompt size and standardize agent behavior.
+These recipes standardize common AI-assisted work patterns.
 
 ## Focused bugfix
+Read:
+- `.planning/STATE.md`
+- active plan if present
+- failing files
+- relevant test file
 
-```
-Read: .planning/STATE.md + affected file(s)
-Deliver: root cause + minimal diff + V1 verification
-Summary: ≤80 words
-```
+Deliver:
+- root cause
+- minimal change
+- targeted validation
+- short summary
+- updated state
 
-## Doc change
+## Local feature slice
+Read:
+- `.planning/STATE.md`
+- active plan
+- target files
+- one canonical doc if needed
 
-```
-Read: .planning/STATE.md + target doc
-Deliver: updated doc (diff only)
-Verify: V0 — confirm doc matches implementation
-Summary: ≤60 words
-```
+Deliver:
+- scoped implementation
+- acceptance check
+- short summary
+- updated state
+- next slice suggestion
 
-## New endpoint
+## Structural change
+Read:
+- `.planning/STATE.md`
+- `docs/ai/WORKFLOW.md`
+- `docs/ai/PROJECT_METHOD.md`
+- related architecture docs
+- existing ADRs if applicable
 
-```
-Read: .planning/STATE.md + route file + service file + relevant docs
-Deliver: route + handler + service method + tests
-Verify: V1 — single request test
-Summary: ≤100 words
-```
+Deliver:
+- proposed decision
+- implementation boundary
+- governance updates first
+- then implementation slice
+- verification notes
 
-## Local refactor
+## Documentation update
+Read:
+- `.planning/STATE.md`
+- target doc
+- nearest source of truth
 
-```
-Read: .planning/STATE.md + target file(s)
-Deliver: refactored code (diff only) + updated in-code docs
-Verify: V1 — existing tests pass
-Summary: ≤80 words
-```
+Deliver:
+- concise documentation update
+- no duplicated policy
+- references to canonical files
+- updated state if scope changed
 
-## Component change (UI)
+## Large-scope planning
+Read:
+- `.planning/STATE.md`
+- `.planning/ROADMAP.md`
+- `docs/ai/WORKFLOW.md`
 
-```
-Read: .planning/STATE.md + component file + design tokens/system docs
-Deliver: component diff + visual validation notes
-Verify: V1 — behavior check on intended flow
-Summary: ≤80 words
-```
+Deliver:
+- reduced scope into slices
+- plan files
+- updated roadmap if required
+- no attempt to execute the full scope in one pass
 
-## Code review
+## Handoff
+Read:
+- `.planning/STATE.md`
+- active plan
+- latest summary if present
 
-```
-Read: diff/PR + .planning/STATE.md
-Deliver: bugs, regressions, missing docs, arch drift, operational risk
-Format: bullet list, max 10 items
-Summary: not needed
-```
-
-## Session handoff
-
-```
-Read: .planning/STATE.md + recent summaries
-Deliver: compressed STATE (≤120 words) + SUMMARY (≤120 words)
-Verify: V0 — next agent can continue without replaying chat
-```
-
-## New feature (Full path)
-
-```
-Read: .planning/STATE.md + CONTEXT_MAP area + relevant docs
-Deliver: ROADMAP update + atomic PLANs + execute first slice
-Verify: V2 per slice
-Summary: per slice ≤120 words
-```
+Deliver:
+- what changed
+- what was verified
+- what remains
+- exact next step
+- no narrative history beyond what is needed

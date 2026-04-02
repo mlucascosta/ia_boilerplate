@@ -8,8 +8,11 @@ This file defines the repository artifacts that any AI runtime should understand
 .planning/
   STATE.md
   ROADMAP.md
+  VISION.md
+  RISK_REGISTER.md
   research/
   epics/
+  adrs/
   plans/
   summaries/
   verification/
@@ -27,6 +30,8 @@ docs/
     ARTIFACTS.md
     WORKFLOW.md
     WORKFLOW_SHORT.md
+    PROJECT_METHOD.md
+    DECISION_RULES.md
     CONTEXT_MAP.md
     RECIPES.md
 ```
@@ -49,7 +54,40 @@ If an artifact exceeds its budget, compress or rotate content to `summaries/` be
 
 No prompt should request "analyze the entire repository". Scope reads explicitly.
 
+## Artifact Classification
+
+### Governance artifacts
+Use these for durable direction and control:
+- `VISION.md`
+- `ROADMAP.md`
+- architecture documentation
+- ADRs (`.planning/adrs/`)
+- `RISK_REGISTER.md`
+
+### Execution artifacts
+Use these for active delivery:
+- `STATE.md`
+- plans
+- summaries
+- verification notes
+- handoffs
+
+### Rule
+Do not mix roadmap-level decisions with slice execution notes.
+Do not use summaries as long-term canonical architecture records.
+
 ## Artifact Meanings
+
+### `.planning/VISION.md`
+
+Use for durable product direction:
+
+1. Purpose of the project.
+2. Target users and value proposition.
+3. High-level boundaries.
+4. Key constraints and premises.
+
+This is a governance artifact. Update only when direction changes.
 
 ### `.planning/STATE.md`
 
@@ -92,6 +130,29 @@ Each epic is a markdown file describing:
 4. Acceptance criteria for the epic as a whole.
 
 Epics sit between `ROADMAP.md` and `plans/`. They do not replace either.
+
+### `.planning/adrs/`
+
+Use for Architecture Decision Records:
+
+1. Structural technical decisions.
+2. Dependency or integration strategy changes.
+3. Persistence, queue, or security pattern choices.
+4. Decisions that need durable reasoning and traceability.
+
+Each ADR is a short markdown file. Use `docs/ai/DECISION_RULES.md` to know when to create one.
+
+### `.planning/RISK_REGISTER.md`
+
+Use for tracking project risks:
+
+1. Risk description.
+2. Impact and probability.
+3. Mitigation strategy.
+4. Trigger conditions.
+5. Owner.
+
+This is a governance artifact. Review periodically.
 
 ### `.planning/plans/`
 
