@@ -156,6 +156,19 @@ If the bootstrap warns that `npx` is missing, install Node.js before trying to u
 └── docs/
 ```
 
+## Current Limitations and Roadmap
+
+This repository is at v1.0.0 — the workflow contract, tooling, and a Node.js example are in place. A few things are intentionally deferred:
+
+| What | Why deferred | Planned |
+|---|---|---|
+| Automated tests for the bootstrap script | Tests should cover real failure modes; those only become clear after real adoption | Phase 07 |
+| Multi-stack examples (Vue.js, Python, PHP) | One concrete example ships first; more are added once usage patterns are understood | Phase 09 |
+| Cross-platform install docs (Linux, WSL, Windows) | Prerequisites section covers the common case; explicit multi-platform docs follow community feedback | Phase 08 |
+| Migration tooling for derived projects | Only relevant once there is a v1.x → v2.x boundary to cross | Phase 10 |
+
+Full roadmap: [`.planning/ROADMAP.md`](.planning/ROADMAP.md)
+
 ## Contributing
 
 Contributions are open.
