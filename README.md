@@ -34,6 +34,28 @@ This repository is intentionally focused on workflow infrastructure rather than 
 - Keep workflow expectations explicit, reviewable, and durable
 - Enforce strong implementation standards around complete code documentation and SOLID-oriented architecture
 
+## How The Workflow Fits Together
+
+```
+  Define objective          Plan atomic slice        Execute focused diff
+   STATE.md          →      plans/PLAN.md       →      code changes
+       ↓                         ↓                          ↓
+  ROADMAP.md             verification steps            TSDoc / PHPDoc
+  (phased work)          done criteria                 SOLID boundaries
+                                                            ↓
+                         Compact handoff           Log results
+                         summaries/            ←   verification/
+                         (≤180 words)              next STATE.md step
+```
+
+Choose the lightest path that still preserves correctness:
+
+| Situation | Path |
+|---|---|
+| Copy, labels, single-file local fix | **Trivial** — edit directly |
+| Bug fix, one endpoint, one component | **Focused** — short plan + validate |
+| New feature, risky refactor, auth, billing, infra | **Full** — map → plan → execute → verify → capture |
+
 ## Workflow Foundation
 
 This setup combines ideas from two public repositories that influenced the structure and operating model used here:

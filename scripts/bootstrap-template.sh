@@ -4,7 +4,15 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-TEMPLATE_ROOT="/Users/mlucascosta/Documents/dev/reduto/collabPix"
+# TEMPLATE_ROOT is the original absolute path baked into GSD internal references.
+# The bootstrap replaces all occurrences of this path with REPO_ROOT so the
+# workflow artifacts work correctly on any machine or directory.
+# It is derived from the first absolute path found inside .claude/ references,
+# falling back to REPO_ROOT itself if none is found.
+TEMPLATE_ROOT="$(grep -roh '/[^ "]*ia_boilerplate[^ "]*' "$REPO_ROOT/.claude" 2>/dev/null | head -1 | xargs dirname 2>/dev/null || echo "$REPO_ROOT")"
+if [[ "$TEMPLATE_ROOT" == "$REPO_ROOT" || -z "$TEMPLATE_ROOT" ]]; then
+  TEMPLATE_ROOT="$REPO_ROOT"
+fi
 
 project_name=""
 project_slug=""
