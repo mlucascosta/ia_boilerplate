@@ -9,6 +9,13 @@ It provides a shared operating model for GitHub Copilot, Codex, Claude, and othe
 
 This repository is intentionally focused on workflow infrastructure rather than application code. Its purpose is to make AI-assisted delivery more predictable, auditable, and portable across runtimes.
 
+## Why Use This
+
+- **Stop context drift** — state lives in repository artifacts, not in chat history that disappears between sessions
+- **One workflow, any AI** — Copilot, Claude, and Codex follow the same rules from the same source of truth
+- **Built-in quality bar** — complete in-code documentation and SOLID architecture are non-negotiable defaults
+- **Token-efficient by design** — atomic loops, compact handoffs, and explicit scope boundaries reduce waste across every phase
+
 ## What This Repository Contains
 
 - A canonical workflow in `docs/ai/WORKFLOW.md`
@@ -56,6 +63,23 @@ This repository is prepared to work with:
 - Codex
 
 Each runtime is adapted back to the same repository-level source of truth so the workflow stays consistent even when native commands differ.
+
+## Quick Start
+
+```bash
+# 1. Clone and bootstrap
+git clone https://github.com/mlucascosta/ia_boilerplate.git my-project
+cd my-project
+./scripts/bootstrap-template.sh --project-name "My Project"
+
+# 2. Validate conformance
+bash scripts/validate-workflow.sh
+
+# 3. Open the workflow and start
+# docs/ai/WORKFLOW.md   — execution contract
+# .planning/STATE.md    — set your current objective here
+# docs/examples/        — see a complete flow in practice
+```
 
 ## Prerequisites
 
