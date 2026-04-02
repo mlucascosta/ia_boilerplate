@@ -1,5 +1,8 @@
 # IA Boilerplate
 
+[![Workflow Conformance](https://github.com/mlucascosta/ia_boilerplate/actions/workflows/validate.yml/badge.svg)](https://github.com/mlucascosta/ia_boilerplate/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 IA Boilerplate is a repository-level, cross-AI workflow bootstrap for software delivery.
 
 It provides a shared operating model for GitHub Copilot, Codex, Claude, and other coding agents so they can work against the same planning artifacts, documentation rules, and execution constraints.
@@ -13,6 +16,8 @@ This repository is intentionally focused on workflow infrastructure rather than 
 - Runtime adapters for Copilot, Claude, and Codex
 - A local GSD installation aligned to the repository workflow
 - A `.planning/` bootstrap structure for roadmap, state, planning, summaries, and verification artifacts
+- A conformance validation script in `scripts/validate-workflow.sh`
+- An end-to-end usage example in `docs/examples/01-new-feature-example.md`
 
 ## Goals
 

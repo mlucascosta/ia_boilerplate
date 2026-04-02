@@ -1,0 +1,20 @@
+name: Workflow Conformance
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  validate:
+    name: Validate workflow artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run conformance check
+        run: |
+          chmod +x scripts/validate-workflow.sh
+          bash scripts/validate-workflow.sh
