@@ -22,7 +22,7 @@ Use this before closing any non-trivial slice of work to confirm the agent follo
 
 ## At session boundaries
 
-- [ ] A compact handoff summary (max 180 words) is stored in `.planning/summaries/`
+- [ ] A compact handoff summary (max 120 words) is stored in `.planning/summaries/`
 - [ ] The summary covers: objective, changed files, checks run, open risks, next action
 - [ ] The next action in the summary matches the next step in `STATE.md`
 

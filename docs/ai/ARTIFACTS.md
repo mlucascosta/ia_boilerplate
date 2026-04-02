@@ -24,9 +24,30 @@ docs/
   runbooks/
   solutions/
   ai/
+    ARTIFACTS.md
+    WORKFLOW.md
+    WORKFLOW_SHORT.md
+    CONTEXT_MAP.md
+    RECIPES.md
 ```
 
 Not every directory must exist immediately. Create only what the current work needs.
+
+## Context Budget
+
+Hard limits per artifact to enforce continuous compression:
+
+| Artifact | Max size |
+| --- | --- |
+| `STATE.md` | 120 words |
+| `ROADMAP.md` | 12 bullets |
+| Each atomic `PLAN` | 180 words |
+| Each `SUMMARY` | 120 words |
+| Each `VERIFICATION` | 8 bullets |
+
+If an artifact exceeds its budget, compress or rotate content to `summaries/` before continuing.
+
+No prompt should request "analyze the entire repository". Scope reads explicitly.
 
 ## Artifact Meanings
 
@@ -139,39 +160,39 @@ Reusable learnings and patterns from non-trivial implementation or debugging wor
 
 ```md
 # State
-
-## Objective
-
-## Active Work
-
-## Locked Decisions
-
-## Open Questions
-
-## Blockers
-
-## Next Step
+Objective: <one line>
+Now: <current task>
+Files: <in-scope files>
+Locked: <key decisions>
+Risk: <main risk or blocker>
+Next: <immediate next action>
 ```
+
+History is prohibited inside `STATE.md`. Rotate past context to `summaries/`.
 
 ### Atomic plan template
 
 ```md
 # Plan: <name>
+SCOPE=trivial|focused|full
+DOC=full|min
+ARCH=solid|none
+VERIFY=V0|V1|V2
+FILES=<comma-separated paths>
+OUT=<explicit exclusions>
 
 ## Objective
-
-## Scope
 
 ## Expected Changes
 
 ## Constraints
 
-## Documentation Strategy
-
 ## Verification
 
 ## Done Criteria
 ```
+
+Flags at the top let agents parse the task in ~10 lines instead of ~200.
 
 ### Execution summary template
 

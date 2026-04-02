@@ -140,7 +140,19 @@ Prefer atomic plans that fit in a fresh context window without hidden dependenci
 
 ## Verification Standards
 
-Verification must be explicit.
+Verification must be explicit and proportional to risk.
+
+### Verification levels
+
+| Level | When | What |
+| --- | --- | --- |
+| V0 | Trivial path | Reasoning only — confirm the change is correct by inspection |
+| V1 | Focused path | One targeted check — run a single command, test, or manual validation |
+| V2 | Full path | Multi-check — commands + evidence, only when change risk justifies it |
+
+Default to the lowest level that still preserves correctness.
+
+### Verification checklist
 
 1. Code changes must leave complete code documentation in a consistent standard such as TSDoc, PHPDoc, or an equivalent format appropriate to the language.
 2. Architectural changes must preserve SOLID-oriented design and make responsibilities, boundaries, and dependencies easy to reason about.
@@ -189,10 +201,40 @@ Treat token cost and context continuity as engineering constraints, not aftertho
 3. Request diff-oriented outputs, not full-file rewrites.
 4. Use short constraint lists (3-7 bullets) instead of narrative instructions.
 5. Keep each execution loop atomic: one plan, one slice, one verification.
-6. At session boundaries or model switches, write a compact handoff summary (max 180 words) covering objective, changed files, checks run, open risks, and next action.
+6. At session boundaries or model switches, write a compact handoff summary (max 120 words) covering objective, changed files, checks run, open risks, and next action.
 7. Store handoff summaries in `.planning/summaries/` and mirror the next action in `.planning/STATE.md`.
 8. If a chat drifts from the current objective, compact context into artifacts and restart from `.planning/STATE.md`.
 9. Prefer deterministic, artifact-backed instructions over long freeform prompts.
+10. On first read, load `docs/ai/WORKFLOW_SHORT.md`. Consult `WORKFLOW.md` only when ambiguity requires it.
+11. Use `docs/ai/CONTEXT_MAP.md` to determine which files to load per area instead of discovering scope each session.
+
+### Session reset triggers
+
+If any of these conditions is met, the agent must reset:
+
+- Chat exceeds **12 turns**, or
+- **3 scope changes** within one session, or
+- **2 failed attempts** at the same task.
+
+Reset procedure:
+1. Write a `SUMMARY` for the current slice.
+2. Compress `STATE.md` to ≤120 words.
+3. Restart from `STATE.md` + active `PLAN` only.
+
+### Task manifest flags
+
+Every atomic plan should carry compact flags at the top:
+
+```
+SCOPE=trivial|focused|full
+DOC=full|min
+ARCH=solid|none
+VERIFY=V0|V1|V2
+FILES=<comma-separated paths>
+OUT=<explicit exclusions>
+```
+
+This lets agents parse task constraints in ~10 lines instead of re-reading prose.
 
 ## What Agents Must Avoid
 

@@ -1,7 +1,8 @@
 # AI Agent Rules (minimal adapter)
 
 You MUST follow:
-- `docs/ai/WORKFLOW.md` (normative)
+- `docs/ai/WORKFLOW_SHORT.md` (pocket card — read first)
+- `docs/ai/WORKFLOW.md` (full reference — consult only when ambiguous)
 - `docs/ai/ARTIFACTS.md` (artifacts contract)
 
 ## Default behavior
@@ -12,15 +13,17 @@ You MUST follow:
   - **Escalate path if correctness is at risk** – do not guess when missing context.
 - Requests broader than a single feature must follow the large-scope handling rules in `docs/ai/WORKFLOW.md`.
 - **Reading**: before acting, read only:
-  - at most 1 workflow file
+  - `WORKFLOW_SHORT.md` (not the full workflow)
   - 1 active artifact (`STATE.md` or `PLAN.md`)
+  - Files from `docs/ai/CONTEXT_MAP.md` for the relevant area
   - Files explicitly cited in the request.
 - **Output**: return only diff/patch of expected changes. No workflow recap, no file dumps, no context replay.
 - **Verification levels**:
   - V0 = reasoning only (Trivial)
-  - V1 = single command (Focused)
-  - V2 = commands + evidence (Full, but still minimal)
-- **State**: `STATE.md` ≤200 words. Archive old context to `summaries/` or `docs/solutions/`.
+  - V1 = single targeted check (Focused)
+  - V2 = multi-check + evidence (Full, but still minimal)
+- **State**: `STATE.md` ≤120 words, telegraphic format. Archive old context to `summaries/`.
+- **Session reset**: >12 turns, >3 scope changes, or >2 failed attempts → write SUMMARY → compress STATE → restart.
 
 Prohibited: pasting **entire** files. Small excerpts are allowed when necessary for clarity.
 
