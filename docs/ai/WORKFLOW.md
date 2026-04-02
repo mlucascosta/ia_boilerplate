@@ -70,6 +70,35 @@ Choose the lightest path that still preserves correctness.
 | One focused bug fix, one endpoint, one component, one test addition | Focused |
 | New feature, risky refactor, migration, auth, billing, queue, infra, cross-cutting docs | Full |
 
+## Handling large scopes
+
+When a request is broader than a single feature or bugfix (for example: project-wide planning, full MVP definition, large-scale documentation, multi-module architecture, or execution planning across multiple areas), treat it as a **Full** workflow by default.
+
+### Rules
+1. **Do not execute the whole scope in a single pass.**
+   Large scopes must be converted into planning artifacts before documentation or implementation begins.
+
+2. **Build the planning machine first.**
+   Create or update, as needed:
+   - `STATE.md` with the current objective, working hypothesis, main risk, and immediate next step
+   - `ROADMAP.md` with the macro-phases of the work
+   - `.planning/epics/` when a macro-phase needs its own grouped breakdown
+   - `.planning/plans/PLAN-XXX-*.md` for atomic executable slices
+
+3. **Proceed iteratively.**
+   Work one atomic plan at a time. After each completed slice:
+   - update `STATE.md`
+   - write a compact handoff in `summaries/`
+   - move to the next plan only after the current one is stable
+
+4. **Never attempt "complete MVP documentation" in one handoff.**
+   That violates atomicity, increases token waste, and raises the risk of scope drift.
+
+### Practical interpretation
+Use this sequence for large scopes:
+
+`raw scope -> STATE.md -> ROADMAP.md -> epics -> atomic plans -> execution/docs -> summaries -> next slice`
+
 ## Unified Command Equivalents
 
 Different runtimes expose different commands. Use the conceptual stage, not the literal slash command, as the source of truth.
@@ -93,8 +122,9 @@ Minimum artifact expectations:
 1. `docs/ai/ARTIFACTS.md` defines the artifact contract.
 2. `.planning/STATE.md` tracks current phase, decisions, blockers, and next steps for non-trivial work.
 3. `.planning/ROADMAP.md` exists when work is phased.
-4. `.planning/plans/` contains atomic plans when the task is large enough to need them.
-5. `docs/` holds stable docs, runbooks, architecture notes, and reusable learnings.
+4. `.planning/epics/` groups related plans for macro-phases when needed.
+5. `.planning/plans/` contains atomic plans when the task is large enough to need them.
+6. `docs/` holds stable docs, runbooks, architecture notes, and reusable learnings.
 
 ## Planning Standards
 

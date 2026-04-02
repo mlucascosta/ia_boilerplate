@@ -9,6 +9,7 @@ This file defines the repository artifacts that any AI runtime should understand
   STATE.md
   ROADMAP.md
   research/
+  epics/
   plans/
   summaries/
   verification/
@@ -57,6 +58,19 @@ Use for temporary but useful implementation research:
 2. Architecture investigation.
 3. Existing codebase mapping.
 4. External system constraints.
+
+### `.planning/epics/`
+
+Use when a macro-phase from `ROADMAP.md` needs its own grouped breakdown.
+
+Each epic is a markdown file describing:
+
+1. Goal of the epic.
+2. List of atomic plans it contains (by reference to `../plans/`).
+3. Dependencies between plans.
+4. Acceptance criteria for the epic as a whole.
+
+Epics sit between `ROADMAP.md` and `plans/`. They do not replace either.
 
 ### `.planning/plans/`
 

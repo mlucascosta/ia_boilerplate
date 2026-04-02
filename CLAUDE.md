@@ -1,20 +1,14 @@
-# Claude Adapter
+# Claude adapter for ia_boilerplate
 
-Use `AGENTS.md` as the repository-wide operating manual.
-The canonical workflow lives in `docs/ai/WORKFLOW.md`.
-The canonical artifact contract lives in `docs/ai/ARTIFACTS.md`.
+Follow `AGENTS.md` (which points to WORKFLOW.md + ARTIFACTS.md).
 
-## Required Behavior
+## Hard constraints for this session
+- Use lightest possible path (Trivial > Focused > Full). Escalate only if correctness demands.
+- Never read more than: 1 workflow + 1 active artifact + requested files.
+- Output only the minimal diff/patch. No unnecessary summaries, no context replay.
+- State file ≤200 words; rotate history to `summaries/`.
+- Verification: V0 or V1 unless task is Full (use V2 only when change risk justifies it).
+- Never paste entire files – only minimal excerpts when needed.
 
-1. For non-trivial work, follow map -> clarify -> plan -> execute -> verify -> capture.
-2. Read relevant docs before implementation.
-3. Maintain `.planning/` for active workflow state when work is phased or risky.
-4. Keep documentation aligned with implementation.
-5. Preserve project constraints, especially mandatory complete in-code documentation and SOLID-oriented architecture for meaningful implementation work.
-6. Preserve the documented architectural direction and avoid introducing undeclared platform shifts.
-7. Use Git Flow-compatible branching for meaningful implementation work and do not work directly on the protected primary branch.
-
-## Notes
-
-1. If native GSD commands are available, use them as runtime helpers, not as replacements for the repository contract.
-2. If native Pster commands are available, use them to generate or refresh docs and plans while keeping repository artifacts aligned with `docs/ai/ARTIFACTS.md`.
+## Flags in plans (compact)
+`DOC=full|min`, `ARCH=solid|none`, `VERIFY=V0|V1|V2`, `SCOPE=<files>`
