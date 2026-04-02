@@ -150,6 +150,20 @@ When this repository is used as a project workflow base, keep these constraints 
 5. Treat frontend structure, tokens, typography, and interaction rules as deliberate system design, not incidental styling.
 6. Do not introduce major framework or infrastructure shifts without first documenting and approving the direction.
 
+## Token Economy And Context Continuity
+
+Treat token cost and context continuity as engineering constraints, not afterthoughts.
+
+1. Keep active state in `.planning/STATE.md`, not in implicit chat memory.
+2. Reference file paths instead of pasting large content into prompts.
+3. Request diff-oriented outputs, not full-file rewrites.
+4. Use short constraint lists (3-7 bullets) instead of narrative instructions.
+5. Keep each execution loop atomic: one plan, one slice, one verification.
+6. At session boundaries or model switches, write a compact handoff summary (max 180 words) covering objective, changed files, checks run, open risks, and next action.
+7. Store handoff summaries in `.planning/summaries/` and mirror the next action in `.planning/STATE.md`.
+8. If a chat drifts from the current objective, compact context into artifacts and restart from `.planning/STATE.md`.
+9. Prefer deterministic, artifact-backed instructions over long freeform prompts.
+
 ## What Agents Must Avoid
 
 1. Skipping codebase reading before proposing structural changes.
@@ -157,3 +171,7 @@ When this repository is used as a project workflow base, keep these constraints 
 3. Treating `.planning/` as disposable scratch output for non-trivial work.
 4. Using a full workflow for trivial edits or a trivial workflow for risky changes.
 5. Hiding assumptions that materially affect scope, delivery, or validation.
+6. Asking the model to re-read everything when file-scope can be explicit.
+7. Combining unrelated tasks in a single prompt.
+8. Continuing drifted chats instead of compacting into artifacts and restarting (see Token Economy rule 8).
+9. Skipping handoff summaries at session boundaries, because missing context causes expensive rework.

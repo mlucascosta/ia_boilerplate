@@ -61,6 +61,9 @@ These constraints apply whenever work targets the project described by repositor
 3. Validate with checks, manual validation, tests when appropriate, or explicit reasoning tied to acceptance criteria, while keeping code documentation and architecture aligned with the documented standard.
 4. Call out blockers, assumptions, and residual risks clearly.
 5. Do not deliver meaningful implementation work directly on the protected primary branch; use Git Flow-compatible feature, release, or hotfix branches.
+6. Reference file paths instead of pasting large content; request diffs instead of full-file rewrites.
+7. Write a compact handoff summary at session boundaries so the next agent or session can continue without replaying the full chat.
+8. Do not combine unrelated tasks in a single prompt or continue drifted chats; compact and restart from `.planning/STATE.md`.
 
 ## Runtime Adapters
 
