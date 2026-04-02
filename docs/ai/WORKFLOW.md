@@ -245,6 +245,7 @@ Treat token cost and context continuity as engineering constraints, not aftertho
 9. Prefer deterministic, artifact-backed instructions over long freeform prompts.
 10. On first read, load `docs/ai/WORKFLOW_SHORT.md`. Consult `WORKFLOW.md` only when ambiguity requires it.
 11. Use `docs/ai/CONTEXT_MAP.md` to determine which files to load per area instead of discovering scope each session.
+12. If `STATE.md` exceeds 120 words during execution, compress it immediately and rotate old context to `.planning/summaries/`.
 
 ### Session reset triggers
 

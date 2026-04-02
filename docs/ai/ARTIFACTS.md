@@ -9,6 +9,7 @@ This file defines the repository artifacts that any AI runtime should understand
   STATE.md
   ROADMAP.md
   VISION.md
+  PROJECT.md
   RISK_REGISTER.md
   research/
   epics/
@@ -59,6 +60,7 @@ No prompt should request "analyze the entire repository". Scope reads explicitly
 ### Governance artifacts
 Use these for durable direction and control:
 - `VISION.md`
+- `PROJECT.md`
 - `ROADMAP.md`
 - architecture documentation
 - ADRs (`.planning/adrs/`)
@@ -89,16 +91,29 @@ Use for durable product direction:
 
 This is a governance artifact. Update only when direction changes.
 
+### `.planning/PROJECT.md`
+
+Use for project-level identity and requirements:
+
+1. What the project is.
+2. Core value proposition.
+3. Validated and pending requirements.
+
+This file is managed by the GSD workflow. Treat it as a governance artifact.
+
 ### `.planning/STATE.md`
 
-Use for active workflow state:
+Use for active workflow state (telegraphic, ≤120 words):
 
 1. Current objective.
-2. Active phase or task.
-3. Locked decisions.
-4. Open questions.
-5. Blockers.
-6. Next recommended action.
+2. Current task.
+3. In-scope files.
+4. Locked decisions.
+5. Main risk or blocker.
+6. Immediate next action.
+
+History is prohibited. Rotate past context to `summaries/`.
+If STATE exceeds 120 words during execution, compress immediately.
 
 ### `.planning/ROADMAP.md`
 
