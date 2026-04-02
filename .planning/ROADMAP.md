@@ -15,9 +15,9 @@
 
 | Phase | Goal | Dependency | Status |
 | --- | --- | --- | --- |
-| 07 | Automated tests for bootstrap script (macOS, Linux, WSL) | 06 | Planned |
+| 07 | Automated tests for bootstrap script (13 tests, CI matrix Ubuntu + macOS) | 06 | Completed |
 | 08 | Cross-platform install docs (Linux apt/dnf, Windows WSL) | 06 | Planned |
-| 09 | Additional stack examples: Vue.js 3 component, Python script | 06 | Planned |
+| 09 | Multi-stack Todo API examples (Node, Python, Go, Rust, PHP) | 06 | Completed |
 | 10 | Migration script for projects on older workflow versions | 09 | Planned |
 
 ## Notes

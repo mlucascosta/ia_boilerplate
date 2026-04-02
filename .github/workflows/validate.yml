@@ -18,3 +18,18 @@ jobs:
         run: |
           chmod +x scripts/validate-workflow.sh
           bash scripts/validate-workflow.sh
+
+  test-bootstrap:
+    name: Bootstrap tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run bootstrap integration tests
+        run: |
+          chmod +x tests/test-bootstrap.sh scripts/bootstrap-template.sh scripts/validate-workflow.sh
+          bash tests/test-bootstrap.sh

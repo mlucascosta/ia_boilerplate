@@ -24,7 +24,9 @@ This repository is intentionally focused on workflow infrastructure rather than 
 - A local GSD installation aligned to the repository workflow
 - A `.planning/` bootstrap structure for roadmap, state, planning, summaries, and verification artifacts
 - A conformance validation script in `scripts/validate-workflow.sh`
+- Integration tests for the bootstrap script in `tests/test-bootstrap.sh`
 - An end-to-end usage example in `docs/examples/01-new-feature-example.md`
+- Multi-stack Todo API examples in `docs/examples/todo/` (Node, Python, Go, Rust, PHP)
 
 ## Goals
 
@@ -162,8 +164,8 @@ This repository is at v1.0.0 — the workflow contract, tooling, and a Node.js e
 
 | What | Why deferred | Planned |
 |---|---|---|
-| Automated tests for the bootstrap script | Tests should cover real failure modes; those only become clear after real adoption | Phase 07 |
-| Multi-stack examples (Vue.js, Python, PHP) | One concrete example ships first; more are added once usage patterns are understood | Phase 09 |
+| ~~Automated tests for the bootstrap script~~ | ~~Tests should cover real failure modes~~ | ~~Phase 07~~ — Done |
+| ~~Multi-stack examples~~ | ~~One concrete example ships first~~ | ~~Phase 09~~ — Done |
 | Cross-platform install docs (Linux, WSL, Windows) | Prerequisites section covers the common case; explicit multi-platform docs follow community feedback | Phase 08 |
 | Migration tooling for derived projects | Only relevant once there is a v1.x → v2.x boundary to cross | Phase 10 |
 
