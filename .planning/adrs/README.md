@@ -4,6 +4,8 @@ Store structural technical decisions here as short markdown files.
 
 Suggested naming: `ADR-001-<slug>.md`
 
+Starter template: `00-TEMPLATE-ADR.md`
+
 Each ADR should include:
 - Context: what prompted the decision
 - Decision: what was chosen

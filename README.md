@@ -21,11 +21,16 @@ This repository is intentionally focused on workflow infrastructure rather than 
 - A canonical workflow in `docs/ai/WORKFLOW.md`
 - A canonical artifact contract in `docs/ai/ARTIFACTS.md`
 - Runtime adapters for Copilot, Claude, and Codex
+- Harmonized minimal adapter contracts across Copilot, Claude, and Codex
 - A local GSD installation aligned to the repository workflow
 - A `.planning/` bootstrap structure for roadmap, state, planning, summaries, and verification artifacts
 - A conformance validation script in `scripts/validate-workflow.sh`
+- A pull request template with workflow path, verification, governance, and documentation signals
 - Integration tests for the bootstrap script in `tests/test-bootstrap.sh`
+- Validation tests for conformance enforcement in `tests/test-validate-workflow.sh`
+- Derived-repo migration support in `scripts/migrate-derived-repo.sh`
 - An end-to-end usage example in `docs/examples/01-new-feature-example.md`
+- Scenario-based adoption playbooks in `docs/adoption/`
 - Multi-stack Todo API examples in `docs/examples/todo/` (Node, Python, Go, Rust, PHP)
 
 ## Goals
@@ -88,6 +93,8 @@ This repository is prepared to work with:
 
 Each runtime is adapted back to the same repository-level source of truth so the workflow stays consistent even when native commands differ.
 
+Adapters are intentionally minimal: they constrain read budget, path selection, output shape, verification level, artifact updates, and hard prohibitions instead of restating the full workflow.
+
 ## Quick Start
 
 ```bash
@@ -145,6 +152,16 @@ If you omit `--project-name`, the script derives the name from the current folde
 
 If the bootstrap warns that `npx` is missing, install Node.js before trying to use the GSD runtime commands.
 
+## Derived Repository Migration
+
+If a repository was already bootstrapped from this boilerplate and needs a newer workflow layer, use:
+
+```bash
+./scripts/migrate-derived-repo.sh --target /path/to/derived-repo
+```
+
+Use `--dry-run` to preview changes and `--include-ci` only if you also want to sync `.github/workflows/validate.yml`.
+
 ## Repository Structure
 
 ```text
@@ -167,7 +184,7 @@ This repository is at v1.0.0 — the workflow contract, tooling, and a Node.js e
 | ~~Automated tests for the bootstrap script~~ | ~~Tests should cover real failure modes~~ | ~~Phase 07~~ — Done |
 | ~~Multi-stack examples~~ | ~~One concrete example ships first~~ | ~~Phase 09~~ — Done |
 | Cross-platform install docs (Linux, WSL, Windows) | Prerequisites section covers the common case; explicit multi-platform docs follow community feedback | Phase 08 |
-| Migration tooling for derived projects | Only relevant once there is a v1.x → v2.x boundary to cross | Phase 10 |
+| Migration tooling for derived projects | Lightweight migration now exists for syncing workflow infrastructure; full version-boundary tooling remains deferred | Phase 10 |
 
 Full roadmap: [`.planning/ROADMAP.md`](.planning/ROADMAP.md)
 

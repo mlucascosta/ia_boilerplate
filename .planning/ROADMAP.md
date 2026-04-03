@@ -20,8 +20,23 @@
 | 09 | Multi-stack Todo API examples (Node, Python, Go, Rust, PHP) | 06 | Completed |
 | 10 | Migration script for projects on older workflow versions | 09 | Planned |
 
+## Milestone: Adoption Hardening
+
+| Phase | Goal | Dependency | Status |
+| --- | --- | --- | --- |
+| 11 | Expand CI conformance checks for artifact budgets, minimum governance files, and PR review signals | 04, 07 | Completed |
+| 12 | Add scenario-based adoption playbooks for new, legacy, and in-flight projects | 11 | Completed |
+| 13 | Improve readability of dense operational docs (`DECISION_RULES`, `CONTEXT_MAP`, `RECIPES`) without changing their contract | 12 | Completed |
+| 14 | Harmonize runtime adapters around one minimal contract and isolate GSD-specific behavior | 11 | Completed |
+| 15 | Ship first-class templates for planning artifacts, ADRs, risks, and pull requests | 11 | Completed |
+| 16 | Add lightweight migration support for derived repositories upgrading workflow versions | 14, 15 | Completed |
+
 ## Notes
 
 **Why phases 07-10 are deferred:**
 
 Phases 01-06 establish the workflow contract itself. Tests for the bootstrap and multi-stack examples require real usage data to know what scenarios to cover — shipping them speculatively before anyone has used the boilerplate would produce low-confidence tests and examples that do not reflect actual pain points. Phases 07-10 will be planned once real adoption provides concrete evidence of what breaks and what needs illustrating.
+
+**Why phases 11-16 are next:**
+
+The workflow is already strong as a repository contract, but adoption still relies too heavily on manual discipline and prior familiarity with the model. These phases convert the current strengths into a more enforceable and easier-to-adopt system by hardening CI, adding scenario playbooks, improving document ergonomics, aligning runtime adapters, and reducing setup ambiguity for derived repositories.

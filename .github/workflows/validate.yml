@@ -31,5 +31,15 @@ jobs:
 
       - name: Run bootstrap integration tests
         run: |
-          chmod +x tests/test-bootstrap.sh scripts/bootstrap-template.sh scripts/validate-workflow.sh
+          chmod +x tests/test-bootstrap.sh tests/test-validate-workflow.sh scripts/bootstrap-template.sh scripts/validate-workflow.sh
           bash tests/test-bootstrap.sh
+
+      - name: Run validation script tests
+        run: |
+          chmod +x tests/test-validate-workflow.sh scripts/validate-workflow.sh
+          bash tests/test-validate-workflow.sh
+
+      - name: Run derived repo migration tests
+        run: |
+          chmod +x tests/test-migrate-derived-repo.sh scripts/migrate-derived-repo.sh scripts/bootstrap-template.sh
+          bash tests/test-migrate-derived-repo.sh

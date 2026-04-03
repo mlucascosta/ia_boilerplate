@@ -1,0 +1,3 @@
+# Summary
+
+Completed phases 15 and 16. The repository now ships first-class templates for state, roadmap, vision, project, risk register, epic, ADR, plan, summary, verification, and PR artifacts. Conformance enforces the presence of the starter templates. A lightweight migration script now syncs workflow infrastructure into derived repositories, preserves the target Codex skill name, skips project README and active planning state, and only updates CI when requested. Next work can move to cross-platform install docs or the later full version-boundary migration tooling.

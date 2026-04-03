@@ -23,6 +23,7 @@ Please keep contributions aligned with the repository rules:
 - Keep the workflow generic, portable, and runtime-agnostic when possible
 - Preserve the repository-level source of truth in `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md`
 - Keep implementation guidance compatible across runtimes
+- Keep runtime adapters minimal and semantically aligned; adapters should restrict behavior, not restate the full workflow
 - For meaningful implementation changes, preserve complete in-code documentation standards and SOLID-oriented architecture
 
 ## Process
@@ -32,6 +33,8 @@ Please keep contributions aligned with the repository rules:
 3. Update documentation when behavior, architecture, or workflow expectations change.
 4. Avoid introducing runtime-specific behavior as the source of truth.
 5. Prefer clear rationale in PR descriptions, especially when changing workflow semantics.
+6. Fill in the pull request workflow signals so reviewers can see path, verification level, and governance impact immediately.
+7. Preserve project-specific identity when changing migration tooling; workflow sync should not overwrite product docs by default.
 
 ## Style Guidelines
 

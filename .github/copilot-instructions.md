@@ -1,22 +1,60 @@
-# Copilot Instructions
+# Copilot adapter
 
-Follow `AGENTS.md` (which points to WORKFLOW.md + ARTIFACTS.md).
+Follow `AGENTS.md`.
 
-## Copilot-Specific Adapter
+## Source of truth
 
-1. Treat `docs/` and `.planning/` as first-class project memory.
-2. For non-trivial work, read the relevant docs and planning artifacts before editing code.
-3. Use the unified workflow stages even if the exact slash commands come from another ecosystem.
-4. Keep changes small, explicit, and verifiable.
-5. Update durable docs when architecture, operations, or reusable patterns change.
-6. Prefer predictable delivery over speculative autonomy.
+1. `docs/ai/WORKFLOW_SHORT.md`
+2. `docs/ai/WORKFLOW.md` only if ambiguous
+3. `docs/ai/ARTIFACTS.md`
 
-<!-- GSD Configuration — managed by get-shit-done installer -->
-# Instructions for GSD
+## First read
 
-- Use the get-shit-done skill when the user asks for GSD or uses a `gsd-*` command.
-- Treat `/gsd-...` or `gsd-...` as command invocations and load the matching file from `.github/skills/gsd-*`.
-- When a command says to spawn a subagent, prefer a matching custom agent from `.github/agents`.
-- Do not apply GSD workflows unless the user explicitly asks for them.
-- After completing any `gsd-*` command (or any deliverable it triggers: feature, bug fix, tests, docs, etc.), ALWAYS: (1) offer the user the next step by prompting via `ask_user`; repeat this feedback loop until the user explicitly indicates they are done.
-<!-- /GSD Configuration -->
+- `docs/ai/WORKFLOW_SHORT.md`
+- one active artifact: `.planning/STATE.md` or the active plan
+- area files selected through `docs/ai/CONTEXT_MAP.md`
+- files explicitly requested by the user
+
+## Max read budget
+
+Before acting, read only the first-read set and the smallest additional area context needed for correctness.
+Do not scan the whole repository.
+Do not load unrelated docs.
+
+## Path selection
+
+- Trivial: local change, default `VERIFY=V0`
+- Focused: bounded multi-file change, default `VERIFY=V1`
+- Full: structural or cross-cutting change, default `VERIFY=V2`
+
+Escalate path if risk or uncertainty increases.
+
+## Output contract
+
+- Return only the minimal diff or patch.
+- Keep notes short and only when needed for correctness.
+- Keep changes explicit and verifiable.
+- No workflow recap.
+- No file dumps.
+- No context replay.
+
+## Verification contract
+
+- Use `V0` for trivial work, `V1` for focused work, and `V2` for full work.
+- Escalate verification when risk exceeds the default path.
+- Keep verification explicit and minimal.
+
+## Artifact update rules
+
+- For non-trivial work, update `STATE.md` when the next step or focus changes.
+- Update a plan only when the implementation path changes.
+- Update durable docs only when durable knowledge changes.
+- Use `docs/ai/DECISION_RULES.md` before touching roadmap, ADRs, or governance docs.
+
+## Hard prohibitions
+
+- Forcing feedback loops.
+- Using GSD commands or skills unless the user explicitly asks.
+- Mandatory `ask_user` follow-ups after every deliverable.
+- Speculative autonomy.
+- Entire file dumps.

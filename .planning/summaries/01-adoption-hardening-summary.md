@@ -1,0 +1,3 @@
+# Summary
+
+Added stronger conformance enforcement and adoption playbooks. The validator now checks minimum governance artifacts, PR template signals, STATE and plan word budgets, summary word budgets, and verification bullet budgets. CI now runs dedicated tests for the validator. Added scenario guides for new, legacy, and in-flight projects, and updated discovery docs so these files are visible. Remaining adoption-hardening work is phase 13 onward: improve dense doc ergonomics, align adapters, expand templates, and add migration support.

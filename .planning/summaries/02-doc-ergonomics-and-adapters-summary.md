@@ -1,0 +1,3 @@
+# Summary
+
+Completed phases 13 and 14. `DECISION_RULES`, `CONTEXT_MAP`, and `RECIPES` now keep the same content with clearer scanning structure. Claude, Copilot, and Codex adapters now share the same minimal eight-block contract: source of truth, first read, read budget, path selection, output, verification, artifact rules, and prohibitions. The Copilot adapter no longer carries mandatory `ask_user` loops and gates GSD behavior behind explicit user request. Conformance now enforces adapter shape and blocks legacy conversational drift. Next work starts at phase 15: expand first-class templates.

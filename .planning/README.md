@@ -10,6 +10,6 @@ Use this directory as the active workflow memory for non-trivial work.
 4. `plans/` stores atomic executable plans.
 5. `summaries/` stores implementation summaries.
 6. `verification/` stores validation evidence, UAT notes, and unresolved gaps.
-7. Starter templates live in `plans/`, `summaries/`, and `verification/` as `00-TEMPLATE-*.md` files.
+7. Starter templates live at the `.planning/` root and in `adrs/`, `epics/`, `plans/`, `summaries/`, and `verification/` as `00-TEMPLATE-*.md` files.
 
 Refer to `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md` for the governing contract.

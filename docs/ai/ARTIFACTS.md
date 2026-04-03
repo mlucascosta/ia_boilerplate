@@ -18,6 +18,7 @@ This file defines the repository artifacts that any AI runtime should understand
   summaries/
   verification/
 docs/
+  adoption/
   architecture/
   infrastructure/
   integrations/
@@ -198,6 +199,10 @@ Use for validation notes, UAT outcomes, documentation conformance evidence, arch
 
 ## Documentation Contract
 
+### `docs/adoption/`
+
+Scenario-based onboarding guides for introducing the workflow in new, legacy, or in-flight projects.
+
 ### `docs/architecture/`
 
 Durable structure, boundaries, ADRs, major system flows.
@@ -245,6 +250,89 @@ Next: <immediate next action>
 ```
 
 History is prohibited inside `STATE.md`. Rotate past context to `summaries/`.
+
+### `ROADMAP.md`
+
+```md
+# Roadmap
+
+## Milestone: <name>
+
+| Phase | Goal | Dependency | Status |
+| --- | --- | --- | --- |
+| 01 | <goal> | — | Planned |
+```
+
+### `VISION.md`
+
+```md
+# Vision
+
+## Purpose
+
+## Target Users
+
+## Value Proposition
+
+## Boundaries
+
+## Key Constraints
+```
+
+### `PROJECT.md`
+
+```md
+# <Project Name>
+
+## What This Is
+
+## Core Value
+
+## Requirements
+
+### Validated
+
+### Active
+
+### Out of Scope
+```
+
+### `RISK_REGISTER.md`
+
+```md
+# Risk Register
+
+| Risk | Impact | Probability | Mitigation | Trigger | Owner |
+|---|---|---:|---|---|---|
+```
+
+### Epic template
+
+```md
+# Epic: <name>
+
+## Goal
+
+## Plans
+
+## Dependencies
+
+## Acceptance Criteria
+```
+
+### ADR template
+
+```md
+# ADR-001: <title>
+
+## Status
+
+## Context
+
+## Decision
+
+## Consequences
+```
 
 ### Atomic plan template
 

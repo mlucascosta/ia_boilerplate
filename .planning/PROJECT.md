@@ -14,12 +14,14 @@ Keep cross-AI execution predictable by making repository artifacts and workflow 
 
 - ✓ Cross-AI workflow contract exists in repository docs — bootstrap
 - ✓ Runtime adapters for Copilot, Codex, and Claude exist locally — bootstrap
+- ✓ First-class templates exist for governance, execution, ADR, epic, and PR artifacts — phase 15
+- ✓ Lightweight migration support exists for syncing workflow infrastructure into derived repositories — phase 16
 
 ### Active
 
 - [ ] Local GSD runtime support remains usable without conflicting with repository-specific rules
 - [ ] Planning artifacts stay compatible with the shared contract in `docs/ai/ARTIFACTS.md`
-- [ ] Future repository work can start from ready-to-use planning, summary, and verification templates
+- [ ] Full version-boundary migration tooling remains separate from lightweight derived-repo migration
 
 ### Out of Scope
 
