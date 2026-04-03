@@ -76,7 +76,33 @@ fi
 teardown
 
 echo ""
-echo "5. STATE word budget enforced"
+echo "5. Missing plan manifest fails"
+setup
+tmp_file="$WORK_DIR/.planning/plans/00-TEMPLATE-PLAN.md.tmp"
+grep -v '^OUT=' "$WORK_DIR/.planning/plans/00-TEMPLATE-PLAN.md" > "$tmp_file"
+mv "$tmp_file" "$WORK_DIR/.planning/plans/00-TEMPLATE-PLAN.md"
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Missing plan manifest should fail validation"
+else
+  pass "Missing plan manifest fails validation"
+fi
+teardown
+
+echo ""
+echo "6. Missing summary block fails"
+setup
+tmp_file="$WORK_DIR/.planning/summaries/00-TEMPLATE-SUMMARY.md.tmp"
+grep -v '^Next:' "$WORK_DIR/.planning/summaries/00-TEMPLATE-SUMMARY.md" > "$tmp_file"
+mv "$tmp_file" "$WORK_DIR/.planning/summaries/00-TEMPLATE-SUMMARY.md"
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Missing summary block should fail validation"
+else
+  pass "Missing summary block fails validation"
+fi
+teardown
+
+echo ""
+echo "7. STATE word budget enforced"
 setup
 cat <<'EOF' > "$WORK_DIR/.planning/STATE.md"
 # State
@@ -119,7 +145,7 @@ fi
 teardown
 
 echo ""
-echo "6. Verification bullet budget enforced"
+echo "8. Verification bullet budget enforced"
 setup
 cat <<'EOF' > "$WORK_DIR/.planning/verification/01-budget-check.md"
 # Verification
@@ -142,7 +168,7 @@ fi
 teardown
 
 echo ""
-echo "7. Adapter section contract enforced"
+echo "9. Adapter section contract enforced"
 setup
 tmp_file="$WORK_DIR/CLAUDE.md.tmp"
 grep -v '^## Source of truth$' "$WORK_DIR/CLAUDE.md" > "$tmp_file"
@@ -155,7 +181,7 @@ fi
 teardown
 
 echo ""
-echo "8. Copilot ask_user loop rejected"
+echo "10. Copilot ask_user loop rejected"
 setup
 cat <<'EOF' >> "$WORK_DIR/.github/copilot-instructions.md"
 

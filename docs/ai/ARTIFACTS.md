@@ -115,6 +115,7 @@ Use for active workflow state (telegraphic, ≤120 words):
 
 History is prohibited. Rotate past context to `summaries/`.
 If STATE exceeds 120 words during execution, compress immediately.
+If an active plan exists, keep `STATE.md` global and let the plan carry the hot execution details.
 
 ### `.planning/ROADMAP.md`
 
@@ -189,9 +190,13 @@ Each plan should include:
 6. Verification steps.
 7. Done criteria.
 
+Plans are the preferred hot execution artifact. Put compact flags first and avoid repeating them in prose below.
+
 ### `.planning/summaries/`
 
 Use for execution summaries that help future sessions understand what changed.
+
+Summaries are checkpoints, not mini-reports. Prefer `Done / Validated / Pending / Next` over narrative recap.
 
 ### `.planning/verification/`
 
@@ -339,17 +344,17 @@ History is prohibited inside `STATE.md`. Rotate past context to `summaries/`.
 ```md
 # Plan: <name>
 SCOPE=trivial|focused|full
-DOC=full|min
-ARCH=solid|none
+DOC=min|full
+ARCH=none|solid|structural
 VERIFY=V0|V1|V2
 FILES=<comma-separated paths>
 OUT=<explicit exclusions>
 
 ## Objective
 
-## Expected Changes
-
 ## Constraints
+
+## Expected Changes
 
 ## Verification
 
@@ -363,12 +368,16 @@ Flags at the top let agents parse the task in ~10 lines instead of ~200.
 ```md
 # Summary: <name>
 
-## What Changed
+Done:
 
-## Validation
+Validated:
 
-## Risks Or Follow-ups
+Pending:
+
+Next:
 ```
+
+For resumptions, pair the latest summary with `STATE.md`, the active plan, and only the last 2 relevant summaries.
 
 ### Verification template
 

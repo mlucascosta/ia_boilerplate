@@ -17,7 +17,9 @@ You MUST follow:
   - 1 active artifact (`STATE.md` or `PLAN.md`)
   - Files from `docs/ai/CONTEXT_MAP.md` for the relevant area
   - Files explicitly cited in the request.
+- If an active `PLAN` exists, use it as the hot execution artifact and keep `STATE.md` as the global header only.
 - **Output**: return only diff/patch of expected changes. No workflow recap, no file dumps, no context replay.
+- Prefer flags and manifests over prose. If a plan already exposes compact flags, do not restate them in natural language.
 - **Verification levels**:
   - V0 = reasoning only (Trivial)
   - V1 = single targeted check (Focused)

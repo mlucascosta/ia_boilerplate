@@ -24,6 +24,8 @@ V0 = reasoning only (Trivial) · V1 = one check (Focused) · V2 = multi-check + 
 ## Context & output rules
 
 - Read: pocket card + 1 active artifact + `CONTEXT_MAP.md` area files + cited files.
+- If an active plan exists, treat it as the hot execution artifact; keep `STATE.md` as the global header only.
+- Prefer flags and manifests over prose. If plan flags already express scope, files, exclusions, and verification, do not restate them.
 - Output: diff/patch only. No recap, no file dumps.
 - STATE ≤120 words, no history. Compress immediately if exceeded.
 - Summaries ≤120 words. Plans ≤180 words. ROADMAP ≤12 bullets.

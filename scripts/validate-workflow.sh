@@ -108,6 +108,20 @@ echo "3. Starter templates"
 [[ -f "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" ]] && pass "Plan template exists" || fail "Missing .planning/plans/00-TEMPLATE-PLAN.md"
 [[ -f "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" ]] && pass "Summary template exists" || fail "Missing .planning/summaries/00-TEMPLATE-SUMMARY.md"
 [[ -f "$REPO_ROOT/.planning/verification/00-TEMPLATE-VERIFICATION.md" ]] && pass "Verification template exists" || fail "Missing .planning/verification/00-TEMPLATE-VERIFICATION.md"
+if [[ -f "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" ]]; then
+  grep -q '^SCOPE=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes SCOPE manifest" || fail "Plan template missing SCOPE manifest"
+  grep -q '^DOC=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes DOC manifest" || fail "Plan template missing DOC manifest"
+  grep -q '^ARCH=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes ARCH manifest" || fail "Plan template missing ARCH manifest"
+  grep -q '^VERIFY=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes VERIFY manifest" || fail "Plan template missing VERIFY manifest"
+  grep -q '^FILES=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes FILES manifest" || fail "Plan template missing FILES manifest"
+  grep -q '^OUT=' "$REPO_ROOT/.planning/plans/00-TEMPLATE-PLAN.md" && pass "Plan template includes OUT manifest" || fail "Plan template missing OUT manifest"
+fi
+if [[ -f "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" ]]; then
+  grep -q '^Done:' "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" && pass "Summary template includes Done block" || fail "Summary template missing Done block"
+  grep -q '^Validated:' "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" && pass "Summary template includes Validated block" || fail "Summary template missing Validated block"
+  grep -q '^Pending:' "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" && pass "Summary template includes Pending block" || fail "Summary template missing Pending block"
+  grep -q '^Next:' "$REPO_ROOT/.planning/summaries/00-TEMPLATE-SUMMARY.md" && pass "Summary template includes Next block" || fail "Summary template missing Next block"
+fi
 
 echo ""
 echo "4. Runtime adapters"

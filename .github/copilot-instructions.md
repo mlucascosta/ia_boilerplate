@@ -15,6 +15,8 @@ Follow `AGENTS.md`.
 - area files selected through `docs/ai/CONTEXT_MAP.md`
 - files explicitly requested by the user
 
+If an active plan exists, use it as the local execution guide and keep `STATE.md` as the global header only.
+
 ## Max read budget
 
 Before acting, read only the first-read set and the smallest additional area context needed for correctness.
@@ -34,6 +36,7 @@ Escalate path if risk or uncertainty increases.
 - Return only the minimal diff or patch.
 - Keep notes short and only when needed for correctness.
 - Keep changes explicit and verifiable.
+- Prefer flags and manifests over prose. Do not restate plan flags in natural language.
 - No workflow recap.
 - No file dumps.
 - No context replay.

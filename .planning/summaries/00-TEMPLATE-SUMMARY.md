@@ -1,20 +1,20 @@
 # Summary: <name>
 
-## What Changed
+Done:
 
-Summarize the implementation at a level a future session can understand quickly.
+- <completed work>
 
-## Validation
+Validated:
 
-- Commands run
-- Tests or checks that passed
-- Any manual verification performed
+- <checks or evidence>
 
-## Risks Or Follow-ups
+Pending:
 
-- Remaining known risks
-- Deferred cleanup
-- Next logical step if work continues
+- <open risk or deferred item>
+
+Next:
+
+- <single executable next step>
 
 ---
 

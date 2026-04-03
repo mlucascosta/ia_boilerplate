@@ -1,24 +1,27 @@
 # Plan: <name>
 
+SCOPE=trivial|focused|full
+DOC=min|full
+ARCH=none|solid|structural
+VERIFY=V0|V1|V2
+FILES=<comma-separated paths>
+OUT=<explicit exclusions>
+
 ## Objective
 
 State the concrete outcome this plan must deliver.
-
-## Scope
-
-List what is in scope for this plan and any explicit exclusions.
-
-## Expected Changes
-
-- Files or modules likely to change
-- Data flows, contracts, or interfaces affected
-- Docs that must stay aligned
 
 ## Constraints
 
 - Existing patterns to preserve
 - Product or platform constraints
 - Dependencies or sequencing limits
+
+## Expected Changes
+
+- Files or modules likely to change
+- Data flows, contracts, or interfaces affected
+- Docs that must stay aligned
 
 ## Verification
 

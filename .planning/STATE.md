@@ -2,12 +2,12 @@
 
 ## Objective
 
-Keep the workflow explicit, portable, and enforceable as one delivery system.
+Keep the workflow explicit, portable, and cheap to resume.
 
 ## Active Work
 
-Phase 17 completed.
-Hybrid delivery and quality gates are canonical.
+Phase 19 completed.
+Context compression and resume rules are explicit.
 
 ## Locked Decisions
 
@@ -16,6 +16,7 @@ Hybrid delivery and quality gates are canonical.
 3. Adapter conformance is validated.
 4. Derived-repo migration preserves project identity and Codex skill naming.
 5. Delivery model = hybrid governance + agile execution + Git Flow + quality gates.
+6. If an active plan exists, it is the hot execution artifact.
 
 ## Open Questions
 

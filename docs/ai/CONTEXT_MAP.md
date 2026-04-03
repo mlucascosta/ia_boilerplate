@@ -2,6 +2,34 @@
 
 Use this file to minimize unnecessary context loading.
 
+## Context temperatures
+
+### Hot
+
+Load by default:
+
+- `docs/ai/WORKFLOW_SHORT.md`
+- one active artifact: `STATE.md` or the active plan
+- files in the current slice
+
+### Warm
+
+Load only when needed for the current task type:
+
+- `docs/ai/CONTEXT_MAP.md`
+- `docs/ai/DECISION_RULES.md`
+- one recipe or closest canonical reference
+
+### Cold
+
+Load only when the task explicitly requires broader context:
+
+- `ROADMAP.md`
+- ADRs
+- research artifacts
+- broad architecture or module docs
+- older summaries beyond the last 2 relevant ones
+
 ## Always read first
 
 - `.planning/STATE.md`
@@ -38,7 +66,9 @@ Read:
 Avoid:
 
 - roadmap
+- ADRs unless the bug touches a structural decision
 - broad architecture docs
+- research artifacts
 - unrelated summaries
 
 ### Local feature
@@ -56,16 +86,27 @@ Read later only if needed:
 - ADRs
 - roadmap
 
+Avoid:
+
+- research artifacts
+- old summaries unrelated to the current slice
+
 ### Structural change
 
 Read:
 
 - `.planning/STATE.md`
+- active plan if present
 - `docs/ai/WORKFLOW.md`
 - `docs/ai/PROJECT_METHOD.md`
 - relevant architecture docs
 - related ADRs
 - affected module docs
+
+Avoid:
+
+- unrelated module docs
+- old summaries beyond the last 2 relevant checkpoints
 
 ### Documentation change
 
@@ -78,15 +119,35 @@ Read:
 Avoid:
 
 - implementation files unless the doc depends on them
+- roadmap unless the documentation change is governance-level
+- research artifacts unless they are the source of truth
 
 ### Handoff or resume
 
 Read:
 
 - `.planning/STATE.md`
-- latest relevant summary
 - active plan
+- latest 2 relevant summaries
 - only the files in current scope
+
+Avoid:
+
+- roadmap unless priorities changed
+- research artifacts unless the slice depends on them
+- broad docs outside the current area
+
+## Resume packet
+
+For resumptions, build the packet in this order:
+
+- current objective from `STATE.md`
+- active plan
+- latest 2 relevant summaries
+- files in focus
+- current risk or blocker
+
+Do not reopen roadmap, ADRs, or broad docs unless the resume packet proves they are needed.
 
 ## Loading rule
 

@@ -37,6 +37,7 @@
 | --- | --- | --- | --- |
 | 17 | Formalize the hybrid delivery and mandatory quality model across workflow, project method, and PR review | 16 | Completed |
 | 18 | Automate branch, quality, and security gate enforcement where the workflow already defines policy | 17 | Planned |
+| 19 | Codify hot/warm/cold context, active-artifact precedence, and manifest-first compression rules | 17 | Completed |
 
 ## Notes
 
