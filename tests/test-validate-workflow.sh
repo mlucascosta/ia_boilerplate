@@ -52,7 +52,20 @@ fi
 teardown
 
 echo ""
-echo "3. Missing starter template fails"
+echo "3. Missing PR section fails"
+setup
+tmp_file="$WORK_DIR/.github/pull_request_template.md.tmp"
+grep -v '^## Security Impact$' "$WORK_DIR/.github/pull_request_template.md" > "$tmp_file"
+mv "$tmp_file" "$WORK_DIR/.github/pull_request_template.md"
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Missing PR section should fail validation"
+else
+  pass "Missing PR section fails validation"
+fi
+teardown
+
+echo ""
+echo "4. Missing starter template fails"
 setup
 rm "$WORK_DIR/.planning/00-TEMPLATE-ROADMAP.md"
 if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
@@ -63,7 +76,7 @@ fi
 teardown
 
 echo ""
-echo "4. STATE word budget enforced"
+echo "5. STATE word budget enforced"
 setup
 cat <<'EOF' > "$WORK_DIR/.planning/STATE.md"
 # State
@@ -106,7 +119,7 @@ fi
 teardown
 
 echo ""
-echo "5. Verification bullet budget enforced"
+echo "6. Verification bullet budget enforced"
 setup
 cat <<'EOF' > "$WORK_DIR/.planning/verification/01-budget-check.md"
 # Verification
@@ -129,7 +142,7 @@ fi
 teardown
 
 echo ""
-echo "6. Adapter section contract enforced"
+echo "7. Adapter section contract enforced"
 setup
 tmp_file="$WORK_DIR/CLAUDE.md.tmp"
 grep -v '^## Source of truth$' "$WORK_DIR/CLAUDE.md" > "$tmp_file"
@@ -142,7 +155,7 @@ fi
 teardown
 
 echo ""
-echo "7. Copilot ask_user loop rejected"
+echo "8. Copilot ask_user loop rejected"
 setup
 cat <<'EOF' >> "$WORK_DIR/.github/copilot-instructions.md"
 

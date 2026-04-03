@@ -31,6 +31,13 @@
 | 15 | Ship first-class templates for planning artifacts, ADRs, risks, and pull requests | 11 | Completed |
 | 16 | Add lightweight migration support for derived repositories upgrading workflow versions | 14, 15 | Completed |
 
+## Milestone: Delivery System Alignment
+
+| Phase | Goal | Dependency | Status |
+| --- | --- | --- | --- |
+| 17 | Formalize the hybrid delivery and mandatory quality model across workflow, project method, and PR review | 16 | Completed |
+| 18 | Automate branch, quality, and security gate enforcement where the workflow already defines policy | 17 | Planned |
+
 ## Notes
 
 **Why phases 07-10 are deferred:**

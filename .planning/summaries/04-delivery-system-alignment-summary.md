@@ -1,0 +1,3 @@
+# Summary
+
+Formalized a single delivery system in the canonical workflow. `WORKFLOW.md` now makes the hybrid model explicit: PMBOK-inspired governance, Agile-inspired execution, Git Flow integration discipline, and mandatory quality gates. It also adds TDD policy, a test matrix, security gates, a SOLID review lens, a stricter branch policy, and a stronger definition of done. The PR template now requires change type, behavior change, workflow artifacts, TDD, test matrix, and security impact. Conformance enforces these PR sections. Next work is phase 18 if the project wants CI automation for branch, quality, and security gates.

@@ -21,6 +21,15 @@ The result is a model-agnostic workflow that can be followed by Copilot, Codex, 
 
 This repository uses a hybrid delivery model. See `docs/ai/PROJECT_METHOD.md` for full rationale.
 
+## Delivery Policy
+
+This project uses one delivery system with distinct layers:
+
+- PMBOK-inspired governance for direction, scope, risks, architecture, quality policy, and major change control
+- Agile-inspired execution for backlog-driven work, small slices, short iterations, AI-assisted delivery, and incremental validation
+- Git Flow for integration discipline across feature, fix, release, and hotfix work
+- Mandatory quality gates for all non-trivial code changes
+
 ### Governance layer
 Use governance artifacts for:
 - project direction
@@ -180,6 +189,19 @@ Prefer atomic plans that fit in a fresh context window without hidden dependenci
 
 Verification must be explicit and proportional to risk.
 
+## Quality Policy
+
+All non-trivial changes require validation proportional to risk.
+
+Default expectations:
+
+- TDD for behavior changes
+- unit tests for isolated logic
+- integration tests for real boundaries
+- E2E tests for critical user flows
+- security validation for exposed or sensitive paths
+- SOLID review for design quality
+
 ### Verification levels
 
 | Level | When | What |
@@ -199,16 +221,105 @@ Default to the lowest level that still preserves correctness.
 5. Docs changes must confirm docs match implementation rather than aspirational future state.
 6. Reviews must prioritize bugs, regressions, missing documentation, architectural drift, and operational risk.
 
-## Git Workflow Standard
+## TDD Policy
+
+Use TDD by default when:
+
+- changing business behavior
+- fixing a bug with reproducible behavior
+- adding a new rule or contract
+- refactoring behavior-sensitive logic
+
+TDD may be lighter when:
+
+- changing static content
+- doing cosmetic UI-only work
+- editing documentation
+- performing low-risk configuration changes
+
+## Test Matrix
+
+### Unit tests
+
+Required for:
+
+- pure logic
+- services
+- validators
+- mappers
+- policies
+- domain rules
+
+### Integration tests
+
+Required for:
+
+- database access
+- queues
+- external APIs
+- cache
+- file storage
+- auth boundaries
+
+### E2E tests
+
+Required for:
+
+- login
+- registration
+- checkout or payment
+- critical CRUD flows
+- permission-sensitive user journeys
+- any top-tier business path
+
+### Security validation
+
+Required for:
+
+- auth and session changes
+- permission changes
+- file upload
+- public endpoints
+- input parsing
+- secrets and config exposure
+
+## Security Gate
+
+A change must trigger security validation when it affects:
+
+- authentication
+- authorization
+- session handling
+- public endpoints
+- file upload or download
+- external integrations
+- user input parsing
+- secrets, tokens, or credentials
+
+## SOLID Usage
+
+SOLID is used as a design review lens. It is not a license for overengineering.
+
+Apply SOLID most strongly when:
+
+- creating services
+- defining interfaces
+- refactoring domain logic
+- isolating external dependencies
+- reducing coupling in growing modules
+
+## Branch Policy
 
 Git Flow is mandatory for meaningful implementation work.
 
 1. Agents must not execute meaningful implementation work directly on `main`, `master`, or any protected primary branch.
 2. Feature work must happen on `feature/*` branches.
-3. Release stabilization work must happen on `release/*` branches.
-4. Urgent production fixes must happen on `hotfix/*` branches.
-5. If the repository documents a different protected-branch naming policy, preserve that policy while keeping Git Flow branch families for delivery work.
-6. Planning, execution, and merge recommendations must assume branch-based delivery rather than direct commits to the primary branch.
+3. Bounded fixes should happen on `fix/*` branches.
+4. Release stabilization work must happen on `release/*` branches.
+5. Urgent production fixes must happen on `hotfix/*` branches.
+6. If the repository documents a different protected-branch naming policy, preserve that policy while keeping Git Flow branch families for delivery work.
+7. Planning, execution, and merge recommendations must assume branch-based delivery rather than direct commits to the primary branch.
+8. All non-trivial work must go through pull request review.
 
 ## Documentation Standards
 
@@ -291,7 +402,10 @@ This lets agents parse task constraints in ~10 lines instead of re-reading prose
 
 A slice is done only when:
 - the scoped change is implemented
+- required tests were added or updated
 - validation appropriate to risk was completed
+- security impact was checked when applicable
+- design remains maintainable under a SOLID review lens
 - the result is summarized
 - `STATE.md` is updated
 - no unresolved structural decision is hidden inside execution notes

@@ -39,7 +39,7 @@ This repository is intentionally focused on workflow infrastructure rather than 
 - Make planning and execution artifact-driven instead of chat-history-driven
 - Treat documentation as operational memory
 - Keep workflow expectations explicit, reviewable, and durable
-- Enforce strong implementation standards around complete code documentation and SOLID-oriented architecture
+- Enforce one delivery system with hybrid governance, agile execution, Git Flow discipline, and mandatory quality gates
 
 ## How The Workflow Fits Together
 
@@ -74,14 +74,16 @@ They are referenced here as foundational inspiration for documentation-first exe
 
 ## Core Rules
 
-The current repository policy is intentionally narrow and explicit.
+The current repository policy is intentionally explicit and system-oriented.
 
 For meaningful implementation work, the mandatory requirements are:
 
 - Complete in-code documentation using TSDoc, PHPDoc, or an equivalent language-appropriate standard
 - SOLID-oriented architecture
+- TDD by default when behavior changes
+- Unit, integration, E2E, and security validation proportional to risk
 
-Validation, testing, and review still matter, but they are treated as context-dependent verification choices unless the project documentation says otherwise.
+Governance stays hybrid, execution stays incremental, Git Flow remains mandatory, and validation must match the real delivery risk.
 
 ## Runtime Support
 

@@ -140,10 +140,16 @@ fi
 echo ""
 echo "6. Pull request governance signals"
 if [[ -f "$REPO_ROOT/.github/pull_request_template.md" ]]; then
+  grep -q "## Change Type" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Change Type" || fail "PR template missing Change Type section"
   grep -q "## Workflow Path" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Workflow Path" || fail "PR template missing Workflow Path section"
+  grep -q "## Behavior Change" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Behavior Change" || fail "PR template missing Behavior Change section"
   grep -q "## Verification Level" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Verification Level" || fail "PR template missing Verification Level section"
   grep -q "## Governance Impact" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Governance Impact" || fail "PR template missing Governance Impact section"
+  grep -q "## Workflow Artifacts" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Workflow Artifacts" || fail "PR template missing Workflow Artifacts section"
   grep -q "## Documentation Impact" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Documentation Impact" || fail "PR template missing Documentation Impact section"
+  grep -q "## TDD" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines TDD" || fail "PR template missing TDD section"
+  grep -q "## Test Matrix" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Test Matrix" || fail "PR template missing Test Matrix section"
+  grep -q "## Security Impact" "$REPO_ROOT/.github/pull_request_template.md" && pass "PR template defines Security Impact" || fail "PR template missing Security Impact section"
 fi
 
 echo ""

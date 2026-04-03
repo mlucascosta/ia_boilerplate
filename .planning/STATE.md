@@ -2,25 +2,24 @@
 
 ## Objective
 
-Keep the workflow enforceable, portable, and easy to upgrade in derived repositories.
+Keep the workflow explicit, portable, and enforceable as one delivery system.
 
 ## Active Work
 
-Phases 15 and 16 completed.
-Starter templates and lightweight derived-repo migration shipped.
+Phase 17 completed.
+Hybrid delivery and quality gates are canonical.
 
 ## Locked Decisions
 
-1. `docs/ai/WORKFLOW.md` is the canonical workflow source.
-2. `docs/ai/ARTIFACTS.md` is the canonical artifact contract.
-3. `AGENTS.md` is the repository-wide operating manual.
-4. Runtime-specific files act only as adapters.
-5. Adapter conformance is now enforced in validation.
-6. Lightweight migration must preserve target project identity and Codex skill naming.
+1. `WORKFLOW.md` and `ARTIFACTS.md` remain canonical.
+2. Runtime files remain thin adapters.
+3. Adapter conformance is validated.
+4. Derived-repo migration preserves project identity and Codex skill naming.
+5. Delivery model = hybrid governance + agile execution + Git Flow + quality gates.
 
 ## Open Questions
 
-Should phase 10 build a full version-boundary layer on top of the new lightweight sync?
+Should phase 18 enforce branch, quality, and security gates in CI?
 
 ## Blockers
 
@@ -28,4 +27,4 @@ None.
 
 ## Next Step
 
-Execute phase 08 or define how phase 10 extends the lightweight migration script.
+Choose phase 18 automation or return to phase 08 cross-platform docs.
