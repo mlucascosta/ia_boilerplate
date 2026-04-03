@@ -6,8 +6,12 @@ Keep workflow explicit, cheap.
 
 ## Active Work
 
-Phase 21 completed.
-`.agents/` canonical. Runtime-owned files in `.agents/runtimes/{codex,claude,github}/`. Root runtimes = compatibility entrypoints. 11 skills/runtime. Goal: compact-but-complete surface, upstream capability absorbed via routing and flags.
+branch: `feature/agents-architecture-docs`
+Wrote/replaced 4 architecture docs under `docs/architecture/`:
+- `agents-centralization.md` — consolidated spec (28 sections)
+- `agents-migration-plan.md` — file-by-file 9-phase migration plan
+- `runtime-shims-spec.md` — shim contract per runtime
+- `testing-governance.md` — TDD, layered tests, SOLID, Git Flow, Agile+PMBOK
 
 ## Locked Decisions
 
@@ -18,10 +22,11 @@ Phase 21 completed.
 5. Delivery = hybrid governance + agile execution + Git Flow + quality gates.
 6. Active plan, when present, is hot artifact.
 7. Default model profile: `budget`; non-Anthropic => `inherit`.
+8. `.agents/` is the only normative source; runtime surfaces are derived, minimal, disposable.
 
 ## Open Questions
 
-Should phase 18 enforce CI gates?
+None.
 
 ## Blockers
 
@@ -29,4 +34,4 @@ None.
 
 ## Next Step
 
-Choose phase 18 or phase 08.
+Commit docs on `feature/agents-architecture-docs`, then open PR to `develop`.

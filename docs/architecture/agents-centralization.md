@@ -1,124 +1,143 @@
-# Technical Architecture - Agent Centralization in `.agents/`
+# Technical Architecture Specification
 
-## 1. Overview
+## Centralized Agent Operating Model for `ia_boilerplate`
 
-This document defines the target architecture for evolving `ia_boilerplate` from a runtime-distributed model into a centralized model with a single source of truth in `.agents/`.
+## 1. Executive Summary
 
-The goals are to:
+This document defines the target architecture for evolving `ia_boilerplate` into a fully centralized, repository-level AI workflow system where all agent behavior, skills, runtime adapters, prompts, and operational rules are managed from a single source of truth: `.agents/`.
 
-- centralize all operational agent intelligence in `.agents/`
-- eliminate duplication across Claude, Codex, Copilot, and other runtimes
-- use `get-shit-done` (GSD) as a conceptual base for skills, phases, and subagents
-- reduce dependence on runtime-specific command trees
-- make the repository more portable, predictable, auditable, and easier to maintain
+The current repository already establishes a cross-runtime workflow model for multiple AI runtimes, including Claude, Codex, and Copilot. It also already emphasizes repository artifacts as durable operational memory instead of relying on transient chat context. However, parts of the current design are still distributed across runtime-specific locations such as `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.codex/skills/...`, `.claude/agents/...`, and `.codex/agents/...`.
 
-The new architecture adopts a `skills-first` and `agents-first` model instead of a `runtime-first` model.
+The objective of this redesign is to replace that distributed model with a centralized architecture that is:
 
-## 2. Current State and Problem
+* runtime-agnostic at its core
+* skill-first rather than command-first
+* compatible with Claude, Codex, Copilot, and future runtimes
+* aligned with GSD-style operating patterns
+* technically enforceable
+* easier to maintain
+* less prone to drift
+* explicitly grounded in TDD, SOLID, layered testing, Git Flow, and hybrid Agile + PMBOK governance
 
-The repository already has a solid cross-AI workflow core, but the intelligence is still fragmented across multiple runtime-oriented locations:
+This is not a cosmetic reorganization. It is a structural operating model change.
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.github/copilot-instructions.md`
-- `.codex/skills/...`
-- `.claude/agents/...`
-- `.codex/agents/...`
-- commands, wrappers, and runtime-specific variants
+---
 
-This creates the following problems:
+## 2. Background and Context
 
-### 2.1 Structural duplication
+The repository already presents itself as a cross-AI workflow bootstrap focused on repository-level execution rules, planning artifacts, workflow discipline, and adapter-based runtime compatibility.
 
-Equivalent agents exist in more than one runtime, with minor syntax differences instead of meaningful behavioral differences.
+That current model has several strengths:
 
-### 2.2 Runtime drift
+* a canonical workflow contract
+* a canonical artifact contract
+* planning and execution artifacts under `.planning/`
+* runtime support for multiple AI tools
+* strong emphasis on documentation as operational memory
+* an explicit quality bar
+* explicit concern with predictable delivery
 
-A rule evolves in one place but not necessarily in the others.
+At the same time, the current structure still reflects a partially distributed runtime architecture. The workflow intent is centralized, but some of the executable policy remains duplicated across runtime surfaces.
 
-### 2.3 Expensive maintenance
+This conversation introduced a stronger goal:
 
-Each policy, verification, or output-shape change may require updates in several files.
+1. move all runtime intelligence into `.agents/`
+2. remove semantic duplication between `.claude`, `.codex`, and `.github`
+3. treat runtime-specific directories as thin compatibility shells only
+4. use the `get-shit-done` project as a conceptual base for skills and agent orchestration
+5. avoid over-reliance on many runtime-specific commands
+6. preserve and strengthen engineering discipline:
 
-### 2.4 Runtime-centered architecture
+   * TDD by default
+   * tests first, implementation second
+   * unit, integration, and E2E testing proportional to risk
+   * SOLID-oriented design
+   * hybrid Agile + PMBOK delivery
+   * Git Flow with `develop` as the base branch for feature work
 
-Behavior remains tied to Claude, Codex, or Copilot when it should be defined by the project workflow itself.
+The result is a centralized, repository-native operating system for AI-assisted software delivery.
 
-### 2.5 GSD is only partially absorbed
+---
 
-The repository already aligns with the spirit of GSD, but it has not yet fully internalized its model of skills, phases, subagents, and runtime-decoupled execution.
+## 3. Problem Statement
 
-## 3. Architectural Objective
+The current architecture has four major structural weaknesses.
 
-The target architecture establishes:
+### 3.1 Semantic duplication across runtimes
 
-> `.agents/` is the only source of truth for agent behavior, skills, operational contracts, structured prompts, manifests, and compatibility mapping.
+Equivalent logic exists in multiple places with only format-level differences. This increases maintenance cost and creates drift risk.
 
-All other runtime integration points are treated as:
+For example, an agent may exist in both Claude-specific and Codex-specific directories, even though the actual responsibilities and instructions are largely the same.
 
-- minimal wrappers
-- generated files
-- compatibility shims
-- disposable surfaces
+### 3.2 Runtime-first organization
 
-## 4. Solution Principles
+The system is still too organized around where a runtime expects files, rather than around what the repository itself needs as the real workflow contract.
 
-### Mandatory Core Principles
+This makes the repository behave as if Claude, Codex, or Copilot were the primary owners of the workflow, when in reality the repository should own the workflow and runtimes should merely consume it.
 
-- `.agents/` is the only source of truth for agent behavior
-- TDD is the mandatory default implementation pattern
-- tests come before real implementation
-- unit, integration, and E2E tests are required proportionally to risk
-- SOLID is mandatory in the construction of classes, functions, and modules
-- governance remains hybrid across Agile and PMBOK
-- runtimes do not define behavior; they only consume the central contract
-- runtime wrappers are minimal, derived, and non-normative
+### 3.3 Weak normalization of agent and skill behavior
 
-### 4.1 Single Source of Truth
+There is no single canonical place where agent skills, operational contracts, and runtime mapping are fully governed together.
 
-Every relevant rule must exist only in `.agents/`.
+### 3.4 GSD inspiration is present but not fully internalized
 
-### 4.2 Runtime as Compatibility Layer
+The repository already aligns conceptually with GSD on durable state, phases, artifact-driven execution, and strong operational constraints, but does not yet fully adopt a clean skill-based internal architecture.
 
-Claude, Codex, Copilot, and other runtimes must not define behavior. They only consume behavior.
+---
 
-### 4.3 Skills over Commands
+## 4. Architectural Goal
 
-The system should be organized around reusable capabilities, not large trees of runtime-coupled commands.
+The target architecture is defined by one central rule:
 
-### 4.4 Generated Compatibility
+**All normative behavior for agents, skills, prompts, adapter semantics, and workflow contracts must live exclusively in `.agents/`.**
 
-Whenever possible, runtime files should be generated from the central source.
+All runtime-specific surfaces outside `.agents/` must be treated as:
 
-### 4.5 Zero Semantic Duplication
+* generated
+* minimal
+* disposable
+* non-normative
+* compatibility-only
 
-Syntax differences are acceptable. Rule or policy differences are not.
+This means the repository itself becomes the owner of the AI workflow system, and runtimes simply become consumers of generated or minimal compatibility surfaces.
 
-### 4.6 GSD-Inspired, not GSD-Dependent
+---
 
-The repository absorbs the operational model of GSD without copying its full command structure.
+## 5. Design Principles
 
-## 5. Current State vs Target State
+### 5.1 Single Source of Truth
 
-### 5.1 Current state
+All meaningful agent behavior must be stored in one place only: `.agents/`.
 
-- `AGENTS.md` as the main adapter
-- `CLAUDE.md` as the Claude adapter
-- `.github/copilot-instructions.md` as the Copilot adapter
-- `.codex/skills/...` as the Codex adapter
-- duplicated agents in `.claude/agents` and `.codex/agents`
-- GSD present as a reference, but not yet as the real modeling core
+### 5.2 Runtime Compatibility, Not Runtime Ownership
 
-### 5.2 Target state
+Claude, Codex, Copilot, and similar runtimes may require certain files for discovery, but they must not become the canonical owners of the workflow.
 
-- `.agents/` as the absolute center
-- shared, modular skills
-- shared, runtime-agnostic agents
-- short, non-duplicating adapters
-- generated runtime wrappers
-- GSD internalized as a phase, skill, and subagent execution model
+### 5.3 Skills First
+
+The repository should be organized around reusable capabilities such as discuss, plan, execute, verify, review, and documentation, rather than around a command tree tied to a specific runtime.
+
+### 5.4 Agents as Reusable Building Blocks
+
+Specialized agents should be defined once and reused by multiple runtime environments.
+
+### 5.5 Zero Semantic Duplication
+
+Different wrappers may exist for technical compatibility, but policy or behavior must not be duplicated.
+
+### 5.6 Engineering Discipline Is Mandatory
+
+This is not only a prompt architecture. It is an engineering operating model. TDD, SOLID, layered testing, Git Flow, and hybrid governance are not optional recommendations; they are mandatory system defaults.
+
+### 5.7 GSD-Inspired, Not GSD-Copied
+
+The system should adopt the strongest ideas from GSD without inheriting unnecessary command sprawl or runtime-specific complexity.
+
+---
 
 ## 6. Target Repository Structure
+
+The recommended target structure is:
 
 ```text
 .agents/
@@ -167,43 +186,92 @@ The repository absorbs the operational model of GSD without copying its full com
     └── validate-agents.sh
 ```
 
-## 7. Role of Each Directory
+This structure separates concerns clearly:
 
-### 7.1 `.agents/AGENTS.md`
+* policy lives in `AGENTS.md`
+* inventory and orchestration metadata live in `manifest.json`
+* runtime-specific differences live in `adapters/`
+* reusable capabilities live in `skills/`
+* reusable subagents live in `agents/`
+* reusable fragments live in `prompts/`
+* schemas live in `schemas/`
+* automation lives in `scripts/`
 
-The universal contract of the system.
+---
 
-Responsibilities:
+## 7. Core Components
 
-- define base rules
-- define minimum reading rules
-- define path selection
-- define output policy
-- define verification policy
-- define artifact update policy
-- define prohibitions
+## 7.1 `.agents/AGENTS.md`
 
-This file replaces the semantic role of the current `AGENTS.md` as the real source of behavior, while the repository-root `AGENTS.md` remains a compatibility adapter.
+This becomes the canonical system contract.
 
-### 7.2 `.agents/manifest.json`
+It must define:
 
-The orchestration and metadata file for the agent architecture.
+* source-of-truth policy
+* read budget
+* path selection behavior
+* output contract
+* verification levels
+* artifact update rules
+* engineering defaults
+* branching model
+* hard prohibitions
 
-Responsibilities:
+It replaces the role of the current top-level `AGENTS.md` as the real normative source.
 
-- declare system version
-- list skills
-- list agents
-- list supported runtimes
-- list generated targets
-- support automatic validation
-- support generation scripts
+A typical high-level structure would include:
+
+```md
+# Repository Agent Contract
+
+## Source of truth
+Follow this file first, then the canonical workflow docs.
+
+## Read budget
+Read only the minimum required artifacts and code context.
+
+## Path selection
+Choose Trivial, Focused, or Full based on scope and risk.
+
+## Engineering defaults
+- TDD by default
+- Tests first
+- SOLID design
+- Layered validation proportional to risk
+
+## Git strategy
+- Git Flow is mandatory
+- `develop` is the base for feature work
+
+## Verification
+Use V0, V1, V2, or V3 proportional to risk.
+
+## Hard prohibitions
+- no full repository scan without reason
+- no runtime-specific workflow invention
+- no implementation-first as the default for behavior changes
+```
+
+---
+
+## 7.2 `.agents/manifest.json`
+
+This is the machine-readable map of the operating system.
+
+It should declare:
+
+* architecture version
+* supported runtimes
+* skills inventory
+* agents inventory
+* generated wrapper targets
+* validation expectations
 
 Example:
 
 ```json
 {
-  "version": "2.0.0",
+  "version": "2.0.0-agent-core",
   "sourceOfTruth": ".agents",
   "supportedRuntimes": ["claude", "codex", "copilot"],
   "skills": [
@@ -232,183 +300,157 @@ Example:
 }
 ```
 
-### 7.3 `.agents/adapters/`
+---
 
-Semantic adapters per runtime.
+## 7.3 `.agents/adapters/`
 
-These files exist only to capture real runtime-specific differences without repeating the full workflow.
+These files capture only real runtime-specific differences.
 
-#### `claude.md`
+They must never restate the full workflow or become shadow sources of truth.
 
-Should contain only:
+### `claude.md`
 
-- local discovery notes
-- permission differences
-- runtime-specific conventions that genuinely belong to Claude
+Use only for details genuinely specific to Claude runtime consumption.
 
-#### `codex.md`
+### `codex.md`
 
-Should contain only:
+Use only for Codex skill expectations, format nuances, and runtime notes.
 
-- Codex-specific skill format expectations
-- runtime behavior notes
-- no full workflow duplication
+### `copilot.md`
 
-#### `copilot.md`
+Use only for repository instruction behavior relevant to Copilot.
 
-Should contain only:
+### `gsd.md`
 
-- repository instruction notes for Copilot
-- environment-specific constraints and expectations
+Use for documenting how GSD concepts are incorporated into this repository architecture.
 
-#### `gsd.md`
+---
 
-Should document:
+## 7.4 `.agents/skills/`
 
-- how GSD is conceptually absorbed
-- which capabilities were inherited
-- which parts of GSD will not be reproduced
-- how this repository differs from a full GSD installation
+This is the functional heart of the system.
 
-### 7.4 `.agents/skills/`
+Skills define reusable capabilities, not runtime entrypoints.
 
-The main reusable capability layer.
+### `workflow-core`
 
-Skills must model the workflow by function, not by runtime.
+The foundational skill. It defines the universal model.
 
-#### `workflow-core`
+### `discuss-phase`
 
-Root skill. Defines the backbone of the system.
+Captures user intent, implementation preferences, gray areas, and pre-planning decisions.
 
-#### `discuss-phase`
+### `plan-phase`
 
-Captures decisions, preferences, gray areas, and direction before planning.
+Creates bounded implementation plans, test strategy, and verification expectations.
 
-#### `plan-phase`
+### `execute-phase`
 
-Transforms context into an atomic, verifiable plan aligned to the artifact model.
+Performs implementation in constrained slices with explicit validation behavior.
 
-#### `execute-phase`
+### `verify-phase`
 
-Executes the plan with emphasis on minimal diff, proportional validation, and contract preservation.
+Checks completion, quality, and evidence.
 
-#### `verify-phase`
+### `quick-task`
 
-Verifies implementation, done criteria, and evidence.
+Provides a reduced-overhead path for small tasks without collapsing discipline.
 
-#### `quick-task`
+### `docs-update`
 
-Lightweight path for small tasks without losing minimum discipline.
+Handles documentation updates that reflect durable changes.
 
-#### `docs-update`
+### `review`
 
-Documentation updates driven by verification and durable-knowledge alignment.
+Provides review, audit, and cross-check behavior.
 
-#### `review`
+---
 
-Audit, peer review, and cross-check analysis.
+## 7.5 `.agents/agents/`
 
-### 7.5 `.agents/agents/`
+These are reusable specialized subagents.
 
-Specialized subagents, neutral with respect to runtime.
+Each agent should have one responsibility and must be runtime-neutral.
 
 Examples:
 
-#### `advisor-researcher.md`
+### `advisor-researcher.md`
 
-Researches one gray area and returns a structured comparison.
+Researches a single uncertainty and returns structured comparisons.
 
-#### `planner.md`
+### `planner.md`
 
-Converts scope into atomic plans.
+Turns a bounded request into an implementation-ready plan.
 
-#### `executor.md`
+### `executor.md`
 
-Performs implementation with bounded scope.
+Applies a focused implementation slice within a bounded scope.
 
-#### `verifier.md`
+### `verifier.md`
 
-Validates criteria, evidence, and gaps.
+Checks outcomes, evidence, and behavioral correctness.
 
-#### `doc-writer.md`
+### `doc-writer.md`
 
-Updates durable documentation.
+Updates persistent documentation.
 
-#### `doc-verifier.md`
+### `doc-verifier.md`
 
-Validates consistency, precision, and documentation alignment.
+Checks documentation integrity and alignment.
 
-### 7.6 `.agents/prompts/`
+---
 
-A library of fragments and templates.
+## 7.6 `.agents/prompts/`
 
-Goals:
-
-- avoid repeating textual blocks
-- centralize output contracts
-- centralize verification instructions
-- centralize anti-patterns
-
-Example fragments:
-
-- `minimal-diff.md`
-- `verification-levels.md`
-- `telegraphic-state.md`
-- `conditional-recommendations.md`
-- `artifact-update-rules.md`
-
-### 7.7 `.agents/schemas/`
-
-Validation schemas.
+This directory contains reusable text fragments, templates, and structured system prompt components.
 
 Examples:
 
-- `agent.schema.json`
-- `skill.schema.json`
-- `manifest.schema.json`
+* a verification levels fragment
+* a minimal-diff fragment
+* a telegraphic state update fragment
+* a conditional recommendations fragment
+* a Git Flow constraints fragment
 
-Goals:
+The benefit is consistency and easier maintenance.
 
-- validate structural integrity
-- support future tooling
-- guarantee minimum consistency across skills and agents
+---
 
-### 7.8 `.agents/scripts/`
+## 7.7 `.agents/scripts/`
 
-Utility scripts for synchronization and validation.
+These scripts enforce centralization.
 
-#### `sync-runtime-adapters.sh`
+### `generate-runtime-shims.sh`
 
-Synchronizes generated wrappers and adapters.
+Generates runtime wrappers for Claude, Codex, Copilot, or any additional supported runtime.
 
-#### `generate-runtime-shims.sh`
+### `sync-runtime-adapters.sh`
 
-Generates minimal files for `.claude`, `.codex`, and `.github`.
+Ensures the runtime shells match the central architecture.
 
-#### `validate-agents.sh`
+### `validate-agents.sh`
 
-Validates the manifest, skills, agents, and wrappers.
+Validates:
 
-## 8. Policy for `.claude`, `.codex`, and `.github`
+* manifest integrity
+* skill presence
+* agent presence
+* wrapper minimality
+* no semantic duplication outside `.agents/`
 
-### 8.1 General rule
+---
 
-These directories are no longer sources of truth.
+## 8. Runtime Strategy
 
-They become:
+## 8.1 General Rule
 
-- generated
-- minimal
-- disposable
-- compatible with runtime discovery
+Runtime-specific directories must not be trusted as source-of-truth locations.
 
-### 8.2 What this means in practice
+They may exist physically, but only as minimal compatibility layers.
 
-No workflow intelligence should be maintained there anymore.
+## 8.2 Claude
 
-They may still exist physically, but only as thin shells.
-
-### 8.3 Example for Claude
+A generated minimal wrapper might look like:
 
 ```md
 # Runtime shim for Claude
@@ -421,7 +463,9 @@ Runtime-specific notes:
 - Shared agents live in `.agents/agents/`
 ```
 
-### 8.4 Example for Codex
+## 8.3 Codex
+
+A generated minimal Codex skill might look like:
 
 ```md
 ---
@@ -434,7 +478,9 @@ Runtime specifics: `.agents/adapters/codex.md`
 Primary shared skill: `.agents/skills/workflow-core/SKILL.md`
 ```
 
-### 8.5 Example for Copilot
+## 8.4 Copilot
+
+A minimal wrapper might look like:
 
 ```md
 # Runtime shim for Copilot
@@ -444,142 +490,388 @@ Runtime-specific notes: `.agents/adapters/copilot.md`
 Do not treat this file as a source of truth.
 ```
 
-## 9. Decision About Deleting Runtime Directories
+---
 
-### 9.1 Recommended path
+## 9. Should Runtime Directories Be Deleted?
 
-Do not delete them blindly.
+The answer is: not blindly.
 
-Instead:
+If a runtime depends on those files for discovery, fully deleting them can break native usability.
 
-- remove their intelligence
-- leave only minimal wrappers
-- optionally generate them by script
+So the recommended approach is:
 
-### 9.2 Radical path
+* remove their intelligence
+* keep them minimal
+* preferably generate them
+* treat them as disposable compatibility shells
 
-Delete `.claude`, `.codex`, and `.github` completely.
+This preserves runtime support without allowing those directories to become a second source of truth.
 
-This is only acceptable if:
+---
 
-- the runtime does not depend on them for discovery
-- or an external bootstrap layer regenerates them in the environment
+## 10. GSD Integration Strategy
 
-### 9.3 Formal decision
+The repository should absorb GSD conceptually, not mechanically.
 
-The recommended architecture does not adopt full manual removal as the default path.
+## 10.1 What to adopt
 
-The standard is:
+The following GSD ideas should be internalized:
 
-> Keep minimal compatible surfaces, but remove any normative role from them.
+* durable state in repository artifacts
+* phased work
+* discuss → plan → execute → verify loops
+* bounded plans
+* subagent specialization
+* fresh-context execution
+* strong verification
+* artifact-driven continuity
 
-## 10. GSD-Based Operational Model
+## 10.2 What not to clone directly
 
-### 10.1 Goal
+The repository should avoid unnecessary inheritance of:
 
-Leverage GSD as a strong reference for phase-oriented, subagent-driven workflow.
+* very large command surfaces
+* runtime-coupled command trees
+* complexity not required by the repository's own scope
 
-### 10.2 What should be absorbed from GSD
+## 10.3 Resulting model
 
-- phase-oriented thinking
-- discuss -> plan -> execute -> verify
-- atomic tasks
-- context persisted in artifacts
-- reusable skills
-- specialized agents
-- proportional verification
-- execution decoupled from chat history
+The repository becomes **GSD-inspired** in operating model, but retains its own identity and simpler runtime surface.
 
-### 10.3 What should not be absorbed wholesale
+---
 
-- command-heavy interface as the primary operating model
-- strong coupling to one runtime
-- the need to replicate the entire GSD command tree
-- operational complexity that is unnecessary for the boilerplate scope
+## 11. Engineering Quality Model
 
-### 10.4 Conclusion
+This architecture must explicitly preserve and strengthen engineering discipline.
 
-The repository becomes `GSD-inspired` in architecture, not `GSD-cloned` in operational surface.
+That includes:
 
-## 11. Mandatory Skills
+* TDD
+* test-first implementation
+* SOLID-oriented design
+* layered test coverage
+* hybrid Agile + PMBOK governance
+* Git Flow
 
-At minimum, the architecture requires the following skills:
+These are not optional project preferences. They become mandatory architectural defaults.
 
-### 11.1 `workflow-core`
+---
 
-Mandatory base skill.
+## 12. TDD as a Mandatory Default
 
-Responsibilities:
+For any behavioral change, the default sequence must be:
 
-- load the main contract
-- define universal rules
-- establish path and verification semantics
+1. define expected behavior
+2. write the test first
+3. run the test and confirm failure
+4. implement the minimum solution
+5. refactor while preserving green state
+6. validate across the required layers
 
-### 11.2 `discuss-phase`
+Implementation-first followed by "coverage later" is not the default path.
 
-Responsible for:
+### Example
 
-- clarifying intent
-- capturing preferences
-- identifying gray areas
-- recording direction before planning
+Bad default:
 
-### 11.3 `plan-phase`
+```text
+Implement service -> add tests later
+```
 
-Responsible for:
+Required default:
 
-- decomposing scope
-- proposing executable plans
-- limiting impact surface
-- defining the correct verification level
+```text
+Write failing unit test -> implement service -> refactor -> run integration/E2E if required
+```
 
-### 11.4 `execute-phase`
+---
 
-Responsible for:
+## 13. Layered Testing Model
 
-- operating on the plan
-- minimizing structural drift
-- respecting the output contract
-- maintaining bounded execution
+The system must preserve a layered testing strategy proportional to change risk.
 
-### 11.5 `verify-phase`
+## 13.1 Unit tests
 
-Responsible for:
+Used for isolated rules, services, validators, pure functions, mappers, and domain behavior.
 
-- validating done criteria
-- validating evidence
-- identifying gaps
-- preparing closure or iteration
+Example:
 
-### 11.6 `quick-task`
+* validating a pricing calculation service
+* verifying a permission evaluator
+* checking slug normalization logic
 
-Responsible for:
+## 13.2 Integration tests
 
-- small tasks
-- fast execution
-- minimum discipline without excessive overhead
+Used for interactions between modules or infrastructure boundaries.
 
-### 11.7 `docs-update`
+Example:
 
-Responsible for:
+* repository + database
+* service + queue adapter
+* API handler + persistence
+* application service + external gateway abstraction
 
-- updating durable documentation
-- reflecting already-consolidated knowledge
-- avoiding speculative documentation
+## 13.3 E2E tests
 
-### 11.8 `review`
+Used for full functional flows or user-critical behaviors.
 
-Responsible for:
+Example:
 
-- reviewing changes
-- validating architectural adherence
-- detecting inconsistency between implementation and contract
+* user login flow
+* checkout flow
+* tenant onboarding flow
+* agent execution lifecycle with real planning artifact interactions
 
-## 12. Skill Authoring Contract
+## 13.4 Risk proportionality
 
-Each skill must follow a standardized structure.
+Not every change requires all three layers, but all changes must be verified proportionally.
 
-Suggested template:
+### Example matrix
+
+A local pure-function fix:
+
+* unit only may be sufficient
+
+A service that reads and writes persistence:
+
+* unit + integration
+
+A critical authentication change:
+
+* unit + integration + E2E
+
+---
+
+## 14. SOLID as a Structural Contract
+
+All implementation must be guided by SOLID-oriented architecture.
+
+This means:
+
+* clear responsibility boundaries
+* separation between domain and infrastructure
+* low coupling
+* high cohesion
+* extensions through composition or abstraction rather than uncontrolled modification
+* no large procedural accumulation in handlers or services
+* no infrastructure leakage into core rules
+
+### Example
+
+Bad structure:
+
+```ts
+class UserController {
+  async createUser(req, res) {
+    // validate input
+    // hash password
+    // write to DB
+    // send email
+    // create audit log
+    // generate token
+  }
+}
+```
+
+Better structure:
+
+```ts
+class CreateUserController {
+  constructor(private readonly createUserUseCase: CreateUserUseCase) {}
+
+  async handle(req, res) {
+    const result = await this.createUserUseCase.execute(req.body);
+    return res.status(201).json(result);
+  }
+}
+```
+
+```ts
+class CreateUserUseCase {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly passwordHasher: PasswordHasher,
+    private readonly emailSender: EmailSender,
+    private readonly auditLogger: AuditLogger
+  ) {}
+
+  async execute(input: CreateUserInput): Promise<CreateUserOutput> {
+    // domain-driven orchestration
+  }
+}
+```
+
+---
+
+## 15. Hybrid Agile + PMBOK Governance
+
+The system must preserve a hybrid delivery model.
+
+## 15.1 Agile side
+
+Agile governs:
+
+* incremental slices
+* short feedback loops
+* adaptive planning
+* iterative execution
+* feature-focused delivery
+
+## 15.2 PMBOK side
+
+PMBOK-style governance governs:
+
+* scope control
+* risk tracking
+* dependency visibility
+* milestone orientation
+* documentation and traceability
+* execution discipline at project level
+
+## 15.3 Separation rule
+
+Governance artifacts and execution artifacts must remain distinct.
+
+Examples:
+
+Governance-oriented artifacts:
+
+* roadmap
+* milestone definitions
+* architectural decisions
+* scope boundaries
+* risk tracking
+
+Execution-oriented artifacts:
+
+* active state
+* plan files
+* summaries
+* verification evidence
+
+The centralized agent system must respect this distinction.
+
+---
+
+## 16. Git Flow Is Mandatory
+
+Git Flow must be formally enforced.
+
+The repository already conceptually references Git Flow, but the new architecture must operationalize it clearly.
+
+## 16.1 Main branches
+
+### `main`
+
+Stable, production-grade, or releasable state.
+
+No everyday feature work should be developed directly on `main`.
+
+### `develop`
+
+Default integration branch for ongoing development.
+
+All feature work must branch from `develop`.
+
+## 16.2 Supporting branches
+
+### `feature/*`
+
+Used for bounded new work, improvements, or refactors.
+
+Rules:
+
+* branch from `develop`
+* merge back into `develop`
+
+Examples:
+
+* `feature/agents-centralization`
+* `feature/test-first-execute-phase`
+* `feature/gitflow-validation`
+
+### `release/*`
+
+Used for stabilization before publishing.
+
+Rules:
+
+* branch from `develop`
+* used for final adjustments, versioning, release preparation
+* merged into `main`
+* merged back into `develop`
+
+Example:
+
+* `release/v2.0.0`
+
+### `hotfix/*`
+
+Used for urgent production corrections.
+
+Rules:
+
+* branch from `main`
+* merged into `main`
+* merged back into `develop`
+
+Example:
+
+* `hotfix/runtime-wrapper-regression`
+
+## 16.3 Core branching rule
+
+All normal feature development must begin from `develop`.
+
+That rule should be enforced by documentation, review, and automation where possible.
+
+---
+
+## 17. Verification Levels
+
+The verification model should be formalized as follows.
+
+### `V0`
+
+Reasoning-only. Allowed only for truly trivial, non-behavioral, local changes.
+
+### `V1`
+
+Targeted validation. Usually unit-level or one bounded check.
+
+### `V2`
+
+Multi-check validation. Typically unit + integration, or equivalent.
+
+### `V3`
+
+Full behavioral validation. Used when risk warrants unit + integration + E2E.
+
+### Example
+
+A text-only typo fix in docs:
+
+* `V0`
+
+A helper function logic fix:
+
+* `V1`
+
+A persistence-related feature change:
+
+* `V2`
+
+An authentication or billing flow change:
+
+* `V3`
+
+---
+
+## 18. Skill Design Contract
+
+Every skill should follow a standard structure.
+
+Example:
 
 ```md
 ---
@@ -592,7 +884,7 @@ Create a bounded, implementation-ready plan using the repository workflow.
 
 # Use when
 - Work is broader than trivial
-- A phase or slice needs explicit planning
+- A feature or slice needs explicit planning
 - Correctness depends on artifact updates
 
 # Read first
@@ -601,690 +893,301 @@ Create a bounded, implementation-ready plan using the repository workflow.
 - docs/ai/ARTIFACTS.md
 - relevant active planning artifact
 
+# Engineering defaults
+- Start from tests
+- Define required test layers
+- Respect SOLID boundaries
+- Preserve Git Flow expectations
+
 # Output
 - Minimal plan artifact
 - Explicit verification level
-- Next execution boundary
+- Clear implementation boundary
+- Test-first execution sequence
 
 # Prohibitions
 - No full repository scan
-- No repeated workflow explanation
-- No hidden structural decisions
+- No hidden structural drift
+- No implementation-first default for behavior changes
 ```
 
-Rules:
+---
 
-- a skill must not depend on runtime
-- a skill must not repeat the entire workflow
-- a skill must be focused on one capability
-- a skill must clearly declare when to use it and when not to use it
+## 19. Agent Design Contract
 
-## 13. Agent Authoring Contract
+Every agent should define:
 
-Each agent must define:
+* role
+* purpose
+* scope
+* inputs
+* outputs
+* tool strategy
+* limitations
+* anti-patterns
 
-- name
-- role
-- scope of responsibility
-- expected inputs
-- expected output
-- tool strategy
-- limitations
-- anti-patterns
+Agents must remain runtime-neutral.
 
-Rules:
+### Example: `advisor-researcher.md`
 
-- an agent must be runtime-neutral
-- an agent must not embed Claude-, Codex-, or Copilot-specific logic
-- frontmatter differences must be generated, not maintained manually
-- an agent must operate on a clearly bounded responsibility slice
+```md
+# Role
+Research one gray-area technical decision and return a structured comparison.
 
-## 14. Manifest and Governance
+# Inputs
+- target decision area
+- project context
+- constraints
+- calibration level
 
-### 14.1 `manifest.json` is mandatory
+# Output
+- comparison table
+- concise rationale
 
-No new skill or agent enters the system without being declared in the manifest.
+# Anti-patterns
+- no broad unfocused research
+- no direct user-facing synthesis if this is a subagent
+- no inflated option lists
+```
 
-### 14.2 All generation starts from the manifest
+---
 
-Wrappers, validation, and synchronization must use the manifest as input.
+## 20. Runtime Wrappers Must Remain Minimal
 
-### 14.3 The manifest defines the living model
+A runtime wrapper must never become a second workflow definition.
 
-It is the official map of everything the system exposes.
+A wrapper is allowed to say:
 
-## 15. Daily Operational Flow
+* where the source of truth is
+* where runtime-specific notes live
+* how that runtime should reach the central contract
 
-Under the new architecture, the flow becomes:
+A wrapper is not allowed to:
 
-1. the runtime loads a minimal wrapper
-2. the wrapper points to `.agents/AGENTS.md`
-3. the central contract defines the base policy
-4. the system selects the correct skill
-5. skills invoke agents when needed
-6. planning and state artifacts remain the real memory
-7. verification closes the loop
+* redefine testing policy
+* redefine architecture rules
+* redefine branching strategy
+* redefine verification semantics
 
-## 16. Commands vs Skills
+---
 
-### 16.1 New rule
+## 21. Migration Strategy
 
-Commands are no longer the center of the system.
+The migration should happen in controlled phases.
 
-### 16.2 Role of commands
+## Phase 1 — Introduce `.agents/`
 
-Commands become only:
+Create the new structure without removing existing runtime surfaces yet.
 
-- shortcuts
-- wrappers
-- invocation conveniences
+## Phase 2 — Move canonical policy
 
-### 16.3 Example
+Move the normative system contract into `.agents/AGENTS.md`.
 
-`/gsd:plan-phase` may still exist, but its real logic should delegate to `plan-phase`.
+## Phase 3 — Consolidate runtime adapters
 
-### 16.4 Result
+Reduce existing runtime files into thin wrappers and move real differences into `.agents/adapters/`.
 
-The repository no longer depends on a forest of commands to remain usable.
+## Phase 4 — Consolidate agents
 
-## 17. Migration Strategy
+Unify duplicated agents under `.agents/agents/`.
 
-Migration should happen in phases.
+## Phase 5 — Extract skills
 
-### 17.1 Phase 1 - Introduce `.agents/`
+Reorganize workflow behavior into reusable skill modules.
 
-Goal: create the new structure without breaking anything.
+## Phase 6 — Generate wrappers
 
-Steps:
+Automate runtime shim generation.
 
-- create `.agents/`
-- move the main policy into `.agents/AGENTS.md`
-- create `manifest.json`
-- create `adapters`, `skills`, `agents`, `prompts`, and `scripts`
+## Phase 7 — Validate and lock down
 
-Expected result:
+Add CI checks to prevent semantic drift and wrapper bloat.
 
-- `.agents/` exists and already represents the new direction
+---
 
-### 17.2 Phase 2 - Consolidate adapters
+## 22. CI and Validation
 
-Goal: remove semantic duplication across `CLAUDE.md`, Copilot, and Codex.
+The CI pipeline should validate:
 
-Steps:
+* manifest integrity
+* skill existence
+* agent existence
+* runtime wrapper generation
+* no manual drift in generated files
 
-- extract real differences into `.agents/adapters/`
-- reduce old files to minimal wrappers
-- register generated targets in the manifest
+A minimal sequence could be:
 
-Expected result:
+```bash
+bash .agents/scripts/validate-agents.sh
+bash .agents/scripts/generate-runtime-shims.sh
+git diff --exit-code
+```
 
-- semantic rules are centralized
+If the generated shims differ from committed ones, CI should fail.
 
-### 17.3 Phase 3 - Consolidate agents
+---
 
-Goal: unify duplicated subagents.
+## 23. Documentation Strategy
 
-Steps:
+This architecture should be documented in at least three repository docs.
 
-- identify duplicated pairs across `.claude/agents` and `.codex/agents`
-- create canonical versions in `.agents/agents`
-- remove manual maintenance of duplicates
+### 1. `docs/architecture/agents-centralization.md`
 
-Expected result:
+The main architecture document.
 
-- one agent, one definition
+### 2. `docs/architecture/agents-migration-plan.md`
 
-### 17.4 Phase 4 - Extract skills
+A file-by-file migration plan.
 
-Goal: model behavior by capability.
+### 3. `docs/architecture/runtime-shims-spec.md`
 
-Steps:
+A formal specification of generated runtime wrappers.
 
-- create `workflow-core`
-- decompose discuss, plan, execute, verify, quick, docs, and review
-- move currently scattered knowledge into clear skills
+Optional additions:
 
-Expected result:
+* `docs/architecture/testing-governance.md`
+* `docs/architecture/gitflow-policy.md`
 
-- `skills-first` architecture
+---
 
-### 17.5 Phase 5 - Generate wrappers
+## 24. Risks and Mitigations
 
-Goal: make runtime surfaces derived artifacts.
+### Risk: runtime discovery breakage
 
-Steps:
-
-- implement `generate-runtime-shims.sh`
-- generate `.claude`, `.codex`, and `.github`
-- prevent drift through CI
-
-Expected result:
-
-- minimal, disposable wrappers
-
-### 17.6 Phase 6 - Validate and clean up
-
-Goal: complete the transition.
-
-Steps:
-
-- validate the manifest
-- validate skills
-- validate agents
-- validate wrappers
-- remove legacy content that is no longer needed
-
-Expected result:
-
-- the new architecture is stabilized
-
-## 18. Validation Policy
-
-Validation should have four layers.
-
-### 18.1 Structural validation
-
-Checks whether everything declared in the manifest exists.
-
-### 18.2 Semantic validation
-
-Checks that wrappers do not carry their own rules.
-
-### 18.3 Compatibility validation
-
-Checks whether runtimes still consume the minimal files correctly.
-
-### 18.4 Drift validation
-
-Fails when generated wrappers are manually changed.
-
-## 19. CI and Automation
-
-The pipeline should include at minimum:
-
-- manifest validation
-- skill validation
-- agent validation
-- wrapper generation
-- diff checks against versioned files
-- failure if wrappers diverge from generator output
-
-Example checks:
-
-- `bash .agents/scripts/validate-agents.sh`
-- `bash .agents/scripts/generate-runtime-shims.sh`
-- `git diff --exit-code`
-
-## 20. Versioning Policy
-
-The agent architecture should have its own versioning.
-
-Suggested approach:
-
-- boilerplate version: for example `v2.0.0`
-- agent architecture version in the manifest: for example `2.0.0-agent-core`
-
-Rules:
-
-- skill contract changes -> bump architecture version
-- generated wrapper changes -> may bump compatibility version
-- relevant structural changes -> update roadmap and documentation
-
-## 21. Risks and Mitigations
-
-### 21.1 Risk: discovery breakage
-
-If runtime directories are deleted completely, some environments may stop discovering instructions.
+If runtime directories are fully removed, some tools may stop loading instructions.
 
 Mitigation:
 
-- use generated minimal wrappers
+* keep generated minimal wrappers
 
-### 21.2 Risk: absorbing too much of GSD
+### Risk: accidental re-duplication
 
-The system may become too heavy.
-
-Mitigation:
-
-- absorb capabilities, not the entire command tree
-
-### 21.3 Risk: duplication returns
-
-Adapters may grow again.
+Adapters may start growing again.
 
 Mitigation:
 
-- explicit minimal-wrapper policy
-- CI validation
+* make wrapper minimality a CI-validated rule
 
-### 21.4 Risk: drift between agents and wrappers
+### Risk: over-copying GSD
 
-Local changes may break alignment.
-
-Mitigation:
-
-- always generate wrappers
-- require the manifest
-- validate automatically
-
-### 21.5 Risk: mixing contract and runtime
-
-Project rules may leak into runtime-specific files.
+The system may become unnecessarily large or command-heavy.
 
 Mitigation:
 
-- every normative rule must live only in `.agents/`
+* adopt capability patterns, not command sprawl
 
-## 22. Expected Result
+### Risk: weak enforcement of TDD and Git Flow
 
-After migration:
+These may remain "documented" but not operationalized.
 
-- `.agents/` is the only source of truth
-- Claude, Codex, and Copilot remain compatible
-- duplication across runtimes disappears
-- skills become the real unit of behavior
-- agents become reusable
-- GSD concretely influences the architecture
-- the repository becomes cleaner, more portable, and easier to evolve
+Mitigation:
 
-## 23. Final Master Rule
+* encode them in central contract and review/verification behavior
 
-The central rule of this architecture is:
+---
 
-> All relevant behavior for agents, skills, adapters, structured prompts, and operational contracts must live exclusively in `.agents/`. Any file outside `.agents/` that exists for runtime integration is derived, minimal, disposable, and non-normative.
+## 25. End State
 
-## 24. Implementation Checklist
+When complete, the repository should behave like this:
+
+* `.agents/` is the only normative location
+* runtime shells are compatibility-only
+* agent and skill definitions exist once
+* testing strategy is encoded into workflow behavior
+* TDD is the default
+* SOLID is mandatory
+* layered tests are proportional to risk
+* Agile + PMBOK governance remains explicit
+* Git Flow is enforced with `develop` as the normal base for feature work
+* GSD principles are internalized in a repository-native architecture
+
+---
+
+## 26. Master Rule
+
+The final governing rule of the entire architecture is:
+
+**All meaningful agent behavior, workflow policy, engineering defaults, skill contracts, adapter semantics, and operational constraints must live exclusively inside `.agents/`. Any file outside `.agents/` that exists for runtime compatibility is derived, minimal, disposable, and non-normative.**
+
+---
+
+## 27. Implementation Checklist
 
 ### Structure
 
-- [ ] Create `.agents/`
-- [ ] Create `manifest.json`
-- [ ] Create `adapters/`
-- [ ] Create `skills/`
-- [ ] Create `agents/`
-- [ ] Create `prompts/`
-- [ ] Create `scripts/`
+* Create `.agents/`
+* Add `manifest.json`
+* Add `adapters/`
+* Add `skills/`
+* Add `agents/`
+* Add `prompts/`
+* Add `scripts/`
 
 ### Centralization
 
-- [ ] Migrate the main policy into `.agents/AGENTS.md`
-- [ ] Extract real differences into adapters
-- [ ] Consolidate duplicated agents
-- [ ] Create base skills
+* Move canonical policy to `.agents/AGENTS.md`
+* Move runtime-specific differences into `.agents/adapters/`
+* Consolidate duplicated agents
+* Extract reusable skills
+
+### Engineering defaults
+
+* Encode TDD policy
+* Encode layered test requirements
+* Encode SOLID rules
+* Encode hybrid Agile + PMBOK guidance
+* Encode Git Flow rules
 
 ### Compatibility
 
-- [ ] Generate the Claude wrapper
-- [ ] Generate the Codex wrapper
-- [ ] Generate the Copilot wrapper
-- [ ] Register everything in the manifest
+* Generate Claude shim
+* Generate Codex shim
+* Generate Copilot shim
 
-### Quality
+### Validation
 
-- [ ] Validate the manifest
-- [ ] Validate skills
-- [ ] Validate agents
-- [ ] Validate wrappers
-- [ ] Add CI checks
+* Validate manifest
+* Validate skills
+* Validate agents
+* Validate wrappers
+* Prevent drift in CI
 
 ### Documentation
 
-- [ ] Update the README
-- [ ] Update repository structure docs
-- [ ] Document the minimal-wrapper policy
-- [ ] Document the GSD-inspired model
-
-## 25. Next Recommended Documents
-
-After this document, the repository should add two complementary documents:
-
-1. `docs/architecture/agents-migration-plan.md`
-   - operational migration plan by file
-   - current tree vs target tree
-   - suggested commit sequence
-
-2. `docs/architecture/runtime-shims-spec.md`
-   - wrapper specification
-   - minimal contracts per runtime
-   - generator rules for shims
-
-## 26. Mandatory Engineering Principles
-
-The centralized architecture in `.agents/` must preserve and strengthen the engineering principles already adopted by the repository.
-
-These principles are not optional, and they do not depend on runtime.
-
-They are part of the normative system contract.
-
-### 26.1 TDD as a mandatory default
-
-Every behavior-changing implementation must follow `Test-Driven Development` as the primary default.
-
-The expected sequence is:
-
-1. write the test
-2. run the test and observe failure
-3. implement the minimum necessary code
-4. refactor while preserving green
-5. update artifacts and evidence
-
-Formal rule:
-
-> The default implementation flow must start with tests and only then evolve into classes, functions, services, handlers, components, or real modules.
-
-### 26.2 Mandatory construction order
-
-The standard execution order is:
-
-1. define the expected behavior
-2. create the corresponding tests
-3. validate the initial failure
-4. implement the real code
-5. refactor under SOLID guidance
-6. validate all required layers
-
-Implementation first and cover later is not an acceptable default.
-
-### 26.3 Mandatory test pyramid
-
-The system must preserve the following test layers, always proportionally to change risk:
-
-#### Unit tests
-
-Used to validate isolated rules, functions, services, policies, validators, mappings, and pure logic.
-
-#### Integration tests
-
-Used to validate interactions between modules, databases, queues, internal APIs, coupled services, repositories, adapters, and cross-layer contracts.
-
-#### E2E tests
-
-Used to validate complete flows, critical journeys, and functional system behavior from the outside.
-
-### 26.4 Proportionality rule
-
-Not every change requires the same depth across all layers, but the system must always require verification compatible with impact.
-
-Example rule:
-
-- trivial local change: unit may be enough
-- multi-module change: unit + integration
-- critical flow, authentication, billing, orchestration, queue, persistence, permissions, or critical UX change: unit + integration + E2E
-
-### 26.5 SOLID as an architectural contract
-
-Every real implementation must follow SOLID principles as the architectural default.
-
-This implies, among other things:
-
-- well-bounded responsibilities
-- clear dependency separation
-- low coupling
-- extensibility without excessive rewriting
-- appropriate abstractions
-- isolation of domain rules
-- refactoring guided by readability and sustainable evolution
-
-Formal rule:
-
-> Classes, functions, modules, and services must be designed to preserve clear responsibility, low coupling, and high cohesion, avoiding monolithic logic, infrastructure leakage, and structural drift.
-
-### 26.6 Agile + PMBOK in a hybrid model
-
-Work governance remains hybrid across `Agile` and `PMBOK`.
-
-#### Agile
-
-Used for:
-
-- incremental execution
-- slice-based delivery
-- continuous adaptation
-- fast feedback
-- dynamic prioritization
-- focus on delivered value
-
-#### PMBOK
-
-Used for:
-
-- governance
-- scope control
-- traceability
-- risks
-- dependencies
-- milestones
-- executive and structural documentation
-
-### 26.7 Rule for separating governance and execution
-
-The architecture must clearly separate:
-
-- governance and direction artifacts
-- daily execution artifacts
-
-This means:
-
-- hybrid PMBOK guides direction, risk, scope, and control
-- Agile guides slices, short cycles, adaptation, and delivery
-- the `.agents/` workflow executes daily work without losing governance alignment
-
-### 26.8 Implications for skills and agents
-
-All skills and agents must respect these principles.
-
-#### `workflow-core`
-
-Must explicitly declare:
-
-- TDD by default
-- SOLID as an architectural obligation
-- risk-proportional testing
-- separation between governance and execution
-
-#### `plan-phase`
-
-Must plan:
-
-- which tests come first
-- which test layers are required
-- which classes/functions are implemented only after tests
-- which risks require integration and E2E
-
-#### `execute-phase`
-
-Must execute:
-
-- tests first
-- implementation second
-- SOLID-oriented refactoring
-- explicit validation
-
-#### `verify-phase`
-
-Must verify:
-
-- whether tests were created before implementation
-- whether required test layers were covered
-- whether architectural drift occurred
-- whether the solution preserves low coupling and high cohesion
-
-#### `review`
-
-Must review:
-
-- adherence to TDD
-- test suite quality
-- adherence to SOLID
-- consistency across unit, integration, and E2E layers
-
-### 26.9 Minimum verification levels
-
-The verification policy may be refined as follows:
-
-- `V0`: reasoning only, allowed only for truly trivial changes with no behavior change
-- `V1`: unit test or equivalent targeted local validation
-- `V2`: unit + integration tests, or equivalent combined evidence
-- `V3`: unit + integration + E2E when functional risk justifies it
-
-### 26.10 Master implementation rule
-
-The master rule becomes:
-
-> Every meaningful behavior change must start with tests, evolve through minimal implementation, be refactored under SOLID principles, and be validated through unit, integration, and E2E tests in proportion to risk, within a hybrid Agile execution and PMBOK governance model.
-
-## 27. Mandatory Git Flow
-
-The repository adopts `Git Flow` as the mandatory branching policy.
-
-This policy is not optional and must be respected by all runtimes, agents, skills, and execution flows.
-
-### 27.1 Main branches
-
-#### `main`
-
-Stable production or publishable branch.
-It must not receive day-to-day feature development directly.
-
-#### `master`
-
-Legacy stable production or publishable branch when `main` is not used.
-It follows the same contract as `main`.
-
-#### `develop`
-
-Primary development integration branch.
-Every feature branch must start from it.
-
-### 27.2 Supporting branches
-
-#### `feature/*`
-
-Used for new features, improvements, or bounded refactors.
-
-Rules:
-
-- always created from `develop`
-- always merged back into `develop`
-- never opened directly from the stable branch
-
-Examples:
-
-- `feature/auth-refresh-token`
-- `feature/agents-centralization`
-- `feature/plan-phase-skill`
-
-#### `release/*`
-
-Used to stabilize a version before publication.
-
-Rules:
-
-- created from `develop`
-- limited to stabilization, documentation, versioning, and final corrections
-- merged into the stable branch and then back into `develop`
-
-Example:
-
-- `release/v2.0.0`
-
-#### `hotfix/*`
-
-Used for urgent production corrections.
-
-Rules:
-
-- created from the stable branch
-- merged into the stable branch
-- always merged back into `develop`
-
-Example:
-
-- `hotfix/login-session-regression`
-
-### 27.3 Master feature rule
-
-The central rule is:
-
-> Every feature must be created from `develop` and return to `develop` after validation and review.
-
-### 27.4 Prohibitions
-
-The following are not allowed:
-
-- creating a feature directly from the stable branch
-- merging a feature directly into the stable branch
-- using the stable branch as the daily working branch
-- skipping hotfix synchronization back into `develop`
-- treating Git Flow as an optional suggestion
-
-### 27.5 Branch detection and fallback
-
-The workflow must determine the long-lived branches in this order:
-
-1. detect the stable branch as `main`
-2. if `main` does not exist, detect the stable branch as `master`
-3. detect `develop` as the integration branch
-
-If a stable branch exists but `develop` does not, initialize Git Flow by creating `develop` from the detected stable branch before feature work starts.
-
-If neither a stable branch nor `develop` exists, do not guess. Ask the user to identify the intended long-lived branches, then initialize Git Flow with `develop` as the integration branch.
-
-### 27.6 Relationship to Agile + PMBOK
-
-Git Flow supports the hybrid model of the repository:
-
-- Agile organizes incremental execution in features and slices
-- PMBOK supports control, traceability, milestones, and releases
-- Git Flow provides the integration and versioning discipline that connects both
-
-### 27.7 Implications for `.agents/`
-
-All skills and agents must respect Git Flow.
-
-#### `workflow-core`
-
-Must declare Git Flow as mandatory.
-
-#### `plan-phase`
-
-Must consider the correct branch strategy for execution, including stable-branch detection and missing-branch fallback.
-
-#### `execute-phase`
-
-Must assume implementation happens in `feature/*` branches derived from `develop`, after Git Flow has been initialized correctly.
-
-#### `verify-phase`
-
-Must validate whether delivery is coherent with the expected branch flow and long-lived branch selection.
-
-#### `review`
-
-Must review not only code but also adherence to the branching model.
-
-### 27.8 Branch naming convention
-
-Recommended naming:
-
-- `feature/<slug>`
-- `release/v<semver>`
-- `hotfix/<slug>`
-
-### 27.9 Summary operating flow
-
-Normal flow:
-
-1. detect the stable branch as `main` or `master`
-2. ensure `develop` exists, creating it from the stable branch when needed
-3. create `feature/*` from `develop`
-4. execute implementation and validation
-5. open a pull request to `develop`
-6. create `release/*` after stabilization
-7. publish through the stable branch
-8. sync changes back into `develop` when required
-
-## 28. Status of This Branch
-
-This specification defines the target of `release/v2`.
-
-It should be read as the normative architecture document for the transition, not as a claim that the full target structure has already been completed in the current tree.
+* Update README
+* Document architecture
+* Document migration plan
+* Document runtime shim specification
+
+---
+
+## 28. Final Example: End-to-End Feature Flow
+
+Suppose a developer wants to add a new authentication refresh-token flow.
+
+The expected path under this architecture would be:
+
+1. Update `develop`
+2. Create `feature/auth-refresh-token` from `develop`
+3. Use central `.agents/` contract
+4. Trigger `plan-phase`
+5. Plan defines:
+
+   * failing unit tests for token refresh logic
+   * integration tests for persistence/session behavior
+   * E2E tests for login → refresh flow if risk warrants
+   * SOLID decomposition into controller/use case/repository abstractions
+6. `execute-phase` begins with tests, not implementation
+7. Code is implemented minimally to pass tests
+8. Refactor preserves green state
+9. `verify-phase` checks:
+
+   * tests were added first
+   * unit/integration/E2E coverage is proportional
+   * feature branch is correct
+   * no architectural drift
+10. PR is opened into `develop`
+11. Release work later branches from `develop` into `release/*`
+12. Stable release merges into `main`
+
+That is the intended operating model.
