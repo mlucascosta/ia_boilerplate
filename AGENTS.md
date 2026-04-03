@@ -1,6 +1,10 @@
 # AI Agent Rules (minimal adapter)
 
+Canonical source of truth: `.agents/AGENTS.md`.
+This repository-root file is a compatibility adapter that points runtimes and humans back to the shared `.agents` contract.
+
 You MUST follow:
+- `.agents/AGENTS.md` (canonical repository contract)
 - `docs/ai/WORKFLOW_SHORT.md` (pocket card — read first)
 - `docs/ai/WORKFLOW.md` (full reference — consult only when ambiguous)
 - `docs/ai/ARTIFACTS.md` (artifacts contract)
@@ -38,6 +42,28 @@ Read the canonical workflow first.
 Do not mix roadmap-level decisions with slice execution notes.
 Do not treat chat history as the source of truth.
 
+## Engineering Defaults
+
+- TDD by default: write tests first, then implement
+- Behavioral changes require proportional validation
+- Use unit, integration, and E2E coverage according to delivery risk
+- Refactor under SOLID constraints
+- Do not implement first and cover later as the default path
+- Preserve hybrid governance: agile execution, PMBOK-style control and traceability
+
+## Git Strategy
+
+- Git Flow is mandatory
+- Detect the stable branch as `main` or `master`
+- `develop` is the default integration and base branch for feature work
+- Create `feature/*` branches from `develop`
+- Merge feature branches back into `develop`
+- Reserve the stable branch for release state
+- Use `release/*` for stabilization and `hotfix/*` for urgent production fixes
+- Do not work directly on the stable branch for normal feature delivery
+- If the stable branch exists but `develop` does not, create `develop` from the stable branch before feature work starts
+- If neither `develop` nor a stable branch exists, ask the user to identify the long-lived branches before proceeding, then initialize Git Flow with `develop` as the integration branch
+
 ## Runtime Adapters
 
 Use the runtime-specific files only as adapters to this manual:
@@ -47,3 +73,22 @@ Use the runtime-specific files only as adapters to this manual:
 3. Codex: `.codex/skills/reduto-workflow/SKILL.md`
 
 If two files disagree, `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md` take precedence, then this file, then runtime-specific adapters.
+
+## GSD Operational Layer
+
+Canonical GSD artifacts live in `.agents/` — one copy, consumed by all runtimes:
+
+- **Workflows**: `.agents/workflows/` — executable workflow definitions
+- **Templates**: `.agents/templates/` — artifact templates
+- **References**: `.agents/references/` — model profiles, verification patterns, etc.
+- **Agent definitions**: `.agents/agents/` — 18 subagent definitions
+- **Node tooling**: `.agents/bin/` — gsd-tools.cjs and support libs
+- **Adapter docs**: `.agents/adapters/` — runtime syntax reference
+- **Runtime-owned files**: `.agents/runtimes/` — Codex, Claude, and Copilot wrapper content
+
+Runtime-specific wrappers delegate to `.agents/` via root entrypoints that point into `.agents/runtimes/`:
+- Claude: `.claude/commands/gsd/*.md` (invoked as `/gsd:<name>`)
+- Codex: `.codex/skills/gsd-*/SKILL.md` (invoked as `$gsd-<name>`)
+- Copilot: `.github/skills/gsd-*/SKILL.md`
+
+The repository-root runtime folders remain only for runtime compatibility. Their managed contents live under `.agents/runtimes/`, and agent definitions in `.claude/agents/`, `.codex/agents/`, `.github/agents/` are thin wrappers to `.agents/agents/`.

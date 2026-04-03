@@ -195,6 +195,41 @@ fi
 teardown
 
 echo ""
+echo "11. Missing .agents contract fails"
+setup
+rm "$WORK_DIR/.agents/AGENTS.md"
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Missing .agents/AGENTS.md should fail validation"
+else
+  pass "Missing .agents/AGENTS.md fails validation"
+fi
+teardown
+
+echo ""
+echo "12. Missing .agents manifest fails"
+setup
+rm "$WORK_DIR/.agents/manifest.json"
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Missing .agents/manifest.json should fail validation"
+else
+  pass "Missing .agents/manifest.json fails validation"
+fi
+teardown
+
+echo ""
+echo "13. Legacy absolute path leakage fails"
+setup
+cat <<'EOF' >> "$WORK_DIR/.agents/workflows/help.md"
+/Users/example/boilerplate/.claude/get-shit-done/bin/gsd-tools.cjs
+EOF
+if bash "$WORK_DIR/scripts/validate-workflow.sh" > /dev/null 2>&1; then
+  fail "Legacy absolute path leakage should fail validation"
+else
+  pass "Legacy absolute path leakage fails validation"
+fi
+teardown
+
+echo ""
 echo "========================================"
 echo "Result: $PASSED passed, $FAILED failed"
 echo "========================================"

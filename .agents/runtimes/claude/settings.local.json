@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(xargs cat:*)",
+      "Bash(grep -rn \"get-shit-done\\\\|configDir\\\\|__dirname\" /Users/mlucascosta/Documents/dev/ia_boilerplate/.agents/bin/lib/*.cjs)",
+      "Bash(sed -i '' 's|gsd-tools.cjs lives at <configDir>/get-shit-done/bin/gsd-tools.cjs,|gsd-tools.cjs lives at .agents/bin/gsd-tools.cjs,|g; \\\\:*)",
+      "Bash(sed -i '' 's|os.homedir\\(\\), '\\\\''.claude'\\\\'', '\\\\''get-shit-done'\\\\'', '\\\\''USER-PROFILE.md'\\\\''|os.homedir\\(\\), '\\\\''.claude'\\\\'', '\\\\''USER-PROFILE.md'\\\\''|g' /Users/mlucascosta/Documents/dev/ia_boilerplate/.agents/bin/lib/profile-output.cjs)",
+      "Bash(grep -n \"get-shit-done\" /Users/mlucascosta/Documents/dev/ia_boilerplate/.agents/bin/lib/*.cjs)",
+      "Bash(python3 -)",
+      "Bash(rm -rf .claude/get-shit-done)",
+      "Bash(rm -f .codex/agents/*.md)",
+      "Bash(grep \"get-shit-done\" .claude/hooks/*.js)",
+      "Bash(rm -rf .claude/agents)",
+      "Bash(ln -s ../.agents/agents .claude/agents)",
+      "Bash(ln -s ../.agents/agents .github/agents)"
+    ]
+  }
+}

@@ -16,6 +16,7 @@ The result is a model-agnostic workflow that can be followed by Copilot, Codex, 
 5. Verifiable delivery: each meaningful task needs a concrete validation path.
 6. Explicit design delivery: implementation work is expected to preserve complete code-level documentation and a SOLID-oriented architecture.
 7. Mandatory Git Flow discipline: meaningful work must happen on Git Flow-compatible branches, not directly on the protected primary branch.
+8. TDD-first implementation: behavior changes start with tests, then minimal implementation, then refactor.
 
 ## Delivery Model
 
@@ -76,7 +77,7 @@ Use for new features, architectural changes, multi-file refactors, integrations,
 5. Quality Gates
    Resolve major ambiguities, check coverage, and confirm the plan aligns with docs and requirements.
 6. Execute
-   Implement one atomic task at a time, or parallelize only when dependencies and file conflicts are clear.
+   Implement one atomic task at a time, starting with failing tests, then minimal implementation, then refactor. Parallelize only when dependencies and file conflicts are clear.
 7. Verify
    Run tests, checks, manual validation, or artifact-based verification against the defined acceptance criteria.
 8. Capture
@@ -90,6 +91,7 @@ Use for bounded changes that do not justify a full phase plan.
 2. Clarify the exact ask and constraints.
 3. Make a short implementation plan.
 4. Implement the focused change.
+   Start with the smallest failing test, then implement the minimum real code, then refactor.
 5. Validate the outcome.
 6. Update docs if the change altered durable project knowledge.
 
@@ -207,8 +209,9 @@ Default expectations:
 | Level | When | What |
 | --- | --- | --- |
 | V0 | Trivial path | Reasoning only — confirm the change is correct by inspection |
-| V1 | Focused path | One targeted check — run a single command, test, or manual validation |
-| V2 | Full path | Multi-check — commands + evidence, only when change risk justifies it |
+| V1 | Focused path | One targeted unit check or equivalent local validation |
+| V2 | Full path | Unit + integration checks, or equivalent multi-check evidence |
+| V3 | Critical full path | Unit + integration + E2E when user-facing or system risk justifies it |
 
 Default to the lowest level that still preserves correctness.
 
@@ -236,6 +239,19 @@ TDD may be lighter when:
 - doing cosmetic UI-only work
 - editing documentation
 - performing low-risk configuration changes
+
+### Default implementation order
+
+For behavior changes, the default execution order is:
+
+1. Define expected behavior.
+2. Write the test first.
+3. Run the test and observe failure.
+4. Implement the minimum real code.
+5. Refactor under SOLID constraints.
+6. Re-run the required validation layers.
+
+Implementation first and cover later is not the default path.
 
 ## Test Matrix
 

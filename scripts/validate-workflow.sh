@@ -63,7 +63,7 @@ check_adapter_contract() {
     "## Hard prohibitions"
   )
 
-  grep -Fq 'Follow `AGENTS.md`.' "$file_path" && pass "$label follows AGENTS.md" || fail "$label must follow AGENTS.md"
+  grep -Fq 'Follow `.agents/AGENTS.md`.' "$file_path" && pass "$label follows .agents/AGENTS.md" || fail "$label must follow .agents/AGENTS.md"
   grep -Fq 'WORKFLOW_SHORT.md' "$file_path" && pass "$label references WORKFLOW_SHORT.md first" || fail "$label missing WORKFLOW_SHORT.md first read"
   grep -Fq 'only if ambiguous' "$file_path" && pass "$label limits full workflow reads" || fail "$label must restrict WORKFLOW.md to ambiguous cases"
   grep -Fq 'Do not scan the whole repository.' "$file_path" && pass "$label forbids full repository scans" || fail "$label must forbid full repository scans"
@@ -84,6 +84,11 @@ echo "1. Canonical docs"
 [[ -f "$REPO_ROOT/docs/ai/WORKFLOW.md" ]]  && pass "docs/ai/WORKFLOW.md exists"  || fail "docs/ai/WORKFLOW.md missing"
 [[ -f "$REPO_ROOT/docs/ai/ARTIFACTS.md" ]] && pass "docs/ai/ARTIFACTS.md exists" || fail "docs/ai/ARTIFACTS.md missing"
 [[ -f "$REPO_ROOT/AGENTS.md" ]]            && pass "AGENTS.md exists"            || fail "AGENTS.md missing"
+[[ -f "$REPO_ROOT/.agents/AGENTS.md" ]]    && pass ".agents/AGENTS.md exists"    || fail ".agents/AGENTS.md missing"
+[[ -f "$REPO_ROOT/.agents/manifest.json" ]] && pass ".agents/manifest.json exists" || fail ".agents/manifest.json missing"
+[[ -f "$REPO_ROOT/.agents/scripts/validate-agents.sh" ]] && pass ".agents/scripts/validate-agents.sh exists" || fail ".agents/scripts/validate-agents.sh missing"
+[[ -f "$REPO_ROOT/.agents/scripts/generate-runtime-shims.sh" ]] && pass ".agents/scripts/generate-runtime-shims.sh exists" || fail ".agents/scripts/generate-runtime-shims.sh missing"
+[[ -f "$REPO_ROOT/.agents/scripts/sync-runtime-adapters.sh" ]] && pass ".agents/scripts/sync-runtime-adapters.sh exists" || fail ".agents/scripts/sync-runtime-adapters.sh missing"
 
 echo ""
 echo "2. Planning artifacts"
@@ -204,6 +209,16 @@ fi
 
 echo ""
 echo "============================================"
+if [[ -f "$REPO_ROOT/.agents/scripts/validate-agents.sh" ]]; then
+  echo ""
+  echo "9. .agents conformance"
+  if bash "$REPO_ROOT/.agents/scripts/validate-agents.sh" > /dev/null 2>&1; then
+    pass ".agents/scripts/validate-agents.sh passes"
+  else
+    fail ".agents/scripts/validate-agents.sh fails"
+  fi
+fi
+
 if [[ $errors -eq 0 && $warnings -eq 0 ]]; then
   echo "Result: PASS — no issues found."
 elif [[ $errors -eq 0 ]]; then

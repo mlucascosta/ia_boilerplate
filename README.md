@@ -9,20 +9,35 @@ It provides a shared operating model for GitHub Copilot, Codex, Claude, and othe
 
 This repository is intentionally focused on workflow infrastructure rather than application code. Its purpose is to make AI-assisted delivery more predictable, auditable, and portable across runtimes.
 
+## Release V2 Direction
+
+`release/v2` introduces the next architectural step for this repository:
+
+- `.agents/` becomes the operational center for shared runtime behavior
+- `.agents/AGENTS.md` is the canonical contract that all runtime adapters must read first
+- the public GSD surface stays compact at 11 commands
+- behavior is modeled as reusable skills and agents instead of runtime-specific command trees
+- TDD-first delivery, SOLID design, and hybrid Agile + PMBOK governance are treated as mandatory engineering defaults
+- Git Flow is operationalized with stable-branch detection for `main` or `master`, `develop` as the default base for `feature/*` work, and an explicit fallback when long-lived branches are missing
+
+The target architecture is specified in `docs/architecture/agents-centralization.md`.
+
 ## Why Use This
 
 - **Stop context drift** — state lives in repository artifacts, not in chat history that disappears between sessions
 - **One workflow, any AI** — Copilot, Claude, and Codex follow the same rules from the same source of truth
 - **Built-in quality bar** — complete in-code documentation and SOLID architecture are non-negotiable defaults
+- **Engineering discipline built in** — TDD-first delivery, unit/integration/E2E coverage by risk, and hybrid Agile + PMBOK governance are part of the contract
 - **Token-efficient by design** — atomic loops, compact handoffs, and explicit scope boundaries reduce waste across every phase
 
 ## What This Repository Contains
 
 - A canonical workflow in `docs/ai/WORKFLOW.md`
 - A canonical artifact contract in `docs/ai/ARTIFACTS.md`
+- A canonical agent contract in `.agents/AGENTS.md`
 - Runtime adapters for Copilot, Claude, and Codex
 - Harmonized minimal adapter contracts across Copilot, Claude, and Codex
-- A local GSD installation aligned to the repository workflow
+- A local GSD-aligned runtime layer centered on `.agents/`
 - A `.planning/` bootstrap structure for roadmap, state, planning, summaries, and verification artifacts
 - A conformance validation script in `scripts/validate-workflow.sh`
 - A pull request template with workflow path, verification, governance, and documentation signals
@@ -85,17 +100,67 @@ For meaningful implementation work, the mandatory requirements are:
 
 Governance stays hybrid, execution stays incremental, Git Flow remains mandatory, and validation must match the real delivery risk.
 
+In release v2, these rules are explicitly tied to the agent architecture as well: tests come before implementation, verification depth scales with risk, and real code is expected to be refactored under SOLID constraints rather than covered after the fact.
+
+The branch policy is explicit: detect the stable branch as `main` or `master`, create `develop` from that stable branch when it does not exist yet, create `feature/*` branches from `develop`, merge them back into `develop`, use `release/*` for stabilization before publishing to the stable branch, and route urgent production corrections through `hotfix/*` from the stable branch back into both long-lived branches. If neither a stable branch nor `develop` exists, the workflow asks the user to identify the intended long-lived branches and then initializes Git Flow with `develop` as the integration branch.
+
 ## Runtime Support
 
 This repository is prepared to work with:
 
 - GitHub Copilot
-- Claude
+- Claude (Claude Code CLI)
 - Codex
+- OpenRouter
+- Local models via Ollama or LM Studio
 
 Each runtime is adapted back to the same repository-level source of truth so the workflow stays consistent even when native commands differ.
 
 Adapters are intentionally minimal: they constrain read budget, path selection, output shape, verification level, artifact updates, and hard prohibitions instead of restating the full workflow.
+
+Release v2 tightens this model further: `.agents/` is the shared operational core, while `.claude/`, `.codex/`, and `.github/` are compatibility surfaces rather than independent sources of intelligence.
+
+### Using Local Models (Ollama, LM Studio)
+
+If you run a local model (e.g. `qwen2.5-coder`, `deepseek-coder-v2`) or use OpenRouter:
+
+**Set `inherit` profile before using GSD commands** — this prevents GSD from calling Anthropic models for subagents:
+
+```bash
+# In .planning/config.json
+{
+  "model_profile": "inherit"
+}
+```
+
+Or via the settings command (Claude Code):
+
+```
+/gsd:settings --profile inherit
+```
+
+Recommended local model allocation:
+
+| Task | When to use local | When to use API |
+|------|-------------------|-----------------|
+| Code reading, search | Always — Haiku-equivalent local | — |
+| Bug diagnosis, small edits | Usually fine locally | Complex reasoning |
+| Architecture planning | Depends on model quality | Critical decisions |
+| Verification checks | Always — read-only, cheap | — |
+
+Ollama quick start:
+
+```bash
+# Install Ollama
+brew install ollama   # macOS
+curl -fsSL https://ollama.com/install.sh | sh   # Linux
+
+# Pull a coding model
+ollama pull qwen2.5-coder:7b
+
+# Use with Claude Code by pointing to local endpoint
+# (configure in Claude Code settings as custom API base)
+```
 
 ## Quick Start
 
@@ -103,16 +168,41 @@ Adapters are intentionally minimal: they constrain read budget, path selection, 
 # 1. Clone and bootstrap
 git clone https://github.com/mlucascosta/ia_boilerplate.git my-project
 cd my-project
+
+# Full (includes GSD runtime tooling for Claude Code / Codex)
 ./scripts/bootstrap-template.sh --project-name "My Project"
+
+# Lite (workflow docs + adapters only — no GSD subagent tooling)
+./scripts/bootstrap-template.sh --project-name "My Project" --lite
 
 # 2. Validate conformance
 bash scripts/validate-workflow.sh
 
-# 3. Open the workflow and start
+# 3. Start working
 # docs/ai/WORKFLOW.md   — execution contract
 # .planning/STATE.md    — set your current objective here
 # docs/examples/        — see a complete flow in practice
 ```
+
+If using Claude Code, the 11 compact GSD commands are immediately available:
+
+```
+/gsd:start      Initialize project
+/gsd:plan N     Plan phase N
+/gsd:run N      Execute phase N
+/gsd:verify N   Validate via UAT
+/gsd:ship N     Create PR
+/gsd:debug      Debug an issue
+/gsd:session    Resume / pause / status
+/gsd:capture    Note, todo, backlog
+/gsd:settings   Model profile and toggles
+/gsd:help       Full command reference
+/gsd:update     Refresh the runtime bundle
+```
+
+**Cost tip:** Run `/gsd:settings --profile budget` to cut subagent costs ~50%. For non-Anthropic providers, use `--profile inherit`.
+
+The public surface stays intentionally small. Brownfield mapping, quick tasks, fast fixes, reviews, backlog capture, milestone actions, and health checks are routed through these same 11 commands via flags instead of exposing 40+ standalone commands. See `docs/ai/GSD_SURFACE.md`.
 
 ## Prerequisites
 
@@ -168,6 +258,7 @@ Use `--dry-run` to preview changes and `--include-ci` only if you also want to s
 
 ```text
 .
+├── .agents/
 ├── .claude/
 ├── .codex/
 ├── .github/
@@ -179,7 +270,7 @@ Use `--dry-run` to preview changes and `--include-ci` only if you also want to s
 
 ## Current Limitations and Roadmap
 
-This repository is at v1.0.0 — the workflow contract, tooling, and a Node.js example are in place. A few things are intentionally deferred:
+This repository is transitioning toward release v2. The workflow contract, tooling, and examples are in place, while the `.agents/`-centered architecture is being formalized and completed. A few things are intentionally deferred:
 
 | What | Why deferred | Planned |
 |---|---|---|

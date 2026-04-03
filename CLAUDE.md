@@ -1,12 +1,13 @@
 # Claude adapter
 
-Follow `AGENTS.md`.
+Follow `.agents/AGENTS.md`.
 
 ## Source of truth
 
-1. `docs/ai/WORKFLOW_SHORT.md`
-2. `docs/ai/WORKFLOW.md` only if ambiguous
-3. `docs/ai/ARTIFACTS.md`
+1. `.agents/AGENTS.md`
+2. `docs/ai/WORKFLOW_SHORT.md`
+3. `docs/ai/WORKFLOW.md` only if ambiguous
+4. `docs/ai/ARTIFACTS.md`
 
 ## First read
 
@@ -31,6 +32,28 @@ Do not load unrelated docs.
 
 Escalate path if correctness is at risk.
 
+## Engineering defaults
+
+- TDD by default: write tests first, then implement real code
+- Behavioral changes require validation proportional to risk
+- Use unit, integration, and E2E coverage as needed by impact
+- Refactor under SOLID constraints before considering work complete
+- Do not implement first and cover later as the default path
+- Preserve hybrid governance: agile execution with PMBOK-style control and traceability
+
+## Git strategy
+
+- Git Flow is mandatory
+- Detect the stable branch as `main` or `master`
+- `develop` is the default integration and base branch for feature work
+- Create `feature/*` branches from `develop`
+- Merge feature branches back into `develop`
+- Reserve the stable branch for release state
+- Use `release/*` for stabilization and `hotfix/*` for urgent production fixes
+- Do not work directly on the stable branch for normal feature delivery
+- If the stable branch exists but `develop` does not, create `develop` from the stable branch before feature work starts
+- If neither `develop` nor a stable branch exists, ask the user to identify the long-lived branches before proceeding, then initialize Git Flow with `develop` as the integration branch
+
 ## Output contract
 
 - Return only the minimal diff or patch.
@@ -43,7 +66,7 @@ Escalate path if correctness is at risk.
 
 ## Verification contract
 
-- Use `V0` for trivial work, `V1` for focused work, and `V2` for full work.
+- Use `V0` for trivial work, `V1` for focused work, `V2` for full work, and escalate to `V3` when user-facing or system risk requires unit + integration + E2E evidence.
 - Escalate verification when risk exceeds the default path.
 - Keep verification explicit and minimal.
 

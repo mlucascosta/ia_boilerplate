@@ -1,0 +1,66 @@
+{
+  "version": "2.0.0-agent-core",
+  "sourceOfTruth": ".agents",
+  "supportedRuntimes": [
+    "claude",
+    "codex",
+    "copilot"
+  ],
+  "adapters": [
+    "claude",
+    "codex",
+    "copilot",
+    "gsd"
+  ],
+  "skills": [
+    "workflow-core",
+    "discuss-phase",
+    "plan-phase",
+    "execute-phase",
+    "verify-phase",
+    "quick-task",
+    "docs-update",
+    "review"
+  ],
+  "agents": [
+    "gsd-advisor-researcher",
+    "gsd-assumptions-analyzer",
+    "gsd-codebase-mapper",
+    "gsd-debugger",
+    "gsd-executor",
+    "gsd-integration-checker",
+    "gsd-nyquist-auditor",
+    "gsd-phase-researcher",
+    "gsd-plan-checker",
+    "gsd-planner",
+    "gsd-project-researcher",
+    "gsd-research-synthesizer",
+    "gsd-roadmapper",
+    "gsd-ui-auditor",
+    "gsd-ui-checker",
+    "gsd-ui-researcher",
+    "gsd-user-profiler",
+    "gsd-verifier"
+  ],
+  "generatedTargets": [
+    ".claude/agents",
+    ".claude/commands",
+    ".claude/gsd-file-manifest.json",
+    ".claude/hooks",
+    ".claude/package.json",
+    ".claude/settings.json",
+    ".claude/settings.local.json",
+    ".codex/agents",
+    ".codex/gsd-file-manifest.json",
+    ".codex/skills",
+    ".github/agents",
+    ".github/copilot-instructions.md",
+    ".github/gsd-file-manifest.json",
+    ".github/skills"
+  ],
+  "requiredScripts": [
+    ".agents/scripts/validate-agents.sh",
+    ".agents/scripts/generate-runtime-shims.sh",
+    ".agents/scripts/sync-runtime-adapters.sh"
+  ]
+}

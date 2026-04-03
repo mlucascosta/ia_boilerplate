@@ -9,23 +9,31 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # workflow artifacts work correctly on any machine or directory.
 # It is derived from the first absolute path found inside .claude/ references,
 # falling back to REPO_ROOT itself if none is found.
-TEMPLATE_ROOT="$(grep -roh '/[^ "]*ia_boilerplate[^ "]*' "$REPO_ROOT/.claude" 2>/dev/null | head -1 | xargs dirname 2>/dev/null || echo "$REPO_ROOT")"
-if [[ "$TEMPLATE_ROOT" == "$REPO_ROOT" || -z "$TEMPLATE_ROOT" ]]; then
+# Search .agents/ first (new layout), then .claude/ as fallback (legacy layout)
+TEMPLATE_ROOT="$(grep -roh '/[^ "]*ia_boilerplate[^ "]*' "$REPO_ROOT/.agents" "$REPO_ROOT/.claude" 2>/dev/null \
+  | grep -v '\.git' | head -1 \
+  | python3 -c "import sys,os; p=sys.stdin.read().strip(); print(os.path.dirname(os.path.dirname(p)) if '/.agents/' in p else os.path.dirname(os.path.dirname(os.path.dirname(p)))) if p else print('')" 2>/dev/null \
+  || echo "$REPO_ROOT")"
+if [[ -z "$TEMPLATE_ROOT" || "$TEMPLATE_ROOT" == "$REPO_ROOT" ]]; then
   TEMPLATE_ROOT="$REPO_ROOT"
 fi
 
 project_name=""
 project_slug=""
 copyright_holder=""
+lite_mode=false
 
 usage() {
   cat <<'EOF'
 Usage:
-  ./scripts/bootstrap-template.sh [--project-name "Your Project"] [--copyright-holder "Your Team"]
+  ./scripts/bootstrap-template.sh [--project-name "Your Project"] [--copyright-holder "Your Team"] [--lite]
 
 Options:
   --project-name       Project display name for README and planning docs.
   --copyright-holder   MIT copyright holder. Defaults to "<Project Name> contributors".
+  --lite               Lite mode: install only workflow docs and runtime adapters.
+                       Skips GSD runtime tooling (.claude/, .codex/, .github/skills/).
+                       Ideal for solo developers or teams not using Claude Code subagents.
   --help               Show this message.
 EOF
 }
@@ -150,6 +158,10 @@ while [[ $# -gt 0 ]]; do
       copyright_holder="${2:-}"
       shift 2
       ;;
+    --lite)
+      lite_mode=true
+      shift
+      ;;
     --help|-h)
       usage
       exit 0
@@ -189,7 +201,9 @@ fi
 
 new_codex_workflow_skill_name="$project_slug-workflow"
 
-warn_if_missing_runtime_prerequisites
+if [[ "$lite_mode" == false ]]; then
+  warn_if_missing_runtime_prerequisites
+fi
 
 replace_literal_in_repo "$TEMPLATE_ROOT" "$REPO_ROOT"
 
@@ -197,11 +211,30 @@ rename_codex_workflow_skill "$old_codex_workflow_skill_name" "$new_codex_workflo
 
 replace_literal_in_file "$REPO_ROOT/README.md" "$old_project_name" "$project_name"
 replace_literal_in_file "$REPO_ROOT/AGENTS.md" "$old_project_name" "$project_name"
+replace_literal_in_file "$REPO_ROOT/.agents/AGENTS.md" "$old_project_name" "$project_name"
 replace_literal_in_file "$REPO_ROOT/.planning/PROJECT.md" "$old_project_name" "$project_name"
 replace_literal_in_file "$REPO_ROOT/LICENSE" "$old_copyright_holder" "$copyright_holder"
+
+if [[ "$lite_mode" == true ]]; then
+  echo "Lite mode: removing GSD runtime tooling..."
+  # Keep the canonical .agents contract, adapters, manifest, skills, and validation scripts.
+  # Remove heavy runtime tooling and shared GSD execution assets.
+  rm -rf "$REPO_ROOT/.agents/agents" "$REPO_ROOT/.agents/bin" "$REPO_ROOT/.agents/references" "$REPO_ROOT/.agents/runtimes" "$REPO_ROOT/.agents/templates" "$REPO_ROOT/.agents/workflows"
+  # Remove Claude GSD commands and agents (keep root adapter files)
+  rm -rf "$REPO_ROOT/.claude/commands" "$REPO_ROOT/.claude/agents"
+  # Remove Codex and GitHub skill wrappers
+  for skill_dir in "$REPO_ROOT/.codex/skills"/gsd-*; do
+    [[ -d "$skill_dir" ]] && rm -rf "$skill_dir"
+  done
+  rm -rf "$REPO_ROOT/.github/skills"
+  echo "GSD runtime tooling removed. Canonical .agents contract and workflow adapters retained."
+fi
 
 echo "Bootstrap complete."
 echo "Project name: $project_name"
 echo "Project slug: $project_slug"
 echo "Repository root: $REPO_ROOT"
 echo "Copyright holder: $copyright_holder"
+if [[ "$lite_mode" == true ]]; then
+  echo "Mode: lite (workflow docs only, no GSD runtime)"
+fi

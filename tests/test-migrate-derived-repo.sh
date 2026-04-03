@@ -48,10 +48,12 @@ echo ""
 echo "2. Migration restores workflow files"
 setup_target
 rm "$TARGET_DIR/.planning/00-TEMPLATE-RISK_REGISTER.md"
+rm "$TARGET_DIR/.agents/manifest.json"
 printf 'broken\n' > "$TARGET_DIR/CLAUDE.md"
 printf '# Custom README\n' > "$TARGET_DIR/README.md"
 if bash "$SOURCE_ROOT/scripts/migrate-derived-repo.sh" --target "$TARGET_DIR" > /dev/null 2>&1 \
   && [[ -f "$TARGET_DIR/.planning/00-TEMPLATE-RISK_REGISTER.md" ]] \
+  && [[ -f "$TARGET_DIR/.agents/manifest.json" ]] \
   && grep -q '## Source of truth' "$TARGET_DIR/CLAUDE.md" \
   && grep -q '# Custom README' "$TARGET_DIR/README.md"; then
   pass "Migration restores workflow infrastructure without overwriting project README"

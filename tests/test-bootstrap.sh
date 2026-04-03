@@ -170,6 +170,12 @@ for f in docs/ai/WORKFLOW.md docs/ai/ARTIFACTS.md AGENTS.md CLAUDE.md scripts/va
     ok=false
   fi
 done
+for f in .agents/AGENTS.md .agents/manifest.json .agents/scripts/validate-agents.sh .agents/scripts/generate-runtime-shims.sh .agents/scripts/sync-runtime-adapters.sh; do
+  if [[ ! -f "$WORK_DIR/$f" ]]; then
+    fail "$f missing after bootstrap"
+    ok=false
+  fi
+done
 if $ok; then
   pass "All canonical files preserved"
 fi
