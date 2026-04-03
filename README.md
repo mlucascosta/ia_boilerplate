@@ -237,7 +237,7 @@ What the bootstrap does:
 
 - Rewrites local absolute runtime paths to the directory where the boilerplate was cloned
 - Renames project-facing boilerplate docs from `IA Boilerplate` to your project name
-- Renames the internal Codex workflow skill from `reduto-workflow` to a project-derived identifier such as `your-project-workflow`
+- Renames the internal Codex workflow skill from `boilerplate-workflow` to a project-derived identifier such as `your-project-workflow`
 - Updates the MIT copyright holder, defaulting to `<Project Name> contributors`
 
 If you omit `--project-name`, the script derives the name from the current folder.

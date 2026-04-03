@@ -42,7 +42,7 @@ current_codex_workflow_skill_name() {
     fi
   fi
 
-  printf '%s\n' "reduto-workflow"
+  printf '%s\n' "boilerplate-workflow"
 }
 
 copy_file() {
@@ -196,7 +196,6 @@ copy_file "$SOURCE_ROOT/.codex/skills/$source_skill_name/SKILL.md" "$target_root
 
 if [[ "$dry_run" == false ]]; then
   replace_literal_in_file "$target_root/AGENTS.md" "$source_skill_name" "$target_skill_name"
-  replace_literal_in_file "$target_root/scripts/validate-workflow.sh" "$source_skill_name" "$target_skill_name"
   replace_literal_in_file "$target_root/tests/test-validate-workflow.sh" "$source_skill_name" "$target_skill_name"
   replace_literal_in_file "$target_root/.codex/skills/$target_skill_name/SKILL.md" "$source_skill_name" "$target_skill_name"
 fi

@@ -1,5 +1,5 @@
 ---
-name: reduto-workflow
+name: boilerplate-workflow
 description: "Minimal Codex adapter for this repository."
 ---
 

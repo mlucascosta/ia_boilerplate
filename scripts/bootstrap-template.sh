@@ -143,8 +143,8 @@ rename_codex_workflow_skill() {
   skill_file="$new_dir/SKILL.md"
   if [[ -f "$skill_file" ]]; then
     replace_literal_in_file "$skill_file" "name: $old_name" "name: $new_name"
-    replace_literal_in_file "$skill_file" "# Reduto Workflow Skill" "# $project_name Workflow Skill"
-    replace_literal_in_file "$skill_file" "Reduto" "$project_name"
+    replace_literal_in_file "$skill_file" "# Boilerplate Workflow Skill" "# $project_name Workflow Skill"
+    replace_literal_in_file "$skill_file" "Boilerplate" "$project_name"
   fi
 }
 
@@ -196,7 +196,7 @@ fi
 
 old_codex_workflow_skill_name="$(current_codex_workflow_skill_name)"
 if [[ -z "$old_codex_workflow_skill_name" ]]; then
-  old_codex_workflow_skill_name="reduto-workflow"
+  old_codex_workflow_skill_name="boilerplate-workflow"
 fi
 
 new_codex_workflow_skill_name="$project_slug-workflow"

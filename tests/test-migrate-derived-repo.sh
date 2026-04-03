@@ -69,7 +69,7 @@ rm -rf "$TARGET_DIR/.codex/skills/acme-app-workflow"
 if bash "$SOURCE_ROOT/scripts/migrate-derived-repo.sh" --target "$TARGET_DIR" > /dev/null 2>&1 \
   && [[ -f "$TARGET_DIR/.codex/skills/acme-app-workflow/SKILL.md" ]] \
   && grep -q 'acme-app-workflow' "$TARGET_DIR/AGENTS.md" \
-  && grep -q 'acme-app-workflow' "$TARGET_DIR/scripts/validate-workflow.sh" \
+  && grep -q 'current_codex_workflow_skill_path' "$TARGET_DIR/scripts/validate-workflow.sh" \
   && grep -q 'name: acme-app-workflow' "$TARGET_DIR/.codex/skills/acme-app-workflow/SKILL.md"; then
   pass "Migration keeps the target Codex workflow skill name"
 else

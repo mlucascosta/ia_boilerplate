@@ -70,7 +70,7 @@ Use the runtime-specific files only as adapters to this manual:
 
 1. Copilot: `.github/copilot-instructions.md`
 2. Claude: `CLAUDE.md`
-3. Codex: `.codex/skills/reduto-workflow/SKILL.md`
+3. Codex: `.codex/skills/boilerplate-workflow/SKILL.md`
 
 If two files disagree, `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md` take precedence, then this file, then runtime-specific adapters.
 

@@ -12,6 +12,22 @@ pass() { echo "  [PASS] $1"; }
 fail() { echo "  [FAIL] $1"; errors=$((errors + 1)); }
 warn() { echo "  [WARN] $1"; warnings=$((warnings + 1)); }
 
+current_codex_workflow_skill_path() {
+  local skill_name=""
+
+  if [[ -f "$REPO_ROOT/AGENTS.md" ]]; then
+    skill_name="$(sed -n 's|.*\.codex/skills/\([^/]*\)/SKILL\.md.*|\1|p' "$REPO_ROOT/AGENTS.md" | sed -n '1p')"
+  fi
+
+  if [[ -z "$skill_name" && -d "$REPO_ROOT/.codex/skills" ]]; then
+    skill_name="$(find "$REPO_ROOT/.codex/skills" -maxdepth 1 -mindepth 1 -type d | xargs -n 1 basename 2>/dev/null | grep 'workflow' | head -1 || true)"
+  fi
+
+  if [[ -n "$skill_name" ]]; then
+    printf '%s\n' "$REPO_ROOT/.codex/skills/$skill_name/SKILL.md"
+  fi
+}
+
 word_count() {
   awk '{for (token_index = 1; token_index <= NF; token_index++) total++} END {print total + 0}' "$1"
 }
@@ -151,9 +167,10 @@ if [[ -f "$REPO_ROOT/.github/copilot-instructions.md" ]]; then
   fi
 fi
 
-if [[ -f "$REPO_ROOT/.codex/skills/reduto-workflow/SKILL.md" ]]; then
-  check_adapter_contract "$REPO_ROOT/.codex/skills/reduto-workflow/SKILL.md" "Codex adapter"
-  grep -Fq 'Codex-only workflow' "$REPO_ROOT/.codex/skills/reduto-workflow/SKILL.md" && pass "Codex adapter forbids Codex-only workflow invention" || fail "Codex adapter must forbid Codex-only workflow invention"
+codex_adapter_path="$(current_codex_workflow_skill_path || true)"
+if [[ -n "$codex_adapter_path" && -f "$codex_adapter_path" ]]; then
+  check_adapter_contract "$codex_adapter_path" "Codex adapter"
+  grep -Fq 'Codex-only workflow' "$codex_adapter_path" && pass "Codex adapter forbids Codex-only workflow invention" || fail "Codex adapter must forbid Codex-only workflow invention"
 fi
 
 echo ""
