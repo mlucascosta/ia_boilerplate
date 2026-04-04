@@ -51,7 +51,15 @@ else
   fail "runtime shims are missing or drifted"
 fi
 
-if rg -n '/Users/.*/\.claude/get-shit-done|/home/.*/\.claude/get-shit-done' "$REPO_ROOT/.agents" | grep -v '/.agents/scripts/validate-agents.sh:' > /dev/null 2>&1; then
+legacy_path_pattern='/Users/.*/\.claude/get-shit-done|/home/.*/\.claude/get-shit-done'
+
+if command -v rg > /dev/null 2>&1; then
+  legacy_path_matches="$(rg -n "$legacy_path_pattern" "$REPO_ROOT/.agents" | grep -v '/.agents/scripts/validate-agents.sh:' || true)"
+else
+  legacy_path_matches="$(grep -RInE "$legacy_path_pattern" "$REPO_ROOT/.agents" | grep -v '/.agents/scripts/validate-agents.sh:' || true)"
+fi
+
+if [[ -n "$legacy_path_matches" ]]; then
   fail "legacy absolute template paths remain under .agents/"
 else
   pass "no legacy absolute template paths remain under .agents/"
