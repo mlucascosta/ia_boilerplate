@@ -6,6 +6,28 @@ Format: `[version] — YYYY-MM-DD`
 
 ---
 
+## [2.0.0] — 2026-04-04
+
+### Added
+- `.agents/AGENTS.md` as the canonical repository contract for all AI runtimes
+- `.agents/manifest.json` and `.agents/adapters/` to centralize runtime inventory and adapter semantics
+- `.agents/skills/` for the shared workflow-core, discuss, plan, execute, verify, review, quick-task, and docs-update capabilities
+- `.agents/runtimes/{claude,codex,github}/` to own runtime-managed wrapper content
+- `.agents/scripts/validate-agents.sh`, `.agents/scripts/generate-runtime-shims.sh`, and `.agents/scripts/sync-runtime-adapters.sh` for centralization enforcement
+- `docs/architecture/agents-centralization.md`, `docs/architecture/agents-migration-plan.md`, `docs/architecture/runtime-shims-spec.md`, and `docs/architecture/testing-governance.md`
+
+### Changed
+- Centralized the GSD operational layer under `.agents/` and reduced root/runtime surfaces to compatibility adapters
+- Updated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` to delegate to the centralized contract
+- Aligned validation and workflow templates with the release v2 runtime model
+- Hardened `.agents/scripts/validate-agents.sh` for environments without `rg`
+- Compacted `.planning/STATE.md` to remain within the enforced artifact budget
+
+### Removed
+- Runtime-owned duplicate content under legacy `get-shit-done` locations in favor of `.agents/` ownership and synchronized materialized wrappers
+
+---
+
 ## [1.0.0] — 2026-04-02
 
 ### Added
