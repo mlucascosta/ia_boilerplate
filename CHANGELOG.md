@@ -6,6 +6,13 @@ Format: `[version] — YYYY-MM-DD`
 
 ---
 
+## [2.0.1] — 2026-04-04
+
+### Changed
+- Recorded the `v2.0.0` release notes in `CHANGELOG.md` after the release cut so repository history and release documentation stay aligned.
+
+---
+
 ## [2.0.0] — 2026-04-04
 
 ### Added
