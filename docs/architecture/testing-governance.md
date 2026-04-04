@@ -229,9 +229,9 @@ describe("runtime shim generation", () => {
       manifestPath: ".agents/manifest.json"
     });
 
-    expect(result.generated).toContain(".claude/CLAUDE.md");
+    expect(result.generated).toContain(".claude/commands");
     expect(result.generated).toContain(".github/copilot-instructions.md");
-    expect(result.generated).toContain(".codex/skills/project-workflow/SKILL.md");
+    expect(result.generated).toContain(".codex/skills");
   });
 });
 ```

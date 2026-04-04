@@ -118,129 +118,144 @@ Template for `.planning/codebase/STRUCTURE.md` - captures physical file organiza
 ```markdown
 # Codebase Structure
 
-**Analysis Date:** 2025-01-20
+**Analysis Date:** [YYYY-MM-DD]
 
 ## Directory Layout
 
 ```
-get-shit-done/
-├── bin/                # Executable entry points
-├── commands/           # Slash command definitions
-│   └── gsd/           # GSD-specific commands
-├── get-shit-done/     # Skill resources
-│   ├── references/    # Principle documents
-│   ├── templates/     # File templates
-│   └── workflows/     # Multi-step procedures
-├── src/               # Source code (if applicable)
-├── tests/             # Test files
-├── package.json       # Project manifest
-└── README.md          # User documentation
+[project-root]/
+├── .agents/            # GSD canonical source (single copy for all runtimes)
+│   ├── agents/         # 18 subagent definitions
+│   ├── bin/            # gsd-tools.cjs + support libs
+│   ├── references/     # Model profiles, verification patterns
+│   ├── templates/      # Artifact templates
+│   └── workflows/      # 56 reusable workflow definitions
+├── .claude/            # Claude Code adapter
+│   ├── agents/         # → symlink to ../.agents/agents
+│   └── commands/gsd/   # 11 thin command wrappers
+├── .codex/             # Codex adapter
+│   ├── agents/         # 18 .toml config files (Codex-required format)
+│   └── skills/gsd-*/   # 11 thin skill wrappers
+├── .github/            # Copilot adapter
+│   ├── agents/         # → symlink to ../.agents/agents
+│   └── skills/gsd-*/   # 11 thin skill wrappers
+├── .planning/          # Project governance artifacts
+│   ├── STATE.md        # Active state (≤120 words)
+│   ├── ROADMAP.md      # Phase definitions
+│   └── summaries/      # Archived context
+├── docs/ai/            # Canonical workflow documentation
+│   ├── WORKFLOW.md     # Full workflow reference
+│   ├── WORKFLOW_SHORT.md # Pocket card
+│   └── ARTIFACTS.md    # Artifact contract
+└── scripts/            # Bootstrap and migration tooling
 ```
 
 ## Directory Purposes
 
-**bin/**
-- Purpose: CLI entry points
-- Contains: install.js (installer script)
-- Key files: install.js - handles npx installation
-- Subdirectories: None
+**.agents/**
+- Purpose: Single canonical source for all GSD runtime artifacts
+- Contains: workflows, templates, references, agent definitions, bin tools
+- Key files: bin/gsd-tools.cjs (CLI), workflows/execute-plan.md, workflows/new-project.md
+- Subdirectories: agents/, bin/lib/, references/, templates/codebase/, workflows/
 
-**commands/gsd/**
-- Purpose: Slash command definitions for Claude Code
-- Contains: *.md files (one per command)
-- Key files: new-project.md, plan-phase.md, execute-plan.md
+**.claude/commands/gsd/**
+- Purpose: Thin Claude Code command wrappers (11 skills)
+- Contains: start.md, plan.md, run.md, verify.md, ship.md, debug.md, session.md, capture.md, settings.md, help.md, update.md
+- Key files: run.md (phase execution), plan.md (planning), verify.md (UAT)
 - Subdirectories: None (flat structure)
 
-**get-shit-done/references/**
-- Purpose: Core philosophy and guidance documents
-- Contains: principles.md, questioning.md, plan-format.md
-- Key files: principles.md - system philosophy
+**.codex/agents/**
+- Purpose: Codex agent config files (required format, cannot be symlinked)
+- Contains: 18 .toml files — one per GSD subagent
+- Key files: gsd-executor.toml, gsd-planner.toml, gsd-verifier.toml
 - Subdirectories: None
 
-**get-shit-done/templates/**
-- Purpose: Document templates for .planning/ files
-- Contains: Template definitions with frontmatter
-- Key files: project.md, roadmap.md, plan.md, summary.md
-- Subdirectories: codebase/ (new - for stack/architecture/structure templates)
-
-**get-shit-done/workflows/**
-- Purpose: Reusable multi-step procedures
-- Contains: Workflow definitions called by commands
-- Key files: execute-plan.md, research-phase.md
+**docs/ai/**
+- Purpose: Canonical workflow documentation (source of truth for all runtimes)
+- Contains: WORKFLOW.md, WORKFLOW_SHORT.md, ARTIFACTS.md, CONTEXT_MAP.md, DECISION_RULES.md
+- Key files: WORKFLOW.md (authoritative), WORKFLOW_SHORT.md (daily use)
 - Subdirectories: None
+
+**.planning/**
+- Purpose: Active project governance artifacts
+- Contains: STATE.md, ROADMAP.md, REQUIREMENTS.md, PROJECT.md, config.json, per-phase plans and UAT
+- Key files: STATE.md (live state), config.json (workflow preferences)
+- Subdirectories: summaries/ (archived context)
 
 ## Key File Locations
 
 **Entry Points:**
-- `bin/install.js` - Installation script (npx entry)
+- `.agents/bin/gsd-tools.cjs` - CLI tool (state, config, commit, profile)
 
 **Configuration:**
-- `package.json` - Project metadata, dependencies, bin entry
-- `.gitignore` - Excluded files
+- `.planning/config.json` - Workflow preferences (model_profile, cost controls)
+- `CLAUDE.md` - Claude adapter (delegates to AGENTS.md)
+- `AGENTS.md` - Universal adapter entry point
 
 **Core Logic:**
-- `bin/install.js` - All installation logic (file copying, path replacement)
-
-**Testing:**
-- `tests/` - Test files (if present)
+- `.agents/workflows/execute-plan.md` - Phase execution workflow
+- `.agents/workflows/new-project.md` - Project initialization workflow
+- `.agents/references/model-profiles.md` - Cost profile definitions
 
 **Documentation:**
-- `README.md` - User-facing installation and usage guide
-- `CLAUDE.md` - Instructions for Claude Code when working in this repo
+- `README.md` - User-facing guide
+- `docs/ai/WORKFLOW.md` - Full AI workflow reference
+- `docs/ai/ARTIFACTS.md` - Artifact contract
 
 ## Naming Conventions
 
 **Files:**
-- kebab-case.md: Markdown documents
-- kebab-case.js: JavaScript source files
-- UPPERCASE.md: Important project files (README, CLAUDE, CHANGELOG)
+- kebab-case.md: Workflow, template, reference, and command files
+- kebab-case.cjs: Node.js support libs in .agents/bin/lib/
+- UPPERCASE.md: Governance artifacts (STATE, ROADMAP, WORKFLOW, ARTIFACTS)
 
 **Directories:**
 - kebab-case: All directories
-- Plural for collections: templates/, commands/, workflows/
+- gsd-*: GSD skill/agent directories in each runtime adapter
 
 **Special Patterns:**
-- {command-name}.md: Slash command definition
-- *-template.md: Could be used but templates/ directory preferred
+- `gsd-{name}`: GSD subagent definitions and skill directories
+- `{phase-number}-PLAN.md`, `{phase-number}-UAT.md`: Per-phase execution artifacts
 
 ## Where to Add New Code
 
-**New Slash Command:**
-- Primary code: `commands/gsd/{command-name}.md`
-- Tests: `tests/commands/{command-name}.test.js` (if testing implemented)
-- Documentation: Update `README.md` with new command
+**New GSD Workflow:**
+- Implementation: `.agents/workflows/{name}.md`
+- Reference from commands with `@.agents/workflows/{name}.md`
 
 **New Template:**
-- Implementation: `get-shit-done/templates/{name}.md`
-- Documentation: Template is self-documenting (includes guidelines)
-
-**New Workflow:**
-- Implementation: `get-shit-done/workflows/{name}.md`
-- Usage: Reference from command with `@.agents/workflows/{name}.md`
+- Implementation: `.agents/templates/{name}.md`
+- Reference with `@.agents/templates/{name}.md`
 
 **New Reference Document:**
-- Implementation: `get-shit-done/references/{name}.md`
-- Usage: Reference from commands/workflows as needed
+- Implementation: `.agents/references/{name}.md`
+- Reference with `@.agents/references/{name}.md`
 
-**Utilities:**
-- No utilities yet (`install.js` is monolithic)
-- If extracted: `src/utils/`
+**New GSD Subagent:**
+- Definition: `.agents/agents/gsd-{name}.md`
+- Codex config: `.codex/agents/gsd-{name}.toml`
+- (Claude and GitHub read via symlinks automatically)
 
 ## Special Directories
 
-**get-shit-done/**
-- Purpose: Shared runtime resources rooted in `.agents/`
-- Source: Copied by bin/install.js during installation
-- Committed: Yes (source of truth)
+**.claude/agents/**
+- Purpose: Claude Code agent definitions (symlink — do not add files here)
+- Source: `../.agents/agents/` (symlink target)
+- Committed: Symlink only
 
-**commands/**
-- Purpose: Claude slash-command wrappers installed to `.claude/commands/`
-- Source: Copied by bin/install.js during installation
-- Committed: Yes (source of truth)
+**.github/agents/**
+- Purpose: Copilot agent definitions (symlink — do not add files here)
+- Source: `../.agents/agents/` (symlink target)
+- Committed: Symlink only
+
+**scripts/**
+- Purpose: Developer tooling for bootstrap and migration
+- Key files: bootstrap-template.sh (new project init), migrate-derived-repo.sh, validate-workflow.sh
+- Committed: Yes
 
 ---
 
-*Structure analysis: 2025-01-20*
+*Structure analysis: [date]*
 *Update when directory structure changes*
 ```
 </good_examples>

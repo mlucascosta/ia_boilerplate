@@ -34,4 +34,4 @@ None.
 
 ## Next Step
 
-Commit docs on `feature/agents-architecture-docs`, then open PR to `develop`.
+Validate doc/runtime parity on `feature/agents-architecture-docs`, then open PR to `develop`.

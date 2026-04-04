@@ -35,11 +35,34 @@ A runtime shim may not:
 
 ## 3. Supported Shim Targets
 
-The initial generated targets are:
+Release v2 uses two related shim surfaces.
 
-- `.claude/CLAUDE.md`
-- `.codex/skills/project-workflow/SKILL.md`
-- `.github/copilot-instructions.md`
+## 3.1 Repository compatibility entrypoints
+
+These are the user-facing entrypoints that runtimes discover directly:
+
+* `AGENTS.md`
+* `CLAUDE.md`
+* `.codex/skills/boilerplate-workflow/SKILL.md`
+* `.github/copilot-instructions.md`
+
+## 3.2 Materialized runtime-owned surfaces
+
+These are generated or synchronized compatibility surfaces sourced from `.agents/runtimes/` and listed in `.agents/manifest.json`.
+
+Current generated targets include:
+
+* `.claude/agents`
+* `.claude/commands`
+* `.claude/hooks`
+* `.claude/package.json`
+* `.claude/settings.json`
+* `.claude/settings.local.json`
+* `.codex/agents`
+* `.codex/skills`
+* `.github/agents`
+* `.github/skills`
+* `.github/copilot-instructions.md`
 
 Future runtimes may be added using the same model.
 
@@ -55,7 +78,7 @@ All shims must be:
 - non-normative
 - traceable back to `.agents/`
 
-All shims must explicitly indicate that `.agents/` is the source of truth.
+All shims must explicitly indicate that `.agents/` is the source of truth, either directly or by pointing to a root adapter that already does so.
 
 ---
 
@@ -63,10 +86,18 @@ All shims must explicitly indicate that `.agents/` is the source of truth.
 
 ## 5.1 Path
 
-Recommended target:
+Repository compatibility entrypoint:
 
 ```text
-.claude/CLAUDE.md
+CLAUDE.md
+```
+
+Materialized runtime-owned surfaces:
+
+```text
+.claude/commands/
+.claude/hooks/
+.claude/settings.json
 ```
 
 ## 5.2 Purpose
@@ -75,16 +106,16 @@ Provide Claude-compatible discovery while delegating all behavior.
 
 ## 5.3 Allowed Content
 
-A Claude shim may include:
+A Claude entrypoint may include:
 
 * a short title
 * one sentence instructing the runtime to follow `.agents/AGENTS.md`
 * a short pointer to `.agents/adapters/claude.md`
-* optional pointers to shared skills and agents
+* a short summary of repository read order or runtime expectations when needed for Claude discovery
 
 ## 5.4 Forbidden Content
 
-A Claude shim may not include:
+A Claude entrypoint may not include:
 
 * its own workflow rules
 * its own testing policy
@@ -95,14 +126,11 @@ A Claude shim may not include:
 ## 5.5 Example
 
 ```md
-# Runtime shim for Claude
+# Claude adapter
 
 Follow `.agents/AGENTS.md`.
-
-Runtime-specific notes:
-- See `.agents/adapters/claude.md`
-- Shared skills live in `.agents/skills/`
-- Shared agents live in `.agents/agents/`
+Runtime-specific notes: see `.agents/adapters/claude.md`.
+Do not treat this file as a source of truth.
 ```
 
 ---
@@ -111,10 +139,17 @@ Runtime-specific notes:
 
 ## 6.1 Path
 
-Recommended target:
+Repository compatibility entrypoint:
 
 ```text
-.codex/skills/project-workflow/SKILL.md
+.codex/skills/boilerplate-workflow/SKILL.md
+```
+
+Materialized runtime-owned surfaces:
+
+```text
+.codex/skills/
+.codex/agents/
 ```
 
 ## 6.2 Purpose
@@ -123,16 +158,16 @@ Provide Codex-compatible skill discovery while delegating behavior centrally.
 
 ## 6.3 Allowed Content
 
-A Codex shim may include:
+A Codex entrypoint may include:
 
 * minimal frontmatter required by Codex
 * one sentence instructing the runtime to follow `.agents/AGENTS.md`
 * a pointer to `.agents/adapters/codex.md`
-* a pointer to `.agents/skills/workflow-core/SKILL.md`
+* a pointer to repository-specific invocation conventions such as `$gsd-<name>` when needed for Codex discovery
 
 ## 6.4 Forbidden Content
 
-A Codex shim may not include:
+A Codex entrypoint may not include:
 
 * independent workflow logic
 * test policy definitions
@@ -144,13 +179,13 @@ A Codex shim may not include:
 
 ```md
 ---
-name: project-workflow
+name: boilerplate-workflow
 description: Minimal Codex shim that delegates to .agents
 ---
 
 Follow `.agents/AGENTS.md`.
 Runtime specifics: `.agents/adapters/codex.md`
-Primary shared skill: `.agents/skills/workflow-core/SKILL.md`
+Do not treat this file as a source of truth.
 ```
 
 ---
@@ -159,10 +194,17 @@ Primary shared skill: `.agents/skills/workflow-core/SKILL.md`
 
 ## 7.1 Path
 
-Recommended target:
+Repository compatibility entrypoint:
 
 ```text
 .github/copilot-instructions.md
+```
+
+Materialized runtime-owned surfaces:
+
+```text
+.github/agents/
+.github/skills/
 ```
 
 ## 7.2 Purpose
@@ -201,7 +243,7 @@ Do not treat this file as a source of truth.
 
 ## 8. Shim Generation Rules
 
-Runtime shims should be generated from `.agents/manifest.json` and centralized templates.
+Runtime shims should be generated or synchronized from `.agents/manifest.json`, `.agents/runtimes/`, and centralized templates or references.
 
 ## 8.1 Inputs
 
@@ -209,12 +251,13 @@ The generator should consume:
 
 * `.agents/manifest.json`
 * runtime-specific adapter metadata
-* shared shim templates
+* runtime-owned source files under `.agents/runtimes/`
+* shared shim templates or references
 * target path definitions
 
 ## 8.2 Outputs
 
-The generator should produce exact shim files at the expected runtime discovery locations.
+The generator or sync process should produce exact shim files at the expected runtime discovery locations.
 
 ## 8.3 Determinism
 
@@ -222,7 +265,7 @@ Generation must be deterministic. The same inputs must produce the same outputs.
 
 ## 8.4 Regeneration
 
-A shim must be safely regenerable without losing repository behavior.
+A shim must be safely regenerable or synchronizable without losing repository behavior.
 
 ---
 
@@ -253,7 +296,7 @@ Validation must confirm:
 
 * target files exist
 * target files match generator output
-* target files explicitly point to `.agents/`
+* target files explicitly point to `.agents/`, or to a root adapter that does so
 * target files remain minimal
 * target files do not contain forbidden semantic sections
 
@@ -289,7 +332,7 @@ Impact:
 
 Resolution:
 
-* regenerate shim
+* regenerate or synchronize shim
 
 ## 12.2 Shim manually edited
 
@@ -299,7 +342,7 @@ Impact:
 
 Resolution:
 
-* regenerate shim
+* regenerate or synchronize shim
 * fail CI if checked-in file differs from generated output
 
 ## 12.3 Shim contains central semantics
@@ -337,9 +380,9 @@ Suppose the repository updates the Git Flow policy centrally in `.agents/AGENTS.
 
 Correct result:
 
-* Claude shim remains unchanged or changes only if generator template requires a different pointer layout
-* Codex shim remains minimal
-* Copilot shim remains minimal
+* `CLAUDE.md` remains unchanged or changes only if the root adapter template requires it
+* `.codex/skills/boilerplate-workflow/SKILL.md` remains minimal
+* `.github/copilot-instructions.md` remains minimal
 * none of them restate the Git Flow policy
 
 Incorrect result:
@@ -358,7 +401,7 @@ The generator should:
 
 * read manifest
 * identify enabled runtimes
-* select template per runtime
+* select source files per runtime from `.agents/runtimes/`
 * insert central references
 * insert runtime adapter references
 * write files to expected discovery locations
@@ -374,4 +417,4 @@ Optional enhancements:
 
 ## 16. Final Rule
 
-> A runtime shim is valid only if it acts as a minimal compatibility pointer to `.agents/` and does not independently define workflow semantics, engineering policy, or architectural behavior.
+> A runtime shim is valid only if it acts as a minimal compatibility layer over the centralized `.agents/` architecture and does not independently define workflow semantics, engineering policy, or architectural behavior.

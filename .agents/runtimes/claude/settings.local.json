@@ -13,7 +13,12 @@
       "Bash(grep \"get-shit-done\" .claude/hooks/*.js)",
       "Bash(rm -rf .claude/agents)",
       "Bash(ln -s ../.agents/agents .claude/agents)",
-      "Bash(ln -s ../.agents/agents .github/agents)"
+      "Bash(ln -s ../.agents/agents .github/agents)",
+      "Bash(ls -1 /Users/mlucascosta/Documents/dev/ia_boilerplate/.agents/agents/*.md)",
+      "Bash(ls -1d /Users/mlucascosta/Documents/dev/ia_boilerplate/.agents/skills/gsd-*/)",
+      "Bash(ls -1 /Users/mlucascosta/Documents/dev/ia_boilerplate/.claude/commands/gsd/*.md)",
+      "Bash(ls -1d /Users/mlucascosta/Documents/dev/ia_boilerplate/.codex/skills/gsd-*/)",
+      "Bash(ls -1d /Users/mlucascosta/Documents/dev/ia_boilerplate/.github/skills/gsd-*/)"
     ]
   }
 }

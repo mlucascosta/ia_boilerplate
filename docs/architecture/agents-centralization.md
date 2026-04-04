@@ -137,65 +137,43 @@ The system should adopt the strongest ideas from GSD without inheriting unnecess
 
 ## 6. Target Repository Structure
 
-The recommended target structure is:
+The release v2 target structure already implemented in the repository is:
 
 ```text
 .agents/
 ├── AGENTS.md
-├── manifest.json
+├── VERSION
 ├── adapters/
 │   ├── claude.md
 │   ├── codex.md
 │   ├── copilot.md
 │   └── gsd.md
-├── skills/
-│   ├── workflow-core/
-│   │   └── SKILL.md
-│   ├── discuss-phase/
-│   │   └── SKILL.md
-│   ├── plan-phase/
-│   │   └── SKILL.md
-│   ├── execute-phase/
-│   │   └── SKILL.md
-│   ├── verify-phase/
-│   │   └── SKILL.md
-│   ├── quick-task/
-│   │   └── SKILL.md
-│   ├── docs-update/
-│   │   └── SKILL.md
-│   └── review/
-│       └── SKILL.md
 ├── agents/
-│   ├── advisor-researcher.md
-│   ├── planner.md
-│   ├── executor.md
-│   ├── verifier.md
-│   ├── doc-writer.md
-│   └── doc-verifier.md
-├── prompts/
-│   ├── system/
-│   ├── templates/
-│   └── fragments/
-├── schemas/
-│   ├── agent.schema.json
-│   ├── skill.schema.json
-│   └── manifest.schema.json
-└── scripts/
-    ├── sync-runtime-adapters.sh
-    ├── generate-runtime-shims.sh
-    └── validate-agents.sh
+├── bin/
+├── manifest.json
+├── references/
+├── runtimes/
+│   ├── claude/
+│   ├── codex/
+│   └── github/
+├── scripts/
+├── skills/
+├── templates/
+└── workflows/
 ```
 
 This structure separates concerns clearly:
 
 * policy lives in `AGENTS.md`
+* architecture versioning lives in `VERSION`
 * inventory and orchestration metadata live in `manifest.json`
-* runtime-specific differences live in `adapters/`
+* runtime-specific syntax and discovery notes live in `adapters/`
 * reusable capabilities live in `skills/`
 * reusable subagents live in `agents/`
-* reusable fragments live in `prompts/`
-* schemas live in `schemas/`
-* automation lives in `scripts/`
+* executable workflow definitions live in `workflows/`
+* reusable fragments and templates live in `templates/` and `references/`
+* runtime-owned generated wrapper content lives in `runtimes/`
+* automation lives in `bin/` and `scripts/`
 
 ---
 
@@ -267,13 +245,14 @@ It should declare:
 * generated wrapper targets
 * validation expectations
 
-Example:
+Example aligned to the current release v2 surface:
 
 ```json
 {
   "version": "2.0.0-agent-core",
   "sourceOfTruth": ".agents",
   "supportedRuntimes": ["claude", "codex", "copilot"],
+  "adapters": ["claude", "codex", "copilot", "gsd"],
   "skills": [
     "workflow-core",
     "discuss-phase",
@@ -285,17 +264,24 @@ Example:
     "review"
   ],
   "agents": [
-    "advisor-researcher",
-    "planner",
-    "executor",
-    "verifier",
-    "doc-writer",
-    "doc-verifier"
+    "gsd-advisor-researcher",
+    "gsd-assumptions-analyzer",
+    "gsd-executor",
+    "gsd-phase-researcher",
+    "gsd-planner",
+    "gsd-verifier"
   ],
   "generatedTargets": [
-    ".claude/CLAUDE.md",
-    ".codex/skills/project-workflow/SKILL.md",
+    ".claude/agents",
+    ".claude/commands",
+    ".codex/agents",
+    ".codex/skills",
     ".github/copilot-instructions.md"
+  ],
+  "requiredScripts": [
+    ".agents/scripts/validate-agents.sh",
+    ".agents/scripts/generate-runtime-shims.sh",
+    ".agents/scripts/sync-runtime-adapters.sh"
   ]
 }
 ```
@@ -372,61 +358,75 @@ These are reusable specialized subagents.
 
 Each agent should have one responsibility and must be runtime-neutral.
 
-Examples:
+Representative release v2 agents include:
 
-### `advisor-researcher.md`
+### `gsd-advisor-researcher.md`
 
-Researches a single uncertainty and returns structured comparisons.
+Researches one gray-area decision and returns a bounded comparison.
 
-### `planner.md`
+### `gsd-planner.md`
 
 Turns a bounded request into an implementation-ready plan.
 
-### `executor.md`
+### `gsd-executor.md`
 
-Applies a focused implementation slice within a bounded scope.
+Executes a focused implementation slice within a bounded scope.
 
-### `verifier.md`
+### `gsd-verifier.md`
 
 Checks outcomes, evidence, and behavioral correctness.
 
-### `doc-writer.md`
+### `gsd-phase-researcher.md`
 
-Updates persistent documentation.
+Builds the implementation research artifact consumed by planning.
 
-### `doc-verifier.md`
+### `gsd-ui-researcher.md`
 
-Checks documentation integrity and alignment.
-
----
-
-## 7.6 `.agents/prompts/`
-
-This directory contains reusable text fragments, templates, and structured system prompt components.
-
-Examples:
-
-* a verification levels fragment
-* a minimal-diff fragment
-* a telegraphic state update fragment
-* a conditional recommendations fragment
-* a Git Flow constraints fragment
-
-The benefit is consistency and easier maintenance.
+Defines UI contracts when a phase includes frontend work.
 
 ---
 
-## 7.7 `.agents/scripts/`
+## 7.6 `.agents/workflows/`, `.agents/templates/`, and `.agents/references/`
 
-These scripts enforce centralization.
+These directories hold the reusable execution surface consumed by all runtimes.
+
+* `workflows/` contains executable workflow definitions
+* `templates/` contains reusable artifact and prompt templates
+* `references/` contains stable reference material used across orchestrators and agents
+
+This is the shared behavioral layer referenced by runtime adapters.
+
+---
+
+## 7.7 `.agents/runtimes/`
+
+This directory owns runtime-managed wrapper content.
+
+Release v2 uses:
+
+* `.agents/runtimes/claude/` for Claude-managed commands, hooks, and settings scaffolds
+* `.agents/runtimes/codex/` for Codex-managed agents and skills scaffolds
+* `.agents/runtimes/github/` for GitHub Copilot wrapper content and managed skills
+
+Runtime root files remain compatibility entrypoints, while runtime-owned generated surfaces live here first.
+
+---
+
+## 7.8 `.agents/bin/` and `.agents/scripts/`
+
+These directories enforce centralization.
+
+### `.agents/bin/`
+
+Contains Node-based helper tooling such as state loading and model resolution.
 
 ### `generate-runtime-shims.sh`
 
-Generates runtime wrappers for Claude, Codex, Copilot, or any additional supported runtime.
+Generates runtime wrappers and refreshes the materialized compatibility surfaces.
 
 ### `sync-runtime-adapters.sh`
 
-Ensures the runtime shells match the central architecture.
+Ensures runtime shells match the central architecture and adapter contracts.
 
 ### `validate-agents.sh`
 
@@ -444,51 +444,42 @@ Validates:
 
 ## 8.1 General Rule
 
-Runtime-specific directories must not be trusted as source-of-truth locations.
+Runtime-specific directories and entrypoints must not be trusted as source-of-truth locations.
 
-They may exist physically, but only as minimal compatibility layers.
+Release v2 uses a two-layer compatibility model:
+
+* repository-root entrypoints such as `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`
+* materialized runtime-owned surfaces under `.claude/`, `.codex/`, and `.github/`, sourced from `.agents/runtimes/`
+
+Both layers are compatibility surfaces only. The source of truth remains `.agents/`.
 
 ## 8.2 Claude
 
-A generated minimal wrapper might look like:
+Claude uses a root adapter entrypoint plus runtime-owned command and settings surfaces.
 
-```md
-# Runtime shim for Claude
+The entrypoint is the repository-root `CLAUDE.md`, which points back to `.agents/AGENTS.md` and the Claude adapter.
 
-Follow `.agents/AGENTS.md`.
-
-Runtime-specific notes:
-- See `.agents/adapters/claude.md`
-- Shared skills live in `.agents/skills/`
-- Shared agents live in `.agents/agents/`
-```
+The generated runtime-owned content lives under `.claude/` and is sourced from `.agents/runtimes/claude/`.
 
 ## 8.3 Codex
 
-A generated minimal Codex skill might look like:
+Codex uses a repository skill entrypoint and runtime-owned skill and agent surfaces.
 
-```md
----
-name: project-workflow
-description: Minimal Codex shim that delegates to .agents
----
+The primary compatibility entrypoint is `.codex/skills/boilerplate-workflow/SKILL.md`, which points back to `.agents/AGENTS.md`.
 
-Follow `.agents/AGENTS.md`.
-Runtime specifics: `.agents/adapters/codex.md`
-Primary shared skill: `.agents/skills/workflow-core/SKILL.md`
-```
+The generated runtime-owned content lives under `.codex/` and is sourced from `.agents/runtimes/codex/`.
 
 ## 8.4 Copilot
 
-A minimal wrapper might look like:
+Copilot uses the repository instruction entrypoint at `.github/copilot-instructions.md`.
 
-```md
-# Runtime shim for Copilot
+That entrypoint delegates to `.agents/AGENTS.md` and `.agents/adapters/copilot.md`.
 
-Follow `.agents/AGENTS.md`.
-Runtime-specific notes: `.agents/adapters/copilot.md`
-Do not treat this file as a source of truth.
-```
+Managed Copilot wrapper content and skills live under `.github/` and are sourced from `.agents/runtimes/github/`.
+
+## 8.5 Root Adapters Must Stay Thin
+
+Compatibility entrypoints may summarize runtime-specific discovery expectations, but they must not become a second workflow definition.
 
 ---
 
@@ -928,7 +919,7 @@ Every agent should define:
 
 Agents must remain runtime-neutral.
 
-### Example: `advisor-researcher.md`
+### Example: `gsd-advisor-researcher.md`
 
 ```md
 # Role
