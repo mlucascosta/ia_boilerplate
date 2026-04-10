@@ -2,6 +2,17 @@
 
 Use this file to minimize unnecessary context loading.
 
+## Where to look first
+
+| Question | Check first | Fallback |
+|---|---|---|
+| What are we doing now? | `.planning/STATE.md` | `.planning/plans/` |
+| How do I run the workflow? | `docs/ai/WORKFLOW_SHORT.md` | `docs/ai/WORKFLOW.md` |
+| What is the agent contract? | `.agents/AGENTS.md` | — |
+| Why was this architecture chosen? | `docs/architecture/` | `.planning/adrs/` |
+| How do the layers relate? | `docs/architecture/information-architecture.md` | `START.md` |
+| How do I audit architecture? | `.agents/governance/RULES.md` | `.agents/governance/SKILLS.md` |
+
 ## Context temperatures
 
 ### Hot
