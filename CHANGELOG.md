@@ -6,6 +6,48 @@ Format: `[version] — YYYY-MM-DD`
 
 ---
 
+## [3.1.0] — 2026-04-09
+
+### Added
+
+- `.agents/governance/` — new normative subcamada de governança arquitetural, extending `.agents/` without creating a competing authority:
+  - `SKILLS.md` — eight architectural audit skills: Clean Architecture, DDD integrity, SOLID, TDD/test quality, Controller clean, MVVM headless, Integration test realism, E2E minimalism, and Full Audit Aggregator
+  - `RULES.md` — AI auditor behavior rules: evidence-first findings, confidence tiers (`high/medium/low`), severity tiers (`critical/major/minor`), merge-impact classification (`block/review/advisory`), advisory-first rollout mandate, RTK mandatory for all shell guidance, PR scope discipline, and adapter discipline
+  - `CHECKLIST.md` — per-category review checklist across Boundaries, DDD, SOLID, Tests, Delivery Layer, Governance, and RTK compliance
+  - `ANTI_PATTERNS.md` — ten recognized anti-patterns with descriptions: Fat Controller, Repository With Domain Logic, Anemic Entity, God Service, DTO With Domain Behavior, Test That Verifies Implementation, Excessive Mocking, Fake Integration Test, E2E Covering Domain Logic, Time-Coupled Domain Logic
+  - `REVIEW_OUTPUT_TEMPLATE.md` — standardized JSON finding structure (status, severity, confidence, merge_impact, category, rule, evidence, why_matters, suggested_fix, possible_exception) and Markdown report format with auxiliary score policy
+- `.github/workflows/ai-audit.yml` — advisory PR audit workflow: runs on every PR, reads `.agents/governance/` as normative base, posts findings as PR comment (sticky, replaces on update), no merge block, graceful skip when `OPENAI_API_KEY` is absent
+- `scripts/ai_audit.py` — audit script foundation: reads diff, loads governance files, builds LLM prompt, calls OpenAI with safe fallback (missing key → friendly skip report, exit 0; empty diff → skip; missing governance files → skip with clear message; API error → safe report)
+- `docs/architecture/ai-governance.md` — human explanation of the governance layer, rollout model, advisory-first rationale, and RTK scope
+- `docs/architecture/information-architecture.md` — full layer map with responsibilities, anti-patterns for information architecture, and explicit authority table
+
+### Changed
+
+- `AGENTS.md` (root) — added `Governance layer` section pointing to `.agents/governance/*` with usage guidance
+- `CLAUDE.md` — added `Governance extension` section listing governance files and when to consult them
+- `.github/copilot-instructions.md` — added `Architecture and Governance` section with pointers to `.agents/AGENTS.md` and `.agents/governance/`
+- `README.md` — added `The Governance Problem This Solves` and `Why .agents/ As The Normative Root` sections; updated `What This Repository Contains` with governance entries; updated `AI Governance Structure` table; updated Repository Structure diagram
+- `.agents/skills/review/SKILL.md` — updated read-first list to reference `.agents/governance/` instead of deleted `.agents/workflows/review.md`
+- `docs/ai/CONTEXT_MAP.md` — added `Architecture audit context` section with governance file pointers and skill invocation guidance
+
+### Removed
+
+- `.agents/adapters/gsd.md` — stale GSD adapter, removed post-v3.0 cleanup
+- `docs/ai/GSD_SURFACE.md` — stale GSD surface documentation, removed post-v3.0 cleanup
+
+### Design decisions
+
+**Why `.agents/governance/` and not `docs/ai/` or `vault/`?**
+Governance rules are normative for AI agents — they define what the auditor must do, not explain it to humans. Normative AI content belongs in `.agents/`. Human explanations live in `docs/architecture/`.
+
+**Why advisory-only on first rollout?**
+Heuristics need calibration against real PRs before becoming gates. False positives on merge blocking erode trust faster than they enforce discipline. The model is: advise → calibrate → gate.
+
+**Why RTK in governance guidance but not in CI scripts?**
+RTK is a token-optimization proxy for human + AI shell interaction. CI runners do not have RTK installed and do not need it — their output does not consume AI context windows. The exception is explicit and bounded to machine automation only.
+
+---
+
 ## [3.0.0] — 2026-04-09
 
 ### Added

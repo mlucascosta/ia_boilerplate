@@ -77,6 +77,20 @@ Escalate path if correctness is at risk.
 - Use `docs/ai/DECISION_RULES.md` before updating roadmap, ADRs, or plans.
 - Treat chat history as temporary memory only.
 
+## Governance extension
+
+For architecture review, code quality audit, anti-pattern detection, and pull request governance, also consult:
+
+- `.agents/governance/RULES.md`
+- `.agents/governance/SKILLS.md`
+- `.agents/governance/CHECKLIST.md`
+- `.agents/governance/ANTI_PATTERNS.md`
+- `.agents/governance/REVIEW_OUTPUT_TEMPLATE.md`
+
+These files extend the repository operating model with hard architectural rules, heuristic review signals, merge impact classification, and standardized audit output.
+
+Use them when reviewing code, proposing structural changes, or generating PR audit reports.
+
 ## RTK — Mandatory Token Optimization
 
 RTK is required for all shell commands. Read `RTK.md` at the repository root.

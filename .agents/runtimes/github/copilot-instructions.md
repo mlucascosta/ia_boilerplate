@@ -23,3 +23,21 @@ rtk gain --history    # Per-command savings history
 rtk discover          # Find missed rtk opportunities
 rtk proxy <cmd>       # Run raw (no filtering) but track usage
 ```
+
+## Architecture and Governance
+
+In addition to RTK usage, follow the repository governance rules:
+
+- `.agents/AGENTS.md` — canonical agent contract
+- `.agents/governance/RULES.md` — audit behavior, confidence, severity, and merge impact rules
+- `.agents/governance/SKILLS.md` — architectural audit skills
+- `.agents/governance/CHECKLIST.md` — review checklist
+
+Key expectations:
+
+- Domain must not depend on infrastructure
+- Prefer TDD for behavior changes
+- Respect the workflow and artifact contracts in `docs/ai/`
+- Treat `.agents/` as the only normative AI layer
+- Use governance files when reviewing architecture, tests, and pull request quality
+- RTK remains mandatory for all shell guidance

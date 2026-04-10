@@ -79,6 +79,22 @@ If two files disagree, `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md` take pre
 RTK is the mandatory token optimization layer for all AI runtimes in this project.
 Read `RTK.md` for the full command rewrite table and hard rules.
 
+## Governance layer
+
+This repository defines an architectural audit and governance layer under `.agents/governance/`.
+
+Consult these files when the task involves architecture review, quality gates, pull request audit behavior, anti-pattern detection, or merge-impact classification:
+
+- `.agents/governance/SKILLS.md`
+- `.agents/governance/RULES.md`
+- `.agents/governance/CHECKLIST.md`
+- `.agents/governance/ANTI_PATTERNS.md`
+- `.agents/governance/REVIEW_OUTPUT_TEMPLATE.md`
+
+These files extend the canonical `.agents/` operating model with review and governance rules.
+They do not replace `.agents/AGENTS.md`; they specialize it for architectural audit and code quality governance.
+See `docs/architecture/ai-governance.md` for the human-facing explanation.
+
 Install: `./scripts/install-rtk.sh`
 
 Initialize per runtime:

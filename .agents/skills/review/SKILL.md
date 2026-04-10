@@ -10,7 +10,9 @@ Perform code-review style verification with findings first.
 # Read First
 
 - `.agents/AGENTS.md`
-- `.agents/workflows/review.md`
+- `.agents/governance/RULES.md`
+- `.agents/governance/CHECKLIST.md`
+- `.agents/governance/ANTI_PATTERNS.md`
 
 # Use When
 
