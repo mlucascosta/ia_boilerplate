@@ -11,6 +11,33 @@ This repository is intentionally focused on workflow infrastructure rather than 
 
 > **v3.1:** This release adds a formal AI governance layer — architectural audit skills, code review rules, anti-pattern detection, and an advisory PR audit workflow — all rooted in `.agents/governance/` as a normative extension of the existing `.agents/` contract.
 
+## Start Here
+
+If you are new to this repository, read [`START.md`](START.md) first.
+
+<details>
+<summary>What START.md covers</summary>
+
+- What this repository is and what it is not
+- The five layers and what each one owns
+- What to read first for each situation
+- RTK mandatory usage
+- How runtime adapters work
+- How to avoid context drift
+- What the vault is and is not
+
+</details>
+
+**Layer authority (quick reference):**
+
+| Layer | Path | Role |
+|---|---|---|
+| Normative AI | `.agents/` | All behavior rules — wins all conflicts |
+| Audit governance | `.agents/governance/` | Architectural review and PR audit rules |
+| Workflow | `docs/ai/` | How the workflow operates |
+| Architecture | `docs/architecture/` | Why decisions were made (human-facing) |
+| Knowledge vault | `vault/` | Editorial, Obsidian — not normative |
+
 ## Quick Start
 
 ```sh
@@ -136,19 +163,22 @@ Choose the lightest path that still preserves correctness:
 
 ## Obsidian Knowledge Vault
 
-The `vault/` directory is an Obsidian vault with structured knowledge for this project:
+The `vault/` directory is an Obsidian knowledge vault — editorial and human-first.
+It is useful for browsing standards, templates, and notes in Obsidian.
+It is **not** normative. Nothing in `vault/` overrides `.agents/`.
 
 ```
 vault/
-  00-Home/Dashboard.md        ← Navigation hub
-  RTK/                        ← RTK overview, commands, installation
-  Standards/                  ← TDD, SOLID, Git Flow, Code Review
-  AI-Workflow/                ← Agent contract, artifact reference
-  Skills/                     ← Execute, Plan, Verify, Review skills
-  Templates/                  ← Feature plan, ADR, session note, bug report
+  00-Home/            ← navigation dashboard
+  10-Standards/       ← TDD, SOLID, Git Flow, Code Review, RTK
+  20-Workflow/        ← workflow and artifact lifecycle overviews
+  30-Governance/      ← audit governance summaries
+  40-Research/        ← similar projects, references
+  50-Templates/       ← ADR, feature plan, session note, bug report
 ```
 
 Open `vault/` in Obsidian as a vault to use it.
+See `docs/architecture/vault-policy.md` for the full authority and sync rules.
 
 ## Runtime Support
 
