@@ -77,9 +77,23 @@ Escalate path if correctness is at risk.
 - Use `docs/ai/DECISION_RULES.md` before updating roadmap, ADRs, or plans.
 - Treat chat history as temporary memory only.
 
+## RTK — Mandatory Token Optimization
+
+RTK is required for all shell commands. Read `RTK.md` at the repository root.
+
+- All git operations: `rtk git <subcommand>`
+- All file reads via terminal: `rtk read <file>`, never `cat` or `head`
+- All test runs: `rtk <runner>` (e.g. `rtk cargo test`, `rtk pytest`, `rtk go test`)
+- All builds/lints: `rtk <tool>` (e.g. `rtk tsc`, `rtk lint`, `rtk cargo build`)
+- Directory listing: `rtk ls .`
+- Never run raw commands that have `rtk` equivalents
+
+Initialize for Claude (run once after installing RTK): `rtk init -g`
+
 ## Hard prohibitions
 
 - Pasting entire files.
 - Re-explaining the workflow.
 - Treating chat history as the source of truth.
 - Hiding structural changes inside execution notes.
+- Raw shell commands that bypass `rtk`.

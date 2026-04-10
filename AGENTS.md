@@ -70,25 +70,26 @@ Use the runtime-specific files only as adapters to this manual:
 
 1. Copilot: `.github/copilot-instructions.md`
 2. Claude: `CLAUDE.md`
-3. Codex: `.codex/skills/boilerplate-workflow/SKILL.md`
+3. Codex: `.codex/RTK.md`
 
 If two files disagree, `docs/ai/WORKFLOW.md` and `docs/ai/ARTIFACTS.md` take precedence, then this file, then runtime-specific adapters.
 
-## GSD Operational Layer
+## RTK Operational Layer
 
-Canonical GSD artifacts live in `.agents/` — one copy, consumed by all runtimes:
+RTK is the mandatory token optimization layer for all AI runtimes in this project.
+Read `RTK.md` for the full command rewrite table and hard rules.
 
-- **Workflows**: `.agents/workflows/` — executable workflow definitions
+Install: `./scripts/install-rtk.sh`
+
+Initialize per runtime:
+- Claude Code: `rtk init -g`
+- Copilot: `rtk init -g --copilot`
+- Gemini CLI: `rtk init -g --gemini`
+- Codex: `rtk init -g --codex`
+
+Canonical RTK contract lives in `RTK.md` — one file, consumed by all runtimes:
+
 - **Templates**: `.agents/templates/` — artifact templates
 - **References**: `.agents/references/` — model profiles, verification patterns, etc.
-- **Agent definitions**: `.agents/agents/` — 18 subagent definitions
-- **Node tooling**: `.agents/bin/` — gsd-tools.cjs and support libs
 - **Adapter docs**: `.agents/adapters/` — runtime syntax reference
 - **Runtime-owned files**: `.agents/runtimes/` — Codex, Claude, and Copilot wrapper content
-
-Runtime-specific wrappers delegate to `.agents/` via root entrypoints that point into `.agents/runtimes/`:
-- Claude: `.claude/commands/gsd/*.md` (invoked as `/gsd:<name>`)
-- Codex: `.codex/skills/gsd-*/SKILL.md` (invoked as `$gsd-<name>`)
-- Copilot: `.github/skills/gsd-*/SKILL.md`
-
-The repository-root runtime folders remain only for runtime compatibility. Their managed contents live under `.agents/runtimes/`, and agent definitions in `.claude/agents/`, `.codex/agents/`, `.github/agents/` are thin wrappers to `.agents/agents/`.

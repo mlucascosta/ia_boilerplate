@@ -61,9 +61,27 @@ You MUST follow:
 - `.agents/workflows/`, `.agents/templates/`, `.agents/references/`, `.agents/skills/`, and `.agents/agents/` are the shared runtime surface
 - Runtime-specific files under `.claude/`, `.codex/`, and `.github/` are thin compatibility shells or generated artifacts
 
+## RTK — Mandatory Token Optimization
+
+RTK is required for all shell commands. Read `RTK.md` at the repository root.
+
+- All git operations: `rtk git <subcommand>`
+- All file reads via terminal: `rtk read <file>` or `rtk grep "pattern" .`
+- All test runs: `rtk <runner>` (e.g. `rtk cargo test`, `rtk pytest`, `rtk go test`)
+- All builds and lints: `rtk <tool>` (e.g. `rtk tsc`, `rtk lint`, `rtk cargo build`)
+- Directory listing: `rtk ls .`
+- Never run raw `git`, `ls`, `cat`, `grep`, `rg`, `find`, `cargo test`, `pytest`, `go test`, or any other command that has an `rtk` equivalent
+
+Initialize RTK for your AI tool after installation:
+- Claude Code: `rtk init -g`
+- Copilot: `rtk init -g --copilot`
+- Gemini CLI: `rtk init -g --gemini`
+- Codex: `rtk init -g --codex`
+
 ## Prohibitions
 
 - No full repository scan unless correctness requires escalation
 - No workflow recap in normal task output
 - No full file dumps
 - No hidden structural changes inside execution notes
+- No raw shell commands that bypass `rtk`
