@@ -6,6 +6,37 @@ Format: `[version] — YYYY-MM-DD`
 
 ---
 
+## [3.0.0] — 2026-04-09
+
+### Added
+- `RTK.md` — canonical mandatory RTK (Rust Token Killer) instruction consumed by all AI runtimes
+- `scripts/install-rtk.sh` — OS-aware RTK installer with auto-detection for macOS (Homebrew), Linux (curl), Windows (winget); supports `--init-all` flag to auto-detect and initialize all AI tools
+- `.codex/RTK.md` — Codex-specific RTK instruction with `@RTK.md` reference
+- `.gemini/RTK.md` and `.gemini/hooks/rtk-hook-gemini.sh` — project-level Gemini CLI RTK hook reference
+- `vault/` — Obsidian knowledge vault with structured project knowledge:
+  - `vault/00-Home/Dashboard.md` — navigation hub
+  - `vault/RTK/` — RTK overview, command reference, and installation guide
+  - `vault/Standards/` — TDD, SOLID, Git Flow, and Code Review standards
+  - `vault/AI-Workflow/` — Agent contract and artifact reference
+  - `vault/Skills/` — Execute, Plan, Verify, and Review skill references
+  - `vault/Templates/` — Feature plan, ADR, session note, and bug report templates
+
+### Changed
+- `AGENTS.md` (root) — replaced GSD Operational Layer section with RTK Operational Layer; updated runtime adapter list to include Gemini and `.codex/RTK.md`
+- `CLAUDE.md` — added RTK mandatory section; removed raw shell command prohibition
+- `.github/copilot-instructions.md` — added RTK mandatory section with `rtk init -g --copilot` setup instruction; removed GSD-specific prohibition
+- `.agents/AGENTS.md` — added RTK mandatory section with per-runtime init commands; updated Prohibitions to include raw shell commands that bypass `rtk`
+- `README.md` — complete rewrite: Quick Start now leads with RTK install; added RTK command table; added Obsidian vault section; removed GSD-specific Quick Start, prerequisites, and local model sections
+
+### Removed
+- All GSD skills from `.github/skills/gsd-*/` (11 skill directories)
+- All GSD-branded agent definitions from `.agents/agents/gsd-*.md` (18 agent files)
+- All GSD workflow files from `.agents/workflows/*.md` (50+ workflow files)
+- `.agents/bin/` — Node.js GSD tooling
+- All `gsd-file-manifest.json` manifests (`.github/`, `.claude/`, `.codex/`, `.agents/runtimes/claude/`, `.agents/runtimes/github/`)
+
+---
+
 ## [2.0.1] — 2026-04-04
 
 ### Changed
