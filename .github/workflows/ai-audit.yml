@@ -1,0 +1,64 @@
+name: AI Architecture Audit
+
+on:
+  pull_request:
+    branches: ["**"]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install openai
+
+      - name: Run advisory audit
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AUDIT_MODEL: ${{ vars.AUDIT_MODEL || 'gpt-4o-mini' }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+        run: |
+          python scripts/ai_audit.py
+
+      - name: Ensure audit report exists (fallback)
+        if: always()
+        run: |
+          if [ ! -f audit-report.md ]; then
+            printf '## 🤖 AI Architecture Audit\n\n**Status:** Workflow completed but no report was generated.\nPlease check the Actions logs for details.\n' > audit-report.md
+          fi
+
+      - name: Find existing audit comment
+        if: always()
+        id: find_comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "🤖 AI Architecture Audit"
+
+      - name: Create or update PR comment
+        if: always()
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find_comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-file: audit-report.md
+          edit-mode: replace

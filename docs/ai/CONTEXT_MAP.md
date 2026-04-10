@@ -45,6 +45,18 @@ Load only when the task explicitly requires broader context:
 - `docs/architecture/*`
 - `docs/modules/*`
 
+## Architecture audit context
+
+Load when doing code review, audits, or architecture analysis:
+
+- `.agents/governance/RULES.md` — behavior rules for the auditor
+- `.agents/governance/CHECKLIST.md` — per-category checklist
+- `.agents/governance/ANTI_PATTERNS.md` — known anti-patterns table
+- `.agents/governance/REVIEW_OUTPUT_TEMPLATE.md` — finding/report format
+- `docs/architecture/ARCHITECTURE.md` — layer contract and intentional exceptions
+
+Invoke `.agents/skills/review/` when a full audit is requested.
+
 ## Avoid by default
 
 - unrelated modules
