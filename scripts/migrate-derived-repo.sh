@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# REPO_COMPONENT: derived-repo-migration
+# LAST_VALIDATED: 2026-04-09
+# EXPECTED_SCOPE: ia_boilerplate core
 
 set -euo pipefail
 

@@ -1,3 +1,8 @@
+<!-- ADAPTER FILE -->
+<!-- Canonical source: .agents/AGENTS.md -->
+<!-- Governance extension: .agents/governance/ -->
+<!-- Do not add normative rules here -->
+
 # RTK — Token-Optimized CLI
 
 **rtk** is a CLI proxy that filters and compresses command outputs, saving 60-90% tokens.

@@ -1,3 +1,8 @@
+<!-- ADAPTER FILE -->
+<!-- Canonical source: .agents/AGENTS.md -->
+<!-- Governance extension: .agents/governance/ -->
+<!-- Do not add normative rules here -->
+
 # Claude adapter
 
 Follow `.agents/AGENTS.md`.

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# REPO_COMPONENT: ai-pr-audit
+# LAST_VALIDATED: 2026-04-09
+# EXPECTED_SCOPE: ia_boilerplate core
 """
 AI Architecture Audit Script for PRs.
 Advisory-only mode. Safe fallback if no API key is configured.

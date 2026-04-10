@@ -1,3 +1,8 @@
+<!-- ADAPTER FILE -->
+<!-- Canonical source: .agents/AGENTS.md -->
+<!-- Governance extension: .agents/governance/ -->
+<!-- Do not add normative rules here -->
+
 # AI Agent Rules (minimal adapter)
 
 Canonical source of truth: `.agents/AGENTS.md`.
